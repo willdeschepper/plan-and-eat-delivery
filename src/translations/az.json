@@ -1,0 +1,166 @@
+{
+  "auth": {
+    "forgot": {
+      "change_email": "Emaili dəyiş",
+      "change_number": "Nömrəni dəyiş",
+      "email_label": "Email",
+      "email_placeholder": "Emailinizi daxil edin",
+      "otp_label": "Kod",
+      "otp_placeholder": "Kodu daxil edin",
+      "otp_resend_in": "Kodu {{time}} sonra yenidən göndər",
+      "otp_submit": "Davam et",
+      "otp_subtitle": "OTP kodunu daxil edin",
+      "otp_title": "Şifrəni unutdunuz",
+      "resend_code": "OTP kodunu yenidən göndər",
+      "reset_confirm_password_label": "Yeni şifrəni təsdiqləyin",
+      "reset_confirm_password_placeholder": "Yeni şifrəni təsdiqləyin",
+      "reset_password_label": "Yeni şifrə",
+      "reset_password_placeholder": "Yeni şifrə",
+      "reset_submit": "Şifrəni dəyiş",
+      "reset_subtitle": "Yeni şifrəni daxil edin",
+      "reset_title": "Şifrəni sıfırla",
+      "submit": "Davam et",
+      "subtitle": "Emailinizi daxil edin",
+      "success_back_to_login": "Daxil olmağa qayıt",
+      "success_subtitle": "Şifrəniz uğurla dəyişdirildi. İndi yeni şifrənizlə daxil ola bilərsiniz.",
+      "success_title": "Şifrə dəyişdirildi",
+      "title": "Şifrəni unutdunuz"
+    },
+    "login": {
+      "email_label": "Email ünvanı",
+      "email_placeholder": "Email ünvanı",
+      "forgot_password": "Şifrəni unutdunuz?",
+      "no_account": "Hesabınız yoxdur?",
+      "number_label": "Nömrə",
+      "or": "və ya",
+      "password_label": "Şifrə",
+      "password_placeholder": "Şifrə",
+      "sign_up": "Qeydiyyat",
+      "submit": "Daxil ol",
+      "subtitle": "Hesabınıza daxil olun",
+      "title": "Xoş gəldiniz"
+    },
+    "otp": {
+      "confirm": "Təsdiqlə",
+      "didnt_receive": "Kod gəlmədi?",
+      "forgot_subtitle": "OTP kodunu daxil edin",
+      "forgot_title": "OTP kodunuzu yazın",
+      "registration_subtitle": "OTP kodu daxil edin",
+      "registration_title": "OTP kodunuzu yazın",
+      "resend": "Yenidən göndər"
+    },
+    "registration": {
+      "company_label": "Şirkət adı",
+      "company_placeholder": "Şirkətiniz",
+      "continue": "Davam et",
+      "department_label": "Şöbə",
+      "department_placeholder": "Şöbəniz",
+      "form_title": "Xoş gəldiniz",
+      "option_no": "Xeyr, məndə yoxdur",
+      "option_yes": "Bəli, məndə var",
+      "phone_label": "Telefon",
+      "phone_placeholder": "Telefon nömrəniz",
+      "success_subtitle": "İndi hesabınızla daxil ola bilərsiniz.",
+      "success_title": "Qeydiyyat uğurla tamamlandı.",
+      "workplace_subtitle": "Zəhmət olmasa davam etmək üçün bir seçim edin.",
+      "workplace_title": "Rəsmi iş yeriniz varmı?"
+    },
+    "sign_up": {
+      "back_to_login": "Girişə qayıt",
+      "confirm_password_label": "Şifrəni təsdiqləyin",
+      "confirm_password_placeholder": "Şifrəni təsdiqləyin",
+      "email_label": "Email ünvanı",
+      "email_placeholder": "Emailinizi daxil edin",
+      "have_account": "Artıq hesabınız varmı?",
+      "log_in": "Daxil ol",
+      "name_label": "Tam ad",
+      "name_placeholder": "Adınız",
+      "password_label": "Şifrə",
+      "password_placeholder": "Şifrə yaradın",
+      "submit": "Qeydiyyat",
+      "subtitle": "Yeni hesab yaradın.",
+      "surname_label": "Soyad",
+      "surname_placeholder": "Soyadınız",
+      "title": "Qeydiyyat"
+    },
+    "validation": {
+      "confirm_password_mismatch": "Şifrələr uyğun gəlmir",
+      "email_invalid": "Düzgün email ünvanı daxil edin",
+      "email_required": "Email tələb olunur",
+      "name_min_length": "Ad ən azı 2 simvoldan ibarət olmalıdır",
+      "name_required": "Ad tələb olunur",
+      "number_required": "Nömrə tələb olunur",
+      "password_min_length": "Şifrə minimum 6 simvoldan ibarət olmalıdır",
+      "password_required": "Şifrə tələb olunur",
+      "phone_required": "Telefon tələb olunur"
+    }
+  },
+  "courier": {
+    "subtitle": "Çatdırılma iş sahəsi",
+    "title": "Kuryer"
+  },
+  "network": {
+    "action_offline": "Bağlantı yoxdur. Şəbəkə parametrlərini yoxlayın",
+    "connection_restored": "Bağlantı bərpa olundu",
+    "load_failed": "Məlumat yüklənmədi. Bağlantınızı yoxlayın",
+    "offline_banner": "İnternet bağlantısı yoxdur"
+  },
+  "onboarding": {
+    "done": "Hazır",
+    "message": "Plan&Eat Courier tətbiqinə xoş gəldiniz",
+    "next": "Növbəti",
+    "progress": "{{current}}/{{total}}",
+    "screen1": {
+      "description": "70-dən çox yeməyə göz atın və sevimlilərinizi seçin. Rutininizə uyğun həftəlik və ya aylıq seçiminizi yeniləyin.",
+      "title": "Yeməklərinizi seçin"
+    },
+    "screen2": {
+      "description": "Etibarlı mətbəxlər şəbəkəsi tərəfindən peşəkarcasına hazırlanır. Hər yeməkdə diqqət və keyfiyyətlə təzə hazırlanır.",
+      "title": "Biz bişirib çatdırırıq"
+    },
+    "screen3": {
+      "description": "Hər gün ləziz naharların dadını çıxarın. Fasilənizi gözləntiylə dolduran təzə, doyurucu yeməklər.",
+      "title": "Ləziz naharların dadını çıxarın"
+    },
+    "skip": "Keç"
+  },
+  "settings": {
+    "about": "Haqqında",
+    "app_name": "Tətbiqin adı",
+    "arabic": "Ərəb",
+    "azerbaijani": "Azərbaycanca",
+    "english": "İngilis",
+    "generale": "Ümumi",
+    "github": "Github",
+    "language": "Dil",
+    "links": "Keçidlər",
+    "logout": "Çıxış",
+    "more": "Daha çox",
+    "privacy": "Məxfilik siyasəti",
+    "rate": "Qiymətləndir",
+    "russian": "Rusca",
+    "share": "Paylaş",
+    "support": "Dəstək",
+    "support_us": "Bizi dəstəkləyin",
+    "terms": "Xidmət şərtləri",
+    "theme": {
+      "dark": "Tünd",
+      "light": "Açıq",
+      "system": "Sistem",
+      "title": "Tema"
+    },
+    "title": "Parametrlər",
+    "version": "Versiya",
+    "website": "Vebsayt"
+  },
+  "weekdays": {
+    "fri": "C.",
+    "mon": "B.e.",
+    "sat": "Ş.",
+    "sun": "B.",
+    "thu": "C.a.",
+    "tue": "Ç.a.",
+    "wed": "Ç."
+  },
+  "welcome": "Plan&Eat Courier tətbiqinə xoş gəldiniz"
+}

@@ -1,0 +1,166 @@
+{
+  "auth": {
+    "forgot": {
+      "change_email": "Изменить email",
+      "change_number": "Изменить номер",
+      "email_label": "Email",
+      "email_placeholder": "Введите ваш email",
+      "otp_label": "Код",
+      "otp_placeholder": "Введите код",
+      "otp_resend_in": "Повторная отправка через {{time}}",
+      "otp_submit": "Продолжить",
+      "otp_subtitle": "Введите OTP код",
+      "otp_title": "Восстановление пароля",
+      "resend_code": "Отправить код повторно",
+      "reset_confirm_password_label": "Подтвердите новый пароль",
+      "reset_confirm_password_placeholder": "Подтвердите новый пароль",
+      "reset_password_label": "Новый пароль",
+      "reset_password_placeholder": "Новый пароль",
+      "reset_submit": "Изменить пароль",
+      "reset_subtitle": "Введите новый пароль",
+      "reset_title": "Сброс пароля",
+      "submit": "Продолжить",
+      "subtitle": "Введите ваш email",
+      "success_back_to_login": "Вернуться к входу",
+      "success_subtitle": "Пароль успешно изменён. Теперь вы можете войти с новым паролем.",
+      "success_title": "Пароль изменён",
+      "title": "Восстановление пароля"
+    },
+    "login": {
+      "email_label": "Email адрес",
+      "email_placeholder": "Email адрес",
+      "forgot_password": "Забыли пароль?",
+      "no_account": "Нет аккаунта?",
+      "number_label": "Номер",
+      "or": "или",
+      "password_label": "Пароль",
+      "password_placeholder": "Пароль",
+      "sign_up": "Зарегистрироваться",
+      "submit": "Войти",
+      "subtitle": "Войдите в свой аккаунт",
+      "title": "С возвращением"
+    },
+    "otp": {
+      "confirm": "Подтвердить",
+      "didnt_receive": "Не получили код?",
+      "forgot_subtitle": "Введите OTP код",
+      "forgot_title": "Введите ваш OTP код",
+      "registration_subtitle": "Введите OTP код",
+      "registration_title": "Введите ваш OTP код",
+      "resend": "Отправить повторно"
+    },
+    "registration": {
+      "company_label": "Название компании",
+      "company_placeholder": "Ваша компания",
+      "continue": "Продолжить",
+      "department_label": "Отдел",
+      "department_placeholder": "Ваш отдел",
+      "form_title": "Добро пожаловать",
+      "option_no": "Нет, у меня нет",
+      "option_yes": "Да, у меня есть",
+      "phone_label": "Телефон",
+      "phone_placeholder": "Ваш номер телефона",
+      "success_subtitle": "Теперь вы можете войти в свой аккаунт.",
+      "success_title": "Регистрация успешно завершена.",
+      "workplace_subtitle": "Пожалуйста, выберите вариант для продолжения.",
+      "workplace_title": "Есть ли у вас официальное место работы?"
+    },
+    "sign_up": {
+      "back_to_login": "Вернуться к входу",
+      "confirm_password_label": "Подтвердите пароль",
+      "confirm_password_placeholder": "Подтвердите пароль",
+      "email_label": "Email адрес",
+      "email_placeholder": "Введите ваш email",
+      "have_account": "Уже есть аккаунт?",
+      "log_in": "Войти",
+      "name_label": "Полное имя",
+      "name_placeholder": "Ваше имя",
+      "password_label": "Пароль",
+      "password_placeholder": "Создайте пароль",
+      "submit": "Зарегистрироваться",
+      "subtitle": "Создайте новый аккаунт.",
+      "surname_label": "Фамилия",
+      "surname_placeholder": "Ваша фамилия",
+      "title": "Регистрация"
+    },
+    "validation": {
+      "confirm_password_mismatch": "Пароли не совпадают",
+      "email_invalid": "Введите корректный email адрес",
+      "email_required": "Email обязателен",
+      "name_min_length": "Имя должно содержать минимум 2 символа",
+      "name_required": "Имя обязательно",
+      "number_required": "Номер обязателен",
+      "password_min_length": "Пароль должен содержать минимум 6 символов",
+      "password_required": "Пароль обязателен",
+      "phone_required": "Телефон обязателен"
+    }
+  },
+  "courier": {
+    "subtitle": "Рабочее пространство доставки",
+    "title": "Курьер"
+  },
+  "network": {
+    "action_offline": "Нет подключения. Проверьте настройки сети",
+    "connection_restored": "Соединение восстановлено",
+    "load_failed": "Не удалось загрузить данные. Проверьте подключение",
+    "offline_banner": "Нет подключения к интернету"
+  },
+  "onboarding": {
+    "done": "Готово",
+    "message": "Добро пожаловать в Plan&Eat Courier",
+    "next": "Далее",
+    "progress": "{{current}}/{{total}}",
+    "screen1": {
+      "description": "Просматривайте более 70 блюд и выбирайте любимые. Обновляйте выбор еженедельно или ежемесячно под свой ритм.",
+      "title": "Выбирайте блюда"
+    },
+    "screen2": {
+      "description": "Готовим с заботой в сети проверенных кухонь. Свежие блюда с качеством в каждой порции.",
+      "title": "Мы готовим и доставляем"
+    },
+    "screen3": {
+      "description": "Наслаждайтесь вкусными обедами каждый день. Сытные блюда, которых вы будете с нетерпением ждать.",
+      "title": "Наслаждайтесь вкусными обедами"
+    },
+    "skip": "Пропустить"
+  },
+  "settings": {
+    "about": "О приложении",
+    "app_name": "Название приложения",
+    "arabic": "Арабский",
+    "azerbaijani": "Азербайджанский",
+    "english": "Английский",
+    "generale": "Основные",
+    "github": "Github",
+    "language": "Язык",
+    "links": "Ссылки",
+    "logout": "Выйти",
+    "more": "Ещё",
+    "privacy": "Политика конфиденциальности",
+    "rate": "Оценить",
+    "russian": "Русский",
+    "share": "Поделиться",
+    "support": "Поддержка",
+    "support_us": "Поддержать нас",
+    "terms": "Условия использования",
+    "theme": {
+      "dark": "Тёмная",
+      "light": "Светлая",
+      "system": "Системная",
+      "title": "Тема"
+    },
+    "title": "Настройки",
+    "version": "Версия",
+    "website": "Сайт"
+  },
+  "weekdays": {
+    "fri": "Пт",
+    "mon": "Пн",
+    "sat": "Сб",
+    "sun": "Вс",
+    "thu": "Чт",
+    "tue": "Вт",
+    "wed": "Ср"
+  },
+  "welcome": "Добро пожаловать в Plan&Eat Courier"
+}

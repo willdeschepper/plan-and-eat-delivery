@@ -1,0 +1,166 @@
+{
+  "auth": {
+    "forgot": {
+      "change_email": "Change email",
+      "change_number": "Change number",
+      "email_label": "Email",
+      "email_placeholder": "Enter your email",
+      "otp_label": "Code",
+      "otp_placeholder": "Enter code",
+      "otp_resend_in": "Resend code in {{time}}",
+      "otp_submit": "Continue",
+      "otp_subtitle": "Enter OTP code",
+      "otp_title": "Forgot password",
+      "resend_code": "Send OTP code again",
+      "reset_confirm_password_label": "Confirm new password",
+      "reset_confirm_password_placeholder": "Confirm new password",
+      "reset_password_label": "New password",
+      "reset_password_placeholder": "New password",
+      "reset_submit": "Change password",
+      "reset_subtitle": "Enter new password",
+      "reset_title": "Reset password",
+      "submit": "Continue",
+      "subtitle": "Enter your email",
+      "success_back_to_login": "Back to Login",
+      "success_subtitle": "Your password has been successfully changed. You can now log in with your new password.",
+      "success_title": "Password changed",
+      "title": "Forgot password"
+    },
+    "login": {
+      "email_label": "Email address",
+      "email_placeholder": "Email address",
+      "forgot_password": "Forgot password?",
+      "no_account": "Don't have an account?",
+      "number_label": "Number",
+      "or": "or",
+      "password_label": "Password",
+      "password_placeholder": "Password",
+      "sign_up": "Sign up",
+      "submit": "Log in",
+      "subtitle": "Log in to your account",
+      "title": "Welcome back"
+    },
+    "otp": {
+      "confirm": "Confirm",
+      "didnt_receive": "Didn't receive a code?",
+      "forgot_subtitle": "Enter OTP code",
+      "forgot_title": "Write your OTP code",
+      "registration_subtitle": "Enter OTP code",
+      "registration_title": "Write your OTP code",
+      "resend": "Resend"
+    },
+    "registration": {
+      "company_label": "Company name",
+      "company_placeholder": "Your company",
+      "continue": "Continue",
+      "department_label": "Department",
+      "department_placeholder": "Your department",
+      "form_title": "Welcome",
+      "option_no": "No, I do not have",
+      "option_yes": "Yes, I have",
+      "phone_label": "Phone",
+      "phone_placeholder": "Your phone number",
+      "success_subtitle": "You can now log in with your account.",
+      "success_title": "Registration completed successfully.",
+      "workplace_subtitle": "Please select an option to proceed.",
+      "workplace_title": "Do you have an official workplace?"
+    },
+    "sign_up": {
+      "back_to_login": "Back to Login",
+      "confirm_password_label": "Confirm password",
+      "confirm_password_placeholder": "Confirm password",
+      "email_label": "Email address",
+      "email_placeholder": "Enter your email",
+      "have_account": "Already have an account?",
+      "log_in": "Log in",
+      "name_label": "Full name",
+      "name_placeholder": "Your name",
+      "password_label": "Password",
+      "password_placeholder": "Create a password",
+      "submit": "Sign up",
+      "subtitle": "Create a new account.",
+      "surname_label": "Surname",
+      "surname_placeholder": "Your surname",
+      "title": "Sign up"
+    },
+    "validation": {
+      "confirm_password_mismatch": "Passwords do not match",
+      "email_invalid": "Enter a valid email address",
+      "email_required": "Email is required",
+      "name_min_length": "Name must be at least 2 characters",
+      "name_required": "Name is required",
+      "number_required": "Number is required",
+      "password_min_length": "Password must be at least 6 characters",
+      "password_required": "Password is required",
+      "phone_required": "Phone is required"
+    }
+  },
+  "courier": {
+    "subtitle": "Delivery workspace",
+    "title": "Courier"
+  },
+  "network": {
+    "action_offline": "No connection. Check your network settings",
+    "connection_restored": "Connection restored",
+    "load_failed": "Could not load data. Check your connection",
+    "offline_banner": "No internet connection"
+  },
+  "onboarding": {
+    "done": "Done",
+    "message": "Welcome to Plan&Eat Courier",
+    "next": "Next",
+    "progress": "{{current}}/{{total}}",
+    "screen1": {
+      "description": "Browse 70+ meals and choose your favorites. Update your selection weekly or monthly to match your routine.",
+      "title": "Choose your meals"
+    },
+    "screen2": {
+      "description": "Expertly cooked by our network of trusted kitchens. Freshly prepared with care and quality in every meal.",
+      "title": "We cook & deliver"
+    },
+    "screen3": {
+      "description": "Enjoy delicious lunches every day. Fresh, satisfying meals that make your break something to look forward to.",
+      "title": "Enjoy delicious lunches"
+    },
+    "skip": "Skip"
+  },
+  "settings": {
+    "about": "About",
+    "app_name": "App Name",
+    "arabic": "Arabic",
+    "azerbaijani": "Azerbaijani",
+    "english": "English",
+    "generale": "General",
+    "github": "Github",
+    "language": "Language",
+    "links": "Links",
+    "logout": "Logout",
+    "more": "More",
+    "privacy": "Privacy Policy",
+    "rate": "Rate",
+    "russian": "Russian",
+    "share": "Share",
+    "support": "Support",
+    "support_us": "Support Us",
+    "terms": "Terms of Service",
+    "theme": {
+      "dark": "Dark",
+      "light": "Light",
+      "system": "System",
+      "title": "Theme"
+    },
+    "title": "Settings",
+    "version": "Version",
+    "website": "Website"
+  },
+  "weekdays": {
+    "fri": "Fri",
+    "mon": "Mon",
+    "sat": "Sat",
+    "sun": "Sun",
+    "thu": "Thu",
+    "tue": "Tue",
+    "wed": "Wed"
+  },
+  "welcome": "Welcome to Plan&Eat Courier"
+}
