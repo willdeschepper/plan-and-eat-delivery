@@ -1,4 +1,3 @@
-import { SafeBlurView } from '@/components/ui/safe-blur-view';
 import { Image } from 'expo-image';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as React from 'react';
@@ -23,7 +22,8 @@ import { useUniwind } from 'uniwind';
 import { CustomerOrderItem } from './components/customer-order-item';
 import { useOrdersStore } from './store/use-orders-store';
 
-const HEADER_HEIGHT = 240;
+const HERO_HEIGHT = 260;
+const HEADER_COLLAPSE_AT = HERO_HEIGHT - 80;
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 
 export function StopDetailScreen() {
@@ -32,33 +32,33 @@ export function StopDetailScreen() {
   const { theme } = useUniwind();
   const isDark = theme === 'dark';
   const insets = useSafeAreaInsets();
-
   const scrollY = useSharedValue(0);
 
   const stops = useOrdersStore(s => s.stops);
   const toggleOrderPickedUp = useOrdersStore(s => s.toggleOrderPickedUp);
-
   const stop = stops.find(s => s.id === id);
 
   const scrollHandler = useAnimatedScrollHandler(e => {
     scrollY.value = e.contentOffset.y;
   });
 
+  /* Hero parallax */
   const heroStyle = useAnimatedStyle(() => ({
     transform: [
-      { translateY: interpolate(scrollY.value, [0, HEADER_HEIGHT], [0, -HEADER_HEIGHT / 2], 'clamp') },
-      { scale: interpolate(scrollY.value, [-80, 0], [1.15, 1], 'clamp') },
+      { translateY: interpolate(scrollY.value, [0, HERO_HEIGHT], [0, -HERO_HEIGHT * 0.4], 'clamp') },
+      { scale: interpolate(scrollY.value, [-60, 0], [1.12, 1], 'clamp') },
     ],
   }));
 
-  const headerBlurOpacity = useAnimatedStyle(() => ({
-    opacity: interpolate(scrollY.value, [60, 120], [0, 1], 'clamp'),
+  /* Collapsed header fades in when scrolled past hero */
+  const collapsedHeaderStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(scrollY.value, [HEADER_COLLAPSE_AT, HEADER_COLLAPSE_AT + 40], [0, 1], 'clamp'),
   }));
 
   if (!stop) {
     return (
-      <View style={[styles.notFound, { backgroundColor: isDark ? '#0a0a0a' : '#F5F5F5' }]}>
-        <Text style={{ color: isDark ? '#fafafa' : '#1E1E1E', fontSize: 16 }}>Stop not found.</Text>
+      <View style={[styles.notFound, { backgroundColor: isDark ? '#0a0a0a' : '#fff' }]}>
+        <Text style={{ color: isDark ? '#fafafa' : '#111', fontSize: 16 }}>Stop not found.</Text>
       </View>
     );
   }
@@ -66,118 +66,95 @@ export function StopDetailScreen() {
   const pickedCount = stop.orders.filter(o => o.isPickedUp).length;
   const total = stop.orders.length;
   const allDone = pickedCount === total;
-  const bg = isDark ? '#0a0a0a' : '#F5F5F5';
-  const textPrimary = isDark ? '#fafafa' : '#1E1E1E';
-  const textSecondary = isDark ? '#A3A3A3' : '#7D7D7D';
+
+  const bg = isDark ? '#0a0a0a' : '#ffffff';
+  const textPrimary = isDark ? '#fafafa' : '#111111';
+  const textSecondary = isDark ? '#888' : '#999';
+  const cardBg = isDark ? '#1a1a1a' : '#F7F7F7';
+  const borderColor = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.07)';
 
   return (
     <View style={[styles.container, { backgroundColor: bg }]}>
       <StatusBar barStyle="light-content" />
 
-      {/* Floating blur header (appears on scroll) */}
+      {/* ── Fixed back button — always on top of hero ── */}
+      <Pressable
+        onPress={() => router.back()}
+        style={[styles.backBtn, { top: insets.top + 10 }]}
+        hitSlop={8}
+      >
+        <Text style={styles.backBtnArrow}>←</Text>
+      </Pressable>
+
+      {/* ── Collapsed sticky header (appears after hero scrolled away) ── */}
       <Animated.View
-        style={[styles.floatingHeader, { paddingTop: insets.top }, headerBlurOpacity]}
+        style={[styles.stickyHeader, { paddingTop: insets.top, backgroundColor: isDark ? '#0a0a0a' : '#fff', borderBottomColor: borderColor }, collapsedHeaderStyle]}
         pointerEvents="none"
       >
-        <SafeBlurView
-          intensity={isDark ? 70 : 80}
-          tint={isDark ? 'dark' : 'light'}
-          style={StyleSheet.absoluteFillObject}
-        />
-        <View style={[styles.floatingHeaderInner, { backgroundColor: isDark ? 'rgba(10,10,10,0.7)' : 'rgba(245,245,245,0.7)' }]}>
-          <Text style={[styles.floatingTitle, { color: textPrimary }]} numberOfLines={1}>
-            {stop.name}
-          </Text>
-        </View>
+        <Text style={[styles.stickyTitle, { color: textPrimary }]} numberOfLines={1}>
+          {stop.name}
+        </Text>
       </Animated.View>
-
-      {/* Back button (always visible) */}
-      <View style={[styles.backButtonWrapper, { top: insets.top + 12 }]}>
-        <Pressable
-          onPress={() => router.back()}
-          style={styles.backButton}
-        >
-          <SafeBlurView intensity={70} tint="dark" style={StyleSheet.absoluteFillObject} />
-          <View style={styles.backButtonInner}>
-            <Text style={styles.backButtonText}>←</Text>
-          </View>
-        </Pressable>
-      </View>
 
       <AnimatedScrollView
         onScroll={scrollHandler}
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: insets.bottom + 32 }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + 40 }}
       >
-        {/* Hero image */}
+        {/* Hero */}
         <View style={styles.heroContainer}>
           <Animated.View style={[StyleSheet.absoluteFillObject, heroStyle]}>
             <Image
               source={{ uri: stop.photoUrl }}
               style={StyleSheet.absoluteFillObject}
               contentFit="cover"
+              transition={200}
             />
           </Animated.View>
-          {/* Gradient overlay */}
-          <View style={styles.heroGradient} />
-          {/* Info overlay on hero */}
-          <View style={[styles.heroInfo, { paddingBottom: insets.bottom > 0 ? 20 : 28 }]}>
+          <View style={styles.heroOverlay} />
+          <View style={[styles.heroInfo, { paddingBottom: 24 }]}>
             <Text style={styles.heroName}>{stop.name}</Text>
             <Text style={styles.heroAddress}>{stop.address}</Text>
           </View>
         </View>
 
         {/* Content */}
-        <View style={styles.content}>
+        <View style={[styles.content, { backgroundColor: bg }]}>
+
           {/* Progress card */}
           <Animated.View
-            entering={FadeInDown.delay(50).springify().damping(18)}
-            style={[
-              styles.progressCard,
-              {
-                backgroundColor: isDark ? 'rgba(30,30,30,0.9)' : 'rgba(255,255,255,0.9)',
-                borderColor: allDone ? 'rgba(34,197,94,0.35)' : isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.07)',
-              },
-            ]}
+            entering={FadeInDown.delay(40).springify().damping(18)}
+            style={[styles.progressCard, { backgroundColor: cardBg, borderColor }]}
           >
-            <View style={styles.progressInfo}>
-              <View>
+            <View style={styles.progressRow}>
+              <View style={{ flex: 1 }}>
                 <Text style={[styles.progressTitle, { color: textPrimary }]}>
                   {allDone ? '🎉 All orders picked up!' : `${pickedCount} of ${total} picked up`}
                 </Text>
-                <Text style={[styles.progressSubtitle, { color: textSecondary }]}>
-                  {allDone
-                    ? 'This stop is marked as complete'
-                    : 'Check off each customer below'}
+                <Text style={[styles.progressSub, { color: textSecondary }]}>
+                  {allDone ? 'This stop is complete' : 'Check off each customer below'}
                 </Text>
               </View>
-              <View style={[
-                styles.progressCircle,
-                { borderColor: allDone ? '#22C55E' : '#FF6C00' },
-              ]}>
-                <Text style={[styles.progressCircleText, { color: allDone ? '#22C55E' : '#FF6C00' }]}>
+              <View style={[styles.circleProgress, { borderColor: allDone ? '#22C55E' : '#FF6C00' }]}>
+                <Text style={[styles.circleText, { color: allDone ? '#22C55E' : '#FF6C00' }]}>
                   {pickedCount}/{total}
                 </Text>
               </View>
             </View>
-            {/* Bar */}
-            <View style={[styles.progBar, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.07)' }]}>
-              <Animated.View
-                style={[
-                  styles.progFill,
-                  {
-                    backgroundColor: allDone ? '#22C55E' : '#FF6C00',
-                    width: `${(pickedCount / total) * 100}%`,
-                  },
-                ]}
+            <View style={[styles.progTrack, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)' }]}>
+              <View
+                style={[styles.progFill, {
+                  backgroundColor: allDone ? '#22C55E' : '#FF6C00',
+                  width: `${(pickedCount / total) * 100}%`,
+                }]}
               />
             </View>
           </Animated.View>
 
           {/* Orders list */}
           <Animated.View entering={FadeInDown.delay(100).springify().damping(18)}>
-            <Text style={[styles.ordersTitle, { color: textSecondary }]}>
+            <Text style={[styles.sectionLabel, { color: textSecondary }]}>
               CUSTOMER ORDERS
             </Text>
             {stop.orders.map((order, idx) => (
@@ -196,132 +173,130 @@ export function StopDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  notFound: {
-    flex: 1,
+  container: { flex: 1 },
+  notFound: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+
+  /* ── Back button ── */
+  backBtn: {
+    position: 'absolute',
+    left: 16,
+    zIndex: 50,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#ffffff',
     justifyContent: 'center',
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.18,
+    shadowRadius: 8,
+    elevation: 6,
   },
-  floatingHeader: {
+  backBtnArrow: {
+    color: '#111111',
+    fontSize: 20,
+    fontWeight: '700',
+    lineHeight: 22,
+    includeFontPadding: false,
+    textAlign: 'center',
+  },
+
+  /* ── Sticky collapsed header ── */
+  stickyHeader: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     zIndex: 20,
-    overflow: 'hidden',
-  },
-  floatingHeaderInner: {
-    paddingHorizontal: 64,
-    paddingVertical: 12,
+    borderBottomWidth: StyleSheet.hairlineWidth,
     alignItems: 'center',
+    paddingBottom: 12,
   },
-  floatingTitle: {
+  stickyTitle: {
     fontSize: 16,
     fontWeight: '700',
     letterSpacing: -0.2,
+    paddingTop: 12,
   },
-  backButtonWrapper: {
-    position: 'absolute',
-    left: 16,
-    zIndex: 30,
-  },
-  backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    overflow: 'hidden',
-  },
-  backButtonInner: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.3)',
-  },
-  backButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
-  },
+
+  /* ── Hero ── */
   heroContainer: {
-    height: HEADER_HEIGHT,
+    height: HERO_HEIGHT,
     overflow: 'hidden',
-    position: 'relative',
   },
-  heroGradient: {
+  heroOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.3)',
+    backgroundColor: 'rgba(0,0,0,0.28)',
   },
   heroInfo: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    padding: 20,
+    paddingHorizontal: 20,
   },
   heroName: {
     color: '#fff',
-    fontSize: 26,
+    fontSize: 28,
     fontWeight: '800',
-    letterSpacing: -0.5,
-    textShadowColor: 'rgba(0,0,0,0.4)',
+    letterSpacing: -0.6,
+    textShadowColor: 'rgba(0,0,0,0.35)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 6,
+  },
+  heroAddress: {
+    color: 'rgba(255,255,255,0.82)',
+    fontSize: 13,
+    fontWeight: '500',
+    marginTop: 4,
+    textShadowColor: 'rgba(0,0,0,0.25)',
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 4,
   },
-  heroAddress: {
-    color: 'rgba(255,255,255,0.8)',
-    fontSize: 13,
-    fontWeight: '500',
-    marginTop: 3,
-    textShadowColor: 'rgba(0,0,0,0.3)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
-  },
+
+  /* ── Content ── */
   content: {
     padding: 16,
-    paddingTop: 14,
+    paddingTop: 16,
   },
+
+  /* ── Progress card ── */
   progressCard: {
     borderRadius: 18,
     borderWidth: 1,
     padding: 16,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.07,
-    shadowRadius: 10,
-    elevation: 3,
+    marginBottom: 22,
   },
-  progressInfo: {
+  progressRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    gap: 16,
+    marginBottom: 14,
   },
   progressTitle: {
     fontSize: 15,
     fontWeight: '700',
     letterSpacing: -0.2,
   },
-  progressSubtitle: {
+  progressSub: {
     fontSize: 12,
-    fontWeight: '400',
-    marginTop: 2,
+    marginTop: 3,
   },
-  progressCircle: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+  circleProgress: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     borderWidth: 2.5,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  progressCircleText: {
+  circleText: {
     fontSize: 12,
     fontWeight: '800',
+    textAlign: 'center',
   },
-  progBar: {
+  progTrack: {
     height: 5,
     borderRadius: 3,
     overflow: 'hidden',
@@ -330,11 +305,13 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 3,
   },
-  ordersTitle: {
+
+  /* ── Section label ── */
+  sectionLabel: {
     fontSize: 11,
     fontWeight: '700',
-    letterSpacing: 1.2,
-    marginBottom: 10,
-    paddingHorizontal: 4,
+    letterSpacing: 1.3,
+    marginBottom: 12,
+    paddingHorizontal: 2,
   },
 });

@@ -47,45 +47,42 @@ export function OrdersScreen() {
   const completedStops = stops.filter(s => isStopCompleted(s.id));
   const allDone = pendingStops.length === 0 && stops.length > 0;
 
-  const bg = isDark ? '#0a0a0a' : '#F5F5F5';
-  const headerBg = isDark ? 'rgba(10,10,10,0.85)' : 'rgba(245,245,245,0.85)';
-  const textPrimary = isDark ? '#fafafa' : '#1E1E1E';
-  const textSecondary = isDark ? '#A3A3A3' : '#7D7D7D';
-  const sectionHeaderBg = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)';
+  const bg = isDark ? '#0a0a0a' : '#ffffff';
+  const headerBg = isDark ? '#0a0a0a' : '#ffffff';
+  const textPrimary = isDark ? '#fafafa' : '#111111';
+  const textSecondary = isDark ? '#888' : '#999';
+  const borderColor = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.07)';
+  const sectionBg = isDark ? '#1a1a1a' : '#F7F7F7';
 
   return (
     <View style={[styles.container, { backgroundColor: bg }]}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
 
-      {/* Sticky Header */}
-      <View style={[styles.header, { paddingTop: insets.top }]}>
-        <SafeBlurView
-          intensity={isDark ? 60 : 70}
-          tint={isDark ? 'dark' : 'light'}
-          style={StyleSheet.absoluteFillObject}
-        />
-        <View style={[styles.headerInner, { backgroundColor: headerBg }]}>
+      {/* Header */}
+      <View style={[styles.header, { paddingTop: insets.top, backgroundColor: headerBg, borderBottomColor: borderColor }]}>
+        {/* Row 1: burger + pill */}
+        <View style={styles.headerRow}>
           <BurgerButton onPress={openDrawer} isDark={isDark} />
-          <View style={styles.headerText}>
-            <Text style={[styles.headerTitle, { color: textPrimary }]}>
-              Today's Deliveries
-            </Text>
-            <Text style={[styles.headerSubtitle, { color: textSecondary }]}>
-              {dayName} · {fullDate}
-            </Text>
+          <View style={[styles.stopsPill, { backgroundColor: isDark ? 'rgba(255,108,0,0.12)' : '#FFF3EB', borderColor: isDark ? 'rgba(255,108,0,0.2)' : '#FFD4B0' }]}>
+            <Text style={styles.stopsPillText}>{stops.length} stops today</Text>
           </View>
-          {/* Stop counter */}
-          <View style={[styles.counterPill, { backgroundColor: isDark ? 'rgba(255,108,0,0.15)' : 'rgba(255,108,0,0.1)' }]}>
-            <Text style={styles.counterText}>{stops.length}</Text>
-            <Text style={[styles.counterLabel, { color: textSecondary }]}>stops</Text>
-          </View>
+        </View>
+
+        {/* Row 2: title + date */}
+        <View style={styles.headerTitleBlock}>
+          <Text style={[styles.headerTitle, { color: textPrimary }]}>
+            Today's Deliveries
+          </Text>
+          <Text style={[styles.headerDate, { color: textSecondary }]}>
+            {dayName} · {fullDate}
+          </Text>
         </View>
       </View>
 
       <ScrollView
         contentContainerStyle={[
           styles.scrollContent,
-          { paddingBottom: insets.bottom + 24 },
+          { paddingBottom: insets.bottom + 32 },
         ]}
         showsVerticalScrollIndicator={false}
       >
@@ -93,15 +90,12 @@ export function OrdersScreen() {
         {allDone && (
           <Animated.View
             entering={FadeInDown.springify().damping(18)}
-            style={styles.allDoneBanner}
+            style={[styles.allDoneBanner, { backgroundColor: isDark ? 'rgba(34,197,94,0.1)' : '#F0FDF4', borderColor: isDark ? 'rgba(34,197,94,0.25)' : '#BBF7D0' }]}
           >
-            <SafeBlurView intensity={isDark ? 40 : 50} tint={isDark ? 'dark' : 'light'} style={StyleSheet.absoluteFillObject} />
-            <View style={[styles.allDoneBannerInner, { backgroundColor: isDark ? 'rgba(34,197,94,0.12)' : 'rgba(34,197,94,0.1)', borderColor: 'rgba(34,197,94,0.3)' }]}>
-              <Text style={styles.allDoneEmoji}>🎉</Text>
-              <View>
-                <Text style={[styles.allDoneTitle, { color: textPrimary }]}>All deliveries done!</Text>
-                <Text style={[styles.allDoneSubtitle, { color: textSecondary }]}>Great work today, Ibrohim!</Text>
-              </View>
+            <Text style={styles.allDoneEmoji}>🎉</Text>
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.allDoneTitle, { color: textPrimary }]}>All deliveries done!</Text>
+              <Text style={[styles.allDoneSubtitle, { color: textSecondary }]}>Great work today!</Text>
             </View>
           </Animated.View>
         )}
@@ -109,13 +103,11 @@ export function OrdersScreen() {
         {/* Pending section */}
         {pendingStops.length > 0 && (
           <Animated.View layout={LinearTransition.springify()}>
-            <View style={[styles.sectionHeader, { backgroundColor: sectionHeaderBg }]}>
-              <View style={styles.sectionDot} />
-              <Text style={[styles.sectionTitle, { color: textSecondary }]}>
-                PENDING
-              </Text>
-              <View style={[styles.sectionBadge, { backgroundColor: '#FF6C00' }]}>
-                <Text style={styles.sectionBadgeText}>{pendingStops.length}</Text>
+            <View style={styles.sectionHeader}>
+              <View style={[styles.sectionDot, { backgroundColor: '#FF6C00' }]} />
+              <Text style={[styles.sectionLabel, { color: textSecondary }]}>PENDING</Text>
+              <View style={[styles.sectionCount, { backgroundColor: '#FF6C00' }]}>
+                <Text style={styles.sectionCountText}>{pendingStops.length}</Text>
               </View>
             </View>
             {pendingStops.map((stop, idx) => (
@@ -134,16 +126,14 @@ export function OrdersScreen() {
         {/* Completed section */}
         {completedStops.length > 0 && (
           <Animated.View
-            entering={FadeInDown.delay(100).springify().damping(18)}
+            entering={FadeInDown.delay(80).springify().damping(18)}
             layout={LinearTransition.springify()}
           >
-            <View style={[styles.sectionHeader, { backgroundColor: sectionHeaderBg }]}>
+            <View style={[styles.sectionHeader, { marginTop: pendingStops.length > 0 ? 8 : 0 }]}>
               <View style={[styles.sectionDot, { backgroundColor: '#22C55E' }]} />
-              <Text style={[styles.sectionTitle, { color: textSecondary }]}>
-                COMPLETED
-              </Text>
-              <View style={[styles.sectionBadge, { backgroundColor: '#22C55E' }]}>
-                <Text style={styles.sectionBadgeText}>{completedStops.length}</Text>
+              <Text style={[styles.sectionLabel, { color: textSecondary }]}>COMPLETED</Text>
+              <View style={[styles.sectionCount, { backgroundColor: '#22C55E' }]}>
+                <Text style={styles.sectionCountText}>{completedStops.length}</Text>
               </View>
             </View>
             {completedStops.map((stop, idx) => (
@@ -164,109 +154,88 @@ export function OrdersScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: { flex: 1 },
+
+  /* ── Header ── */
   header: {
-    zIndex: 10,
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 4,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    paddingHorizontal: 20,
+    paddingBottom: 16,
   },
-  headerInner: {
+  headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 14,
-    gap: 12,
+    justifyContent: 'space-between',
+    paddingTop: 10,
+    paddingBottom: 12,
   },
-  headerText: {
-    flex: 1,
+  stopsPill: {
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    borderRadius: 20,
+    borderWidth: 1,
+  },
+  stopsPillText: {
+    color: '#FF6C00',
+    fontSize: 12,
+    fontWeight: '600',
+    letterSpacing: 0.1,
+  },
+  headerTitleBlock: {
+    gap: 3,
   },
   headerTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    letterSpacing: -0.3,
-  },
-  headerSubtitle: {
-    fontSize: 12,
-    fontWeight: '500',
-    marginTop: 1,
-  },
-  counterPill: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 14,
-    alignItems: 'center',
-  },
-  counterText: {
-    color: '#FF6C00',
-    fontSize: 18,
+    fontSize: 30,
     fontWeight: '800',
-    lineHeight: 20,
+    letterSpacing: -0.8,
+    lineHeight: 34,
   },
-  counterLabel: {
-    fontSize: 9,
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+  headerDate: {
+    fontSize: 13,
+    fontWeight: '500',
+    letterSpacing: 0.1,
   },
+
+  /* ── Scroll content ── */
   scrollContent: {
     paddingHorizontal: 16,
-    paddingTop: 16,
+    paddingTop: 18,
   },
+
+  /* ── All done banner ── */
   allDoneBanner: {
-    borderRadius: 20,
-    overflow: 'hidden',
-    marginBottom: 20,
-    borderWidth: 1,
-  },
-  allDoneBannerInner: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 16,
-    padding: 20,
-    borderRadius: 20,
+    gap: 14,
+    padding: 18,
+    borderRadius: 18,
     borderWidth: 1,
+    marginBottom: 20,
   },
-  allDoneEmoji: {
-    fontSize: 36,
-  },
-  allDoneTitle: {
-    fontSize: 17,
-    fontWeight: '700',
-    letterSpacing: -0.2,
-  },
-  allDoneSubtitle: {
-    fontSize: 13,
-    fontWeight: '400',
-    marginTop: 2,
-  },
+  allDoneEmoji: { fontSize: 32 },
+  allDoneTitle: { fontSize: 16, fontWeight: '700', letterSpacing: -0.2 },
+  allDoneSubtitle: { fontSize: 13, marginTop: 2 },
+
+  /* ── Section headers ── */
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 12,
-    marginBottom: 10,
-    gap: 8,
+    gap: 7,
+    marginBottom: 12,
+    paddingHorizontal: 2,
   },
   sectionDot: {
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#FF6C00',
   },
-  sectionTitle: {
+  sectionLabel: {
     flex: 1,
     fontSize: 11,
     fontWeight: '700',
-    letterSpacing: 1.2,
+    letterSpacing: 1.3,
   },
-  sectionBadge: {
+  sectionCount: {
     minWidth: 20,
     height: 20,
     borderRadius: 10,
@@ -274,7 +243,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 6,
   },
-  sectionBadgeText: {
+  sectionCountText: {
     color: '#fff',
     fontSize: 11,
     fontWeight: '700',
