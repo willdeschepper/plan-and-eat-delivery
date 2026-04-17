@@ -16,8 +16,7 @@ const INDETERMINATE_CYCLE_MS = 2200;
 const DETERMINATE_STEP_MS = 360;
 
 export function LoadingHost(): React.ReactElement | null {
-  // const visible = useGlobalLoaderStore(state => state.visible);
-  const visible = true;
+  const visible = useGlobalLoaderStore(state => state.visible);
   const mode = useGlobalLoaderStore(state => state.mode);
   const storeProgress = useGlobalLoaderStore(state => state.progress);
 
