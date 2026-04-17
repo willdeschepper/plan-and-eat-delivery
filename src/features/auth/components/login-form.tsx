@@ -3,15 +3,13 @@ import type { InputFieldForm } from '@/components/ui/input-field';
 import { useForm } from '@tanstack/react-form';
 import { useRouter } from 'expo-router';
 import * as React from 'react';
-
 import { useTranslation } from 'react-i18next';
-import { Pressable, Text as RNText, View } from 'react-native';
-import { Button, InputField, Text } from '@/components/ui';
+import { Pressable, Text as RNText } from 'react-native';
+
+import { Button, InputField, View } from '@/components/ui';
 import { useLoginFormValidators } from '@/lib/hooks';
-import { AuthFooterLink } from './auth-footer-link';
 import { AuthFormHeader } from './auth-form-header';
 import { AuthFormLayout } from './auth-form-layout';
-import { SocialLoginButtons } from './social-login-buttons';
 
 export type FormType = {
   number: string;
@@ -93,23 +91,6 @@ export function LoginForm({ onSubmit = () => {} }: LoginFormProps) {
             />
           );
         }}
-      />
-
-      <View className="my-6 flex-row items-center">
-        <View className="h-px flex-1 bg-neutral-300 dark:bg-neutral-600" />
-        <Text className="mx-4 text-sm text-neutral-500 dark:text-neutral-400">
-          {t('auth.login.or')}
-        </Text>
-        <View className="h-px flex-1 bg-neutral-300 dark:bg-neutral-600" />
-      </View>
-
-      <SocialLoginButtons />
-
-      <AuthFooterLink
-        text={t('auth.login.no_account')}
-        linkText={t('auth.login.sign_up')}
-        onPress={() => router.push('/sign-up')}
-        testID="sign-up-link"
       />
     </AuthFormLayout>
   );

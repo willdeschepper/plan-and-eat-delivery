@@ -1,1 +1,4 @@
-export { ProfileScreen as default } from '@/features/profile/profile-screen';
+import { Redirect } from 'expo-router';
+export default function ProfileRedirect() {
+  return <Redirect href="/orders" />;
+}
