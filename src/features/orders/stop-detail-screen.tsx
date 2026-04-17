@@ -1,4 +1,4 @@
-import { BlurView } from 'expo-blur';
+import { SafeBlurView } from '@/components/ui/safe-blur-view';
 import { Image } from 'expo-image';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as React from 'react';
@@ -79,7 +79,7 @@ export function StopDetailScreen() {
         style={[styles.floatingHeader, { paddingTop: insets.top }, headerBlurOpacity]}
         pointerEvents="none"
       >
-        <BlurView
+        <SafeBlurView
           intensity={isDark ? 70 : 80}
           tint={isDark ? 'dark' : 'light'}
           style={StyleSheet.absoluteFillObject}
@@ -97,7 +97,7 @@ export function StopDetailScreen() {
           onPress={() => router.back()}
           style={styles.backButton}
         >
-          <BlurView intensity={70} tint="dark" style={StyleSheet.absoluteFillObject} />
+          <SafeBlurView intensity={70} tint="dark" style={StyleSheet.absoluteFillObject} />
           <View style={styles.backButtonInner}>
             <Text style={styles.backButtonText}>←</Text>
           </View>

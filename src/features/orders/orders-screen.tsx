@@ -1,4 +1,4 @@
-import { BlurView } from 'expo-blur';
+import { SafeBlurView } from '@/components/ui/safe-blur-view';
 import { useRouter } from 'expo-router';
 import * as React from 'react';
 import {
@@ -59,7 +59,7 @@ export function OrdersScreen() {
 
       {/* Sticky Header */}
       <View style={[styles.header, { paddingTop: insets.top }]}>
-        <BlurView
+        <SafeBlurView
           intensity={isDark ? 60 : 70}
           tint={isDark ? 'dark' : 'light'}
           style={StyleSheet.absoluteFillObject}
@@ -95,7 +95,7 @@ export function OrdersScreen() {
             entering={FadeInDown.springify().damping(18)}
             style={styles.allDoneBanner}
           >
-            <BlurView intensity={isDark ? 40 : 50} tint={isDark ? 'dark' : 'light'} style={StyleSheet.absoluteFillObject} />
+            <SafeBlurView intensity={isDark ? 40 : 50} tint={isDark ? 'dark' : 'light'} style={StyleSheet.absoluteFillObject} />
             <View style={[styles.allDoneBannerInner, { backgroundColor: isDark ? 'rgba(34,197,94,0.12)' : 'rgba(34,197,94,0.1)', borderColor: 'rgba(34,197,94,0.3)' }]}>
               <Text style={styles.allDoneEmoji}>🎉</Text>
               <View>

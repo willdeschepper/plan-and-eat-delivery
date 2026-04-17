@@ -1,4 +1,4 @@
-import { BlurView } from 'expo-blur';
+import { SafeBlurView } from '@/components/ui/safe-blur-view';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import * as React from 'react';
@@ -85,7 +85,7 @@ export function AppDrawer() {
 
       {/* Drawer panel */}
       <Animated.View style={[styles.drawer, { width: DRAWER_WIDTH }, drawerStyle]}>
-        <BlurView
+        <SafeBlurView
           intensity={isDark ? 60 : 70}
           tint={isDark ? 'dark' : 'light'}
           style={StyleSheet.absoluteFillObject}

@@ -1,4 +1,4 @@
-import { BlurView } from 'expo-blur';
+import { SafeBlurView } from '@/components/ui/safe-blur-view';
 import { Image } from 'expo-image';
 import * as React from 'react';
 import {
@@ -78,7 +78,7 @@ export function DeliveryStopCard({ stop, isLocked, isCompleted, index, onPress }
                 : 'rgba(0,0,0,0.07)',
           },
         ]}>
-          <BlurView
+          <SafeBlurView
             intensity={isDark ? 40 : 50}
             tint={isDark ? 'dark' : 'light'}
             style={StyleSheet.absoluteFillObject}
