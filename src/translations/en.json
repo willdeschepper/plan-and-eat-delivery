@@ -97,7 +97,29 @@
   },
   "courier": {
     "subtitle": "Delivery workspace",
-    "title": "Courier"
+    "title": "Courier",
+    "orders": {
+      "title": "Today's Deliveries",
+      "pending": "PENDING",
+      "completed": "COMPLETED",
+      "all_done_title": "All deliveries done!",
+      "stops": "stops"
+    },
+    "stop": {
+      "orders_title": "CUSTOMER ORDERS",
+      "picked_up": "picked up",
+      "all_picked": "All orders picked up!",
+      "check_below": "Check off each customer below",
+      "complete_label": "This stop is marked as complete"
+    },
+    "drawer": {
+      "delivered": "Delivered",
+      "earned": "Earned",
+      "home": "Today's Orders",
+      "settings": "Settings",
+      "logout": "Logout",
+      "role": "Courier"
+    }
   },
   "network": {
     "action_offline": "No connection. Check your network settings",

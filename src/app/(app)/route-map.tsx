@@ -1,1 +1,4 @@
-export { RouteMapScreen as default } from '@/features/route-map/route-map-screen';
+import { Redirect } from 'expo-router';
+export default function RouteMapRedirect() {
+  return <Redirect href="/orders" />;
+}
