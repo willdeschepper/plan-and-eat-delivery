@@ -1,4 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
+export * from './use-app-theme';
 export * from './use-auth-store';
 export * from './use-forgot-password';
 export * from './use-is-first-time';

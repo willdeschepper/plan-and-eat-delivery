@@ -17,7 +17,8 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useUniwind } from 'uniwind';
+
+import { useAppTheme } from '@/lib/hooks/use-app-theme';
 
 import { CustomerOrderItem } from './components/customer-order-item';
 import { useOrdersStore } from './store/use-orders-store';
@@ -29,8 +30,7 @@ const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 export function StopDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
-  const { theme } = useUniwind();
-  const isDark = theme === 'dark';
+  const { isDark, c } = useAppTheme();
   const insets = useSafeAreaInsets();
   const scrollY = useSharedValue(0);
 
@@ -57,8 +57,8 @@ export function StopDetailScreen() {
 
   if (!stop) {
     return (
-      <View style={[styles.notFound, { backgroundColor: isDark ? '#0a0a0a' : '#fff' }]}>
-        <Text style={{ color: isDark ? '#fafafa' : '#111', fontSize: 16 }}>Stop not found.</Text>
+      <View style={[styles.notFound, { backgroundColor: c.bg }]}>
+        <Text style={{ color: c.textPrimary, fontSize: 16 }}>Stop not found.</Text>
       </View>
     );
   }
@@ -67,15 +67,10 @@ export function StopDetailScreen() {
   const total = stop.orders.length;
   const allDone = pickedCount === total;
 
-  const bg = isDark ? '#0a0a0a' : '#ffffff';
-  const textPrimary = isDark ? '#fafafa' : '#111111';
-  const textSecondary = isDark ? '#888' : '#999';
-  const cardBg = isDark ? '#1a1a1a' : '#F7F7F7';
-  const borderColor = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.07)';
-
   return (
-    <View style={[styles.container, { backgroundColor: bg }]}>
-      <StatusBar barStyle="light-content" />
+    <View style={[styles.container, { backgroundColor: c.bg }]}>
+      {/* StatusBar adapts to theme — light-content in dark mode, dark-content in light mode */}
+      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
 
       {/* ── Fixed back button — always on top of hero ── */}
       <Pressable
@@ -88,10 +83,14 @@ export function StopDetailScreen() {
 
       {/* ── Collapsed sticky header (appears after hero scrolled away) ── */}
       <Animated.View
-        style={[styles.stickyHeader, { paddingTop: insets.top, backgroundColor: isDark ? '#0a0a0a' : '#fff', borderBottomColor: borderColor }, collapsedHeaderStyle]}
+        style={[
+          styles.stickyHeader,
+          { paddingTop: insets.top, backgroundColor: c.bg, borderBottomColor: c.border },
+          collapsedHeaderStyle,
+        ]}
         pointerEvents="none"
       >
-        <Text style={[styles.stickyTitle, { color: textPrimary }]} numberOfLines={1}>
+        <Text style={[styles.stickyTitle, { color: c.textPrimary }]} numberOfLines={1}>
           {stop.name}
         </Text>
       </Animated.View>
@@ -120,19 +119,19 @@ export function StopDetailScreen() {
         </View>
 
         {/* Content */}
-        <View style={[styles.content, { backgroundColor: bg }]}>
+        <View style={[styles.content, { backgroundColor: c.bg }]}>
 
           {/* Progress card */}
           <Animated.View
             entering={FadeInDown.delay(40).springify().damping(18)}
-            style={[styles.progressCard, { backgroundColor: cardBg, borderColor }]}
+            style={[styles.progressCard, { backgroundColor: c.card, borderColor: c.border }]}
           >
             <View style={styles.progressRow}>
               <View style={{ flex: 1 }}>
-                <Text style={[styles.progressTitle, { color: textPrimary }]}>
+                <Text style={[styles.progressTitle, { color: c.textPrimary }]}>
                   {allDone ? '🎉 All orders picked up!' : `${pickedCount} of ${total} picked up`}
                 </Text>
-                <Text style={[styles.progressSub, { color: textSecondary }]}>
+                <Text style={[styles.progressSub, { color: c.textSecondary }]}>
                   {allDone ? 'This stop is complete' : 'Check off each customer below'}
                 </Text>
               </View>
@@ -154,7 +153,7 @@ export function StopDetailScreen() {
 
           {/* Orders list */}
           <Animated.View entering={FadeInDown.delay(100).springify().damping(18)}>
-            <Text style={[styles.sectionLabel, { color: textSecondary }]}>
+            <Text style={[styles.sectionLabel, { color: c.textSecondary }]}>
               CUSTOMER ORDERS
             </Text>
             {stop.orders.map((order, idx) => (
@@ -176,7 +175,7 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   notFound: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 
-  /* ── Back button ── */
+  /* ── Back button — intentionally white circle for visibility on hero image ── */
   backBtn: {
     position: 'absolute',
     left: 16,

@@ -1,4 +1,3 @@
-import { SafeBlurView } from '@/components/ui/safe-blur-view';
 import { useRouter } from 'expo-router';
 import * as React from 'react';
 import {
@@ -13,7 +12,8 @@ import Animated, {
   LinearTransition,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useUniwind } from 'uniwind';
+
+import { useAppTheme } from '@/lib/hooks/use-app-theme';
 
 import { useDrawer } from '../drawer/drawer-context';
 import { BurgerButton } from './components/burger-button';
@@ -31,8 +31,7 @@ function formatDate(date: Date): { dayName: string; fullDate: string } {
 }
 
 export function OrdersScreen() {
-  const { theme } = useUniwind();
-  const isDark = theme === 'dark';
+  const { isDark, c } = useAppTheme();
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { openDrawer } = useDrawer();
@@ -47,33 +46,29 @@ export function OrdersScreen() {
   const completedStops = stops.filter(s => isStopCompleted(s.id));
   const allDone = pendingStops.length === 0 && stops.length > 0;
 
-  const bg = isDark ? '#0a0a0a' : '#ffffff';
-  const headerBg = isDark ? '#0a0a0a' : '#ffffff';
-  const textPrimary = isDark ? '#fafafa' : '#111111';
-  const textSecondary = isDark ? '#888' : '#999';
-  const borderColor = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.07)';
-  const sectionBg = isDark ? '#1a1a1a' : '#F7F7F7';
-
   return (
-    <View style={[styles.container, { backgroundColor: bg }]}>
+    <View style={[styles.container, { backgroundColor: c.bg }]}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
 
       {/* Header */}
-      <View style={[styles.header, { paddingTop: insets.top, backgroundColor: headerBg, borderBottomColor: borderColor }]}>
+      <View style={[styles.header, { paddingTop: insets.top, backgroundColor: c.bg, borderBottomColor: c.border }]}>
         {/* Row 1: burger + pill */}
         <View style={styles.headerRow}>
           <BurgerButton onPress={openDrawer} isDark={isDark} />
-          <View style={[styles.stopsPill, { backgroundColor: isDark ? 'rgba(255,108,0,0.12)' : '#FFF3EB', borderColor: isDark ? 'rgba(255,108,0,0.2)' : '#FFD4B0' }]}>
+          <View style={[styles.stopsPill, {
+            backgroundColor: isDark ? 'rgba(255,108,0,0.12)' : '#FFF3EB',
+            borderColor: isDark ? 'rgba(255,108,0,0.2)' : '#FFD4B0',
+          }]}>
             <Text style={styles.stopsPillText}>{stops.length} stops today</Text>
           </View>
         </View>
 
         {/* Row 2: title + date */}
         <View style={styles.headerTitleBlock}>
-          <Text style={[styles.headerTitle, { color: textPrimary }]}>
+          <Text style={[styles.headerTitle, { color: c.textPrimary }]}>
             Today's Deliveries
           </Text>
-          <Text style={[styles.headerDate, { color: textSecondary }]}>
+          <Text style={[styles.headerDate, { color: c.textSecondary }]}>
             {dayName} · {fullDate}
           </Text>
         </View>
@@ -90,12 +85,15 @@ export function OrdersScreen() {
         {allDone && (
           <Animated.View
             entering={FadeInDown.springify().damping(18)}
-            style={[styles.allDoneBanner, { backgroundColor: isDark ? 'rgba(34,197,94,0.1)' : '#F0FDF4', borderColor: isDark ? 'rgba(34,197,94,0.25)' : '#BBF7D0' }]}
+            style={[styles.allDoneBanner, {
+              backgroundColor: isDark ? 'rgba(34,197,94,0.1)' : '#F0FDF4',
+              borderColor: isDark ? 'rgba(34,197,94,0.25)' : '#BBF7D0',
+            }]}
           >
             <Text style={styles.allDoneEmoji}>🎉</Text>
             <View style={{ flex: 1 }}>
-              <Text style={[styles.allDoneTitle, { color: textPrimary }]}>All deliveries done!</Text>
-              <Text style={[styles.allDoneSubtitle, { color: textSecondary }]}>Great work today!</Text>
+              <Text style={[styles.allDoneTitle, { color: c.textPrimary }]}>All deliveries done!</Text>
+              <Text style={[styles.allDoneSubtitle, { color: c.textSecondary }]}>Great work today!</Text>
             </View>
           </Animated.View>
         )}
@@ -105,7 +103,7 @@ export function OrdersScreen() {
           <Animated.View layout={LinearTransition.springify()}>
             <View style={styles.sectionHeader}>
               <View style={[styles.sectionDot, { backgroundColor: '#FF6C00' }]} />
-              <Text style={[styles.sectionLabel, { color: textSecondary }]}>PENDING</Text>
+              <Text style={[styles.sectionLabel, { color: c.textSecondary }]}>PENDING</Text>
               <View style={[styles.sectionCount, { backgroundColor: '#FF6C00' }]}>
                 <Text style={styles.sectionCountText}>{pendingStops.length}</Text>
               </View>
@@ -131,7 +129,7 @@ export function OrdersScreen() {
           >
             <View style={[styles.sectionHeader, { marginTop: pendingStops.length > 0 ? 8 : 0 }]}>
               <View style={[styles.sectionDot, { backgroundColor: '#22C55E' }]} />
-              <Text style={[styles.sectionLabel, { color: textSecondary }]}>COMPLETED</Text>
+              <Text style={[styles.sectionLabel, { color: c.textSecondary }]}>COMPLETED</Text>
               <View style={[styles.sectionCount, { backgroundColor: '#22C55E' }]}>
                 <Text style={styles.sectionCountText}>{completedStops.length}</Text>
               </View>

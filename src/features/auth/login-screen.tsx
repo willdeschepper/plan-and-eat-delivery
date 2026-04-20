@@ -27,7 +27,7 @@ export function LoginScreen() {
 
   return (
     <View className="flex-1 bg-white dark:bg-neutral-900">
-      <FocusAwareStatusBar contentStyle="dark" />
+      <FocusAwareStatusBar />
       <Background fillScreen />
       <LoginForm onSubmit={onSubmit} />
     </View>

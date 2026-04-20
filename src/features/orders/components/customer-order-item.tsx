@@ -10,7 +10,8 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
-import { useUniwind } from 'uniwind';
+
+import { useAppTheme } from '@/lib/hooks/use-app-theme';
 
 import type { CustomerOrder } from '../types';
 
@@ -35,8 +36,7 @@ const AVATAR_COLORS = [
 ];
 
 export function CustomerOrderItem({ order, onToggle, index }: Props) {
-  const { theme } = useUniwind();
-  const isDark = theme === 'dark';
+  const { isDark, c } = useAppTheme();
 
   const checkScale = useSharedValue(1);
 
@@ -46,11 +46,7 @@ export function CustomerOrderItem({ order, onToggle, index }: Props) {
   const cardBg = isDark ? 'rgba(30,30,30,0.9)' : 'rgba(255,255,255,0.9)';
   const borderColor = order.isPickedUp
     ? 'rgba(34,197,94,0.35)'
-    : isDark
-      ? 'rgba(255,255,255,0.08)'
-      : 'rgba(0,0,0,0.07)';
-  const textPrimary = isDark ? '#fafafa' : '#1E1E1E';
-  const textSecondary = isDark ? '#A3A3A3' : '#7D7D7D';
+    : c.border;
   const itemBg = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.03)';
 
   const handleToggle = () => {
@@ -72,10 +68,10 @@ export function CustomerOrderItem({ order, onToggle, index }: Props) {
           <Text style={styles.avatarText}>{initials}</Text>
         </View>
         <View style={styles.nameBlock}>
-          <Text style={[styles.customerName, { color: textPrimary }]}>
+          <Text style={[styles.customerName, { color: c.textPrimary }]}>
             {order.customerName}
           </Text>
-          <Text style={[styles.itemCount, { color: textSecondary }]}>
+          <Text style={[styles.itemCount, { color: c.textSecondary }]}>
             {order.items.length} {order.items.length === 1 ? 'item' : 'items'}
           </Text>
         </View>
@@ -99,7 +95,7 @@ export function CustomerOrderItem({ order, onToggle, index }: Props) {
         {order.items.map(item => (
           <View key={item.id} style={[styles.foodItem, { backgroundColor: itemBg }]}>
             <Text style={styles.foodDot}>•</Text>
-            <Text style={[styles.foodName, { color: textPrimary }]} numberOfLines={1}>
+            <Text style={[styles.foodName, { color: c.textPrimary }]} numberOfLines={1}>
               {item.name}
             </Text>
             <View style={[styles.qtyBadge, { backgroundColor: isDark ? 'rgba(255,108,0,0.15)' : 'rgba(255,108,0,0.1)' }]}>

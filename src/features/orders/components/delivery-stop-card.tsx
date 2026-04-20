@@ -1,4 +1,5 @@
 import { SafeBlurView } from '@/components/ui/safe-blur-view';
+import { useAppTheme } from '@/lib/hooks/use-app-theme';
 import { Image } from 'expo-image';
 import * as React from 'react';
 import {
@@ -14,7 +15,6 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
-import { useUniwind } from 'uniwind';
 
 import type { DeliveryStop } from '../types';
 
@@ -39,8 +39,7 @@ function openGoogleMaps(address: string) {
 }
 
 export function DeliveryStopCard({ stop, isLocked, isCompleted, index, onPress }: Props) {
-  const { theme } = useUniwind();
-  const isDark = theme === 'dark';
+  const { isDark, c } = useAppTheme();
   const scale = useSharedValue(1);
   const pickedCount = stop.orders.filter(o => o.isPickedUp).length;
   const total = stop.orders.length;
@@ -73,14 +72,12 @@ export function DeliveryStopCard({ stop, isLocked, isCompleted, index, onPress }
           {
             borderColor: isCompleted
               ? 'rgba(34,197,94,0.3)'
-              : isDark
-                ? 'rgba(255,255,255,0.1)'
-                : 'rgba(0,0,0,0.07)',
+              : c.border,
           },
         ]}>
           <SafeBlurView
             intensity={isDark ? 40 : 50}
-            tint={isDark ? 'dark' : 'light'}
+            tint={c.blurTint}
             style={StyleSheet.absoluteFillObject}
           />
           <View style={[
@@ -122,11 +119,11 @@ export function DeliveryStopCard({ stop, isLocked, isCompleted, index, onPress }
             {/* Info */}
             <View style={styles.info}>
               <View style={styles.titleRow}>
-                <Text style={[styles.name, { color: isDark ? '#fafafa' : '#1E1E1E' }]} numberOfLines={1}>
+                <Text style={[styles.name, { color: c.textPrimary }]} numberOfLines={1}>
                   {stop.name}
                 </Text>
               </View>
-              <Text style={[styles.address, { color: isDark ? '#A3A3A3' : '#7D7D7D' }]} numberOfLines={1}>
+              <Text style={[styles.address, { color: c.textSecondary }]} numberOfLines={1}>
                 {stop.address}
               </Text>
 
@@ -144,7 +141,7 @@ export function DeliveryStopCard({ stop, isLocked, isCompleted, index, onPress }
                       ]}
                     />
                   </View>
-                  <Text style={[styles.progressLabel, { color: isDark ? '#A3A3A3' : '#7D7D7D' }]}>
+                  <Text style={[styles.progressLabel, { color: c.textSecondary }]}>
                     {pickedCount}/{total} picked up
                   </Text>
                 </View>
@@ -172,12 +169,12 @@ export function DeliveryStopCard({ stop, isLocked, isCompleted, index, onPress }
                     pressed && { opacity: 0.75 },
                   ]}
                 >
-                  <Text style={[styles.navBtnText, { color: isDark ? '#fafafa' : '#1E1E1E' }]}>
+                  <Text style={[styles.navBtnText, { color: c.textPrimary }]}>
                     📍 Maps
                   </Text>
                 </Pressable>
 
-                {/* Auto-checkbox */}
+                {/* Auto-checkbox — non-interactive, reflects completion state */}
                 <View style={[
                   styles.checkbox,
                   isCompleted

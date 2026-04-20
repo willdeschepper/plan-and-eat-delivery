@@ -62,7 +62,7 @@ export function OnboardingScreen() {
   );
 
   return (
-    <View className="flex-1 bg-white">
+    <View className="flex-1 bg-white dark:bg-neutral-900">
       <FocusAwareStatusBar />
 
       <SafeAreaView style={{ flex: 1 }}>

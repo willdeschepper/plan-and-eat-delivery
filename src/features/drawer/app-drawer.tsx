@@ -1,4 +1,5 @@
 import { SafeBlurView } from '@/components/ui/safe-blur-view';
+import { useAppTheme } from '@/lib/hooks/use-app-theme';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import * as React from 'react';
@@ -11,14 +12,12 @@ import {
 } from 'react-native';
 import Animated, {
   interpolate,
-  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useUniwind } from 'uniwind';
 
 import { signOut } from '@/lib/hooks';
 import { useOrdersStore } from '../orders/store/use-orders-store';
@@ -38,8 +37,7 @@ export function AppDrawer() {
   const { isOpen, closeDrawer } = useDrawer();
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { theme } = useUniwind();
-  const isDark = theme === 'dark';
+  const { isDark, c } = useAppTheme();
 
   const profile = useOrdersStore(s => s.profile);
   const completedCount = useOrdersStore(s => s.completedCount());
@@ -87,10 +85,13 @@ export function AppDrawer() {
       <Animated.View style={[styles.drawer, { width: DRAWER_WIDTH }, drawerStyle]}>
         <SafeBlurView
           intensity={isDark ? 60 : 70}
-          tint={isDark ? 'dark' : 'light'}
+          tint={c.blurTint}
           style={StyleSheet.absoluteFillObject}
         />
-        <View style={[styles.drawerInner, { backgroundColor: isDark ? 'rgba(18,18,18,0.55)' : 'rgba(255,255,255,0.55)' }]}>
+        <View style={[
+          styles.drawerInner,
+          { backgroundColor: isDark ? 'rgba(18,18,18,0.55)' : 'rgba(255,255,255,0.55)' },
+        ]}>
 
           {/* User info header */}
           <View style={[styles.header, { paddingTop: insets.top + 24 }]}>
@@ -102,10 +103,10 @@ export function AppDrawer() {
               />
               <View style={styles.onlineDot} />
             </View>
-            <Text style={[styles.userName, { color: isDark ? '#fafafa' : '#1E1E1E' }]}>
+            <Text style={[styles.userName, { color: c.textPrimary }]}>
               {profile.name}
             </Text>
-            <Text style={[styles.userRole, { color: isDark ? '#A3A3A3' : '#7D7D7D' }]}>
+            <Text style={[styles.userRole, { color: c.textSecondary }]}>
               Courier
             </Text>
           </View>
@@ -117,12 +118,12 @@ export function AppDrawer() {
           }]}>
             <View style={styles.statItem}>
               <Text style={styles.statValue}>{completedCount}</Text>
-              <Text style={[styles.statLabel, { color: isDark ? '#A3A3A3' : '#7D7D7D' }]}>Delivered</Text>
+              <Text style={[styles.statLabel, { color: c.textSecondary }]}>Delivered</Text>
             </View>
             <View style={[styles.statDivider, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)' }]} />
             <View style={styles.statItem}>
               <Text style={styles.statValue}>${profile.totalEarnings.toFixed(0)}</Text>
-              <Text style={[styles.statLabel, { color: isDark ? '#A3A3A3' : '#7D7D7D' }]}>Earned</Text>
+              <Text style={[styles.statLabel, { color: c.textSecondary }]}>Earned</Text>
             </View>
           </View>
 
@@ -141,7 +142,7 @@ export function AppDrawer() {
                 onPress={() => handleNavPress(item.route)}
               >
                 <Text style={styles.navIcon}>{item.icon}</Text>
-                <Text style={[styles.navLabel, { color: isDark ? '#fafafa' : '#1E1E1E' }]}>
+                <Text style={[styles.navLabel, { color: c.textPrimary }]}>
                   {item.label}
                 </Text>
               </Pressable>
