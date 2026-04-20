@@ -6,3 +6,136 @@ node_modules
 
 expo-env.d.ts
 # @end expo-cli
+# OSX
+.DS_Store
+
+# Xcode
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+**/.xcode.env.local
+*.xcworkspace
+!default.xcworkspace
+
+# Android/IntelliJ
+.idea
+.gradle
+local.properties
+*.iml
+*.hprof
+.cxx/
+*.keystore
+!debug.keystore
+*.apk
+*.ap_
+*.aab
+.kotlin/
+
+# node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+# yarn.lock - нужно коммитить для фиксации версий
+# package-lock.json - нужно коммитить для фиксации версий
+.pnp
+.pnp.js
+
+# React Native
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+
+# Metro
+.metro-health-check*
+
+# fastlane
+**/fastlane/report.xml
+**/fastlane/Preview.html
+**/fastlane/screenshots
+**/fastlane/test_output
+
+# Bundle artifact
+*.jsbundle
+
+# Ruby / CocoaPods
+**/Pods/
+/vendor/bundle/
+# Podfile.lock - нужно коммитить для фиксации версий pods
+
+# testing
+/coverage
+*.lcov
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# TypeScript
+*.tsbuildinfo
+
+# Logs
+logs
+*.log
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Build artifacts
+dist/
+build/
+*.tgz
+
+# iOS build artifacts
+ios/build/
+ios/Pods/
+ios/*.xcworkspace
+ios/*.xcworkspace/xcuserdata/
+ios/*.xcuserdata
+
+# Android build artifacts
+android/app/build/
+android/.gradle/
+android/local.properties
+android/app/release/
