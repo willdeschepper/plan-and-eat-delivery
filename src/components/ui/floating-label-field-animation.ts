@@ -23,10 +23,11 @@ export type InputFloatParams = {
   label: string | undefined;
   hasError: boolean;
   isDisabled: boolean;
+  isDark?: boolean;
 };
 
 export function useInputFloatAnimation(params: InputFloatParams) {
-  const { value, isFocussed, placeholder, label, hasError, isDisabled } = params;
+  const { value, isFocussed, placeholder, label, hasError, isDisabled, isDark = false } = params;
 
   const hasValue
     = typeof value === 'string' ? value.length > 0 : Boolean(value);
@@ -54,6 +55,10 @@ export function useInputFloatAnimation(params: InputFloatParams) {
     isDisabledSV.value = isDisabled ? 1 : 0;
   }, [isDisabled, isDisabledSV]);
 
+  // Border colors adapt to dark/light mode
+  const borderIdle   = isDark ? colors.charcoal[700] : colors.inputBorder.idle;   // #474747 : #CECECE
+  const borderActive = isDark ? colors.charcoal[400] : colors.inputBorder.active; // #969696 : #BEBEBE
+
   const containerBorderStyle = useAnimatedStyle(() => {
     if (isErrorSV.value > 0.5) {
       return {
@@ -64,7 +69,7 @@ export function useInputFloatAnimation(params: InputFloatParams) {
     if (isDisabledSV.value > 0.5) {
       return {
         borderWidth: 1,
-        borderColor: colors.neutral[300],
+        borderColor: isDark ? colors.charcoal[700] : colors.neutral[300],
       };
     }
     return {
@@ -72,7 +77,7 @@ export function useInputFloatAnimation(params: InputFloatParams) {
       borderColor: interpolateColor(
         floatProgress.value,
         [0, 1],
-        [colors.inputBorder.idle, colors.inputBorder.active],
+        [borderIdle, borderActive],
       ),
     };
   });

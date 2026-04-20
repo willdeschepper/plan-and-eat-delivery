@@ -6,11 +6,13 @@ import { I18nManager, TextInput as NTextInput, Pressable, StyleSheet, View } fro
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { tv } from 'tailwind-variants';
 
+import { useAppTheme } from '@/lib/hooks/use-app-theme';
 import { EyeIcon, EyeOffIcon } from '@/components/ui/password-toggle-icon';
 import { useInputFloatAnimation } from './floating-label-field-animation';
 import { Text } from './text';
 
-const FIGMA_FIELD_TEXT = '#141414';
+const PLACEHOLDER_COLOR_LIGHT = '#A3A3A3'; // neutral-400 — visible but muted on white bg
+const PLACEHOLDER_COLOR_DARK  = '#525252'; // neutral-600 — visible but muted on dark bg
 
 const inputTv = tv({
   slots: {
@@ -93,6 +95,9 @@ function useErrorOpacity(visible: boolean, duration = 200) {
 }
 
 export function Input({ ref, ...props }: NInputProps & { ref?: React.RefObject<NTextInput | null> }) {
+  const { isDark } = useAppTheme();
+  const placeholderTextColor = isDark ? PLACEHOLDER_COLOR_DARK : PLACEHOLDER_COLOR_LIGHT;
+
   const {
     label,
     error,
@@ -137,6 +142,7 @@ export function Input({ ref, ...props }: NInputProps & { ref?: React.RefObject<N
     label,
     hasError: Boolean(error),
     isDisabled: Boolean(props.disabled),
+    isDark,
   });
 
   const errorAnimatedStyle = useErrorOpacity(Boolean(error));
@@ -172,7 +178,7 @@ export function Input({ ref, ...props }: NInputProps & { ref?: React.RefObject<N
           ref={ref}
           secureTextEntry={props.isPassword && !props.passwordVisible}
           placeholder={effectivePlaceholder}
-          placeholderTextColor={FIGMA_FIELD_TEXT}
+          placeholderTextColor={placeholderTextColor}
           className={styles.input()}
           onBlur={onBlur}
           onFocus={onFocus}

@@ -69,7 +69,7 @@ export function LoginForm({ onSubmit = () => {} }: LoginFormProps) {
         className="mb-4 self-end"
         testID="forgot-password-link"
       >
-        <RNText className="text-base text-[#141414] underline">
+        <RNText className="text-base text-charcoal-900 underline dark:text-neutral-100">
           {t('auth.login.forgot_password')}
         </RNText>
       </Pressable>
