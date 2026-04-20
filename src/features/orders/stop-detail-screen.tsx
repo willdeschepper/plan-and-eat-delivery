@@ -2,6 +2,7 @@ import { Image } from 'expo-image';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as React from 'react';
 import {
+  Alert,
   Pressable,
   ScrollView,
   StatusBar,
@@ -20,7 +21,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useAppTheme } from '@/lib/hooks/use-app-theme';
 
-import { CustomerOrderItem } from './components/customer-order-item';
+import { CompanyPickupCard } from './components/company-pickup-card';
 import { useOrdersStore } from './store/use-orders-store';
 
 const HERO_HEIGHT = 260;
@@ -35,14 +36,14 @@ export function StopDetailScreen() {
   const scrollY = useSharedValue(0);
 
   const stops = useOrdersStore(s => s.stops);
-  const toggleOrderPickedUp = useOrdersStore(s => s.toggleOrderPickedUp);
+  const setPickedUpQuantity = useOrdersStore(s => s.setPickedUpQuantity);
+  const markDelivered = useOrdersStore(s => s.markDelivered);
   const stop = stops.find(s => s.id === id);
 
   const scrollHandler = useAnimatedScrollHandler(e => {
     scrollY.value = e.contentOffset.y;
   });
 
-  /* Hero parallax */
   const heroStyle = useAnimatedStyle(() => ({
     transform: [
       { translateY: interpolate(scrollY.value, [0, HERO_HEIGHT], [0, -HERO_HEIGHT * 0.4], 'clamp') },
@@ -50,7 +51,6 @@ export function StopDetailScreen() {
     ],
   }));
 
-  /* Collapsed header fades in when scrolled past hero */
   const collapsedHeaderStyle = useAnimatedStyle(() => ({
     opacity: interpolate(scrollY.value, [HEADER_COLLAPSE_AT, HEADER_COLLAPSE_AT + 40], [0, 1], 'clamp'),
   }));
@@ -63,16 +63,28 @@ export function StopDetailScreen() {
     );
   }
 
-  const pickedCount = stop.orders.filter(o => o.isPickedUp).length;
-  const total = stop.orders.length;
-  const allDone = pickedCount === total;
+  const pickedCount = stop.companies.filter(co => co.pickedUpQuantity > 0).length;
+  const totalCompanies = stop.companies.length;
+  const allPickedUp = pickedCount === totalCompanies;
+
+  function handleMarkDelivered() {
+    if (!allPickedUp) {
+      Alert.alert(
+        'Укажите количество',
+        'Пожалуйста, укажите количество взятых товаров для каждой компании.',
+        [{ text: 'OK' }],
+      );
+      return;
+    }
+    markDelivered(stop!.id);
+    router.back();
+  }
 
   return (
     <View style={[styles.container, { backgroundColor: c.bg }]}>
-      {/* StatusBar adapts to theme — light-content in dark mode, dark-content in light mode */}
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
 
-      {/* ── Fixed back button — always on top of hero ── */}
+      {/* Fixed back button */}
       <Pressable
         onPress={() => router.back()}
         style={[styles.backBtn, { top: insets.top + 10 }]}
@@ -81,7 +93,7 @@ export function StopDetailScreen() {
         <Text style={styles.backBtnArrow}>←</Text>
       </Pressable>
 
-      {/* ── Collapsed sticky header (appears after hero scrolled away) ── */}
+      {/* Collapsed sticky header */}
       <Animated.View
         style={[
           styles.stickyHeader,
@@ -129,41 +141,91 @@ export function StopDetailScreen() {
             <View style={styles.progressRow}>
               <View style={{ flex: 1 }}>
                 <Text style={[styles.progressTitle, { color: c.textPrimary }]}>
-                  {allDone ? '🎉 All orders picked up!' : `${pickedCount} of ${total} picked up`}
+                  {allPickedUp ? '✅ Все товары взяты' : `${pickedCount} из ${totalCompanies} компаний`}
                 </Text>
                 <Text style={[styles.progressSub, { color: c.textSecondary }]}>
-                  {allDone ? 'This stop is complete' : 'Check off each customer below'}
+                  {allPickedUp ? 'Готов к доставке' : 'Укажите количество для каждой компании'}
                 </Text>
               </View>
-              <View style={[styles.circleProgress, { borderColor: allDone ? '#22C55E' : '#FF6C00' }]}>
-                <Text style={[styles.circleText, { color: allDone ? '#22C55E' : '#FF6C00' }]}>
-                  {pickedCount}/{total}
+              <View style={[styles.circleProgress, { borderColor: allPickedUp ? '#22C55E' : '#FF6C00' }]}>
+                <Text style={[styles.circleText, { color: allPickedUp ? '#22C55E' : '#FF6C00' }]}>
+                  {pickedCount}/{totalCompanies}
                 </Text>
               </View>
             </View>
             <View style={[styles.progTrack, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)' }]}>
               <View
                 style={[styles.progFill, {
-                  backgroundColor: allDone ? '#22C55E' : '#FF6C00',
-                  width: `${(pickedCount / total) * 100}%`,
+                  backgroundColor: allPickedUp ? '#22C55E' : '#FF6C00',
+                  width: `${(pickedCount / totalCompanies) * 100}%`,
                 }]}
               />
             </View>
           </Animated.View>
 
-          {/* Orders list */}
+          {/* Companies list */}
           <Animated.View entering={FadeInDown.delay(100).springify().damping(18)}>
             <Text style={[styles.sectionLabel, { color: c.textSecondary }]}>
-              CUSTOMER ORDERS
+              КОМПАНИИ ({totalCompanies})
             </Text>
-            {stop.orders.map((order, idx) => (
-              <CustomerOrderItem
-                key={order.id}
-                order={order}
-                onToggle={() => toggleOrderPickedUp(stop.id, order.id)}
+            {stop.companies.map((company, idx) => (
+              <CompanyPickupCard
+                key={company.id}
+                company={company}
+                onQuantityChange={(qty) => setPickedUpQuantity(stop.id, company.id, qty)}
                 index={idx}
               />
             ))}
+          </Animated.View>
+
+          {/* Deliver section — final step */}
+          <Animated.View
+            entering={FadeInDown.delay(180).springify().damping(18)}
+            style={[
+              styles.deliverCard,
+              {
+                backgroundColor: stop.isDelivered
+                  ? (isDark ? 'rgba(34,197,94,0.1)' : '#F0FDF4')
+                  : (isDark ? 'rgba(255,108,0,0.08)' : '#FFF8F3'),
+                borderColor: stop.isDelivered
+                  ? (isDark ? 'rgba(34,197,94,0.25)' : '#BBF7D0')
+                  : (isDark ? 'rgba(255,108,0,0.2)' : '#FFD4B0'),
+              },
+            ]}
+          >
+            <View style={styles.deliverHeader}>
+              <Text style={styles.deliverIcon}>
+                {stop.isDelivered ? '🎉' : '🚚'}
+              </Text>
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.deliverTitle, { color: c.textPrimary }]}>
+                  {stop.isDelivered ? 'Доставка выполнена!' : 'Отвезти доставку'}
+                </Text>
+                <Text style={[styles.deliverSub, { color: c.textSecondary }]}>
+                  {stop.isDelivered
+                    ? 'Этот маршрут завершён'
+                    : stop.address}
+                </Text>
+              </View>
+            </View>
+
+            {!stop.isDelivered && (
+              <Pressable
+                onPress={handleMarkDelivered}
+                style={({ pressed }) => [
+                  styles.deliverBtn,
+                  { backgroundColor: allPickedUp ? '#22C55E' : (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)') },
+                  pressed && { opacity: 0.8 },
+                ]}
+              >
+                <Text style={[
+                  styles.deliverBtnText,
+                  { color: allPickedUp ? '#fff' : c.textSecondary },
+                ]}>
+                  {allPickedUp ? 'Подтвердить доставку' : 'Укажите количество товаров'}
+                </Text>
+              </Pressable>
+            )}
           </Animated.View>
         </View>
       </AnimatedScrollView>
@@ -175,7 +237,6 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   notFound: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 
-  /* ── Back button — intentionally white circle for visibility on hero image ── */
   backBtn: {
     position: 'absolute',
     left: 16,
@@ -201,7 +262,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
-  /* ── Sticky collapsed header ── */
   stickyHeader: {
     position: 'absolute',
     top: 0,
@@ -219,7 +279,6 @@ const styles = StyleSheet.create({
     paddingTop: 12,
   },
 
-  /* ── Hero ── */
   heroContainer: {
     height: HERO_HEIGHT,
     overflow: 'hidden',
@@ -254,13 +313,11 @@ const styles = StyleSheet.create({
     textShadowRadius: 4,
   },
 
-  /* ── Content ── */
   content: {
     padding: 16,
     paddingTop: 16,
   },
 
-  /* ── Progress card ── */
   progressCard: {
     borderRadius: 18,
     borderWidth: 1,
@@ -305,12 +362,46 @@ const styles = StyleSheet.create({
     borderRadius: 3,
   },
 
-  /* ── Section label ── */
   sectionLabel: {
     fontSize: 11,
     fontWeight: '700',
     letterSpacing: 1.3,
     marginBottom: 12,
     paddingHorizontal: 2,
+  },
+
+  deliverCard: {
+    borderRadius: 18,
+    borderWidth: 1,
+    padding: 16,
+    marginTop: 8,
+    gap: 14,
+  },
+  deliverHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+  },
+  deliverIcon: {
+    fontSize: 32,
+  },
+  deliverTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    letterSpacing: -0.2,
+  },
+  deliverSub: {
+    fontSize: 12,
+    marginTop: 3,
+  },
+  deliverBtn: {
+    borderRadius: 14,
+    paddingVertical: 14,
+    alignItems: 'center',
+  },
+  deliverBtnText: {
+    fontSize: 15,
+    fontWeight: '700',
+    letterSpacing: -0.1,
   },
 });

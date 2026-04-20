@@ -41,8 +41,9 @@ function openGoogleMaps(address: string) {
 export function DeliveryStopCard({ stop, isLocked, isCompleted, index, onPress }: Props) {
   const { isDark, c } = useAppTheme();
   const scale = useSharedValue(1);
-  const pickedCount = stop.orders.filter(o => o.isPickedUp).length;
-  const total = stop.orders.length;
+
+  const pickedCount = stop.companies.filter(co => co.pickedUpQuantity > 0).length;
+  const totalCompanies = stop.companies.length;
 
   const cardStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
@@ -66,7 +67,6 @@ export function DeliveryStopCard({ stop, isLocked, isCompleted, index, onPress }
         onPress={isLocked ? undefined : onPress}
         style={styles.pressable}
       >
-        {/* Glass card */}
         <View style={[
           styles.card,
           {
@@ -92,42 +92,38 @@ export function DeliveryStopCard({ stop, isLocked, isCompleted, index, onPress }
                 contentFit="cover"
                 transition={300}
               />
-              {/* Completed badge */}
               {isCompleted && (
                 <View style={styles.completedBadge}>
-                  <Text style={styles.completedBadgeText}>✓ Completed</Text>
+                  <Text style={styles.completedBadgeText}>✓ Доставлено</Text>
                 </View>
               )}
-              {/* Lock overlay */}
               {isLocked && (
                 <View style={styles.lockOverlay}>
                   <View style={styles.lockIconWrapper}>
                     <Text style={styles.lockIcon}>🔒</Text>
-                    <Text style={styles.lockText}>Complete previous stop first</Text>
+                    <Text style={styles.lockText}>Завершите предыдущий маршрут</Text>
                   </View>
                 </View>
               )}
-              {/* Order count pill */}
+              {/* Companies count pill */}
               <View style={[
-                styles.orderCountPill,
+                styles.countPill,
                 { backgroundColor: isCompleted ? '#22C55E' : '#FF6C00' },
               ]}>
-                <Text style={styles.orderCountText}>📦 {total}</Text>
+                <Text style={styles.countPillText}>🏪 {totalCompanies}</Text>
               </View>
             </View>
 
             {/* Info */}
             <View style={styles.info}>
-              <View style={styles.titleRow}>
-                <Text style={[styles.name, { color: c.textPrimary }]} numberOfLines={1}>
-                  {stop.name}
-                </Text>
-              </View>
+              <Text style={[styles.name, { color: c.textPrimary }]} numberOfLines={1}>
+                {stop.name}
+              </Text>
               <Text style={[styles.address, { color: c.textSecondary }]} numberOfLines={1}>
                 {stop.address}
               </Text>
 
-              {/* Progress bar */}
+              {/* Progress bar — companies picked up */}
               {!isLocked && (
                 <View style={styles.progressRow}>
                   <View style={[styles.progressBg, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.07)' }]}>
@@ -136,13 +132,13 @@ export function DeliveryStopCard({ stop, isLocked, isCompleted, index, onPress }
                         styles.progressFill,
                         {
                           backgroundColor: isCompleted ? '#22C55E' : '#FF6C00',
-                          width: `${(pickedCount / total) * 100}%`,
+                          width: `${(pickedCount / totalCompanies) * 100}%`,
                         },
                       ]}
                     />
                   </View>
                   <Text style={[styles.progressLabel, { color: c.textSecondary }]}>
-                    {pickedCount}/{total} picked up
+                    {isCompleted ? 'Выполнено' : `${pickedCount}/${totalCompanies} компаний`}
                   </Text>
                 </View>
               )}
@@ -174,7 +170,6 @@ export function DeliveryStopCard({ stop, isLocked, isCompleted, index, onPress }
                   </Text>
                 </Pressable>
 
-                {/* Auto-checkbox — non-interactive, reflects completion state */}
                 <View style={[
                   styles.checkbox,
                   isCompleted
@@ -255,7 +250,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'center',
   },
-  orderCountPill: {
+  countPill: {
     position: 'absolute',
     bottom: 12,
     right: 12,
@@ -263,7 +258,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 20,
   },
-  orderCountText: {
+  countPillText: {
     color: '#fff',
     fontSize: 12,
     fontWeight: '700',
@@ -272,16 +267,10 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 4,
   },
-  titleRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
   name: {
     fontSize: 18,
     fontWeight: '700',
     letterSpacing: -0.3,
-    flex: 1,
   },
   address: {
     fontSize: 13,
@@ -307,7 +296,7 @@ const styles = StyleSheet.create({
   progressLabel: {
     fontSize: 11,
     fontWeight: '500',
-    minWidth: 72,
+    minWidth: 88,
     textAlign: 'right',
   },
   actionsRow: {
