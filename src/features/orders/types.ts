@@ -1,14 +1,16 @@
-export interface OrderItem {
+export interface DeliveryItem {
   id: string;
   name: string;
   quantity: number;
 }
 
-export interface CustomerOrder {
+export interface CompanyPickup {
   id: string;
-  customerName: string;
-  items: OrderItem[];
-  isPickedUp: boolean;
+  name: string;
+  photoUrl: string;
+  address: string;
+  items: DeliveryItem[];
+  pickedUpQuantity: number;
 }
 
 export interface DeliveryStop {
@@ -16,7 +18,8 @@ export interface DeliveryStop {
   name: string;
   address: string;
   photoUrl: string;
-  orders: CustomerOrder[];
+  companies: CompanyPickup[];
+  isDelivered: boolean;
 }
 
 export interface CourierProfile {
