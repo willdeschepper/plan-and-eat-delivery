@@ -1,1 +1,5 @@
-export { VerifyOtpScreen as default } from '@/features/auth/verify-otp-screen';
+import { Redirect } from 'expo-router';
+
+export default function RemovedAuthRouteRedirect() {
+  return <Redirect href="/login" />;
+}

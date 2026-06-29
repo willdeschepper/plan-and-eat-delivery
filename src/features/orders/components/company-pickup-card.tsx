@@ -1,5 +1,7 @@
+import type { CompanyPickup } from '../types';
 import { Image } from 'expo-image';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Pressable,
   StyleSheet,
@@ -9,8 +11,6 @@ import {
 
 import { useAppTheme } from '@/lib/hooks/use-app-theme';
 
-import type { CompanyPickup } from '../types';
-
 type Props = {
   company: CompanyPickup;
   onQuantityChange: (quantity: number) => void;
@@ -19,6 +19,7 @@ type Props = {
 
 export function CompanyPickupCard({ company, onQuantityChange, index }: Props) {
   const { isDark, c } = useAppTheme();
+  const { t } = useTranslation();
 
   const totalRequired = company.items.reduce((sum, item) => sum + item.quantity, 0);
   const isReady = company.pickedUpQuantity > 0;
@@ -57,7 +58,9 @@ export function CompanyPickupCard({ company, onQuantityChange, index }: Props) {
 
       {/* Items to deliver */}
       <View style={styles.section}>
-        <Text style={[styles.sectionLabel, { color: c.textSecondary }]}>ДОСТАВИТЬ</Text>
+        <Text style={[styles.sectionLabel, { color: c.textSecondary }]}>
+          {t('courier.company.deliver_section')}
+        </Text>
         <View style={styles.itemsList}>
           {company.items.map(item => (
             <View key={item.id} style={[styles.itemRow, { backgroundColor: itemBg }]}>
@@ -78,10 +81,12 @@ export function CompanyPickupCard({ company, onQuantityChange, index }: Props) {
 
       {/* Quantity stepper */}
       <View style={styles.section}>
-        <Text style={[styles.sectionLabel, { color: c.textSecondary }]}>ВЗЯЛ ТОВАРОВ</Text>
+        <Text style={[styles.sectionLabel, { color: c.textSecondary }]}>
+          {t('courier.company.picked_section')}
+        </Text>
         <View style={styles.stepperRow}>
           <Text style={[styles.stepperHint, { color: c.textSecondary }]}>
-            Нужно: {totalRequired} шт.
+            {t('courier.company.required_qty', { count: totalRequired })}
           </Text>
           <View style={styles.stepper}>
             <Pressable

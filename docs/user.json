@@ -1,0 +1,9 @@
+{
+  "userName": "John Doe",
+  "userPhone": "+998901234567",
+  "userAddress": "123 Main St, Anytown, USA",
+  "totalOrders": 10,
+  "monthlyEarnings": 100,
+  "todayOrders": 1,
+  "todayEarnings": 100
+}

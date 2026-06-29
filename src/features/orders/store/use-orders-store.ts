@@ -1,46 +1,42 @@
 import { create } from 'zustand';
 
-import { MOCK_PROFILE, MOCK_STOPS } from '../mock-data';
-import type { CourierProfile, DeliveryStop } from '../types';
+import { MOCK_PROFILE } from '../mock-data';
+import type { CourierProfile } from '../types';
 
 type OrdersState = {
-  stops: DeliveryStop[];
   profile: CourierProfile;
+  pickedUpByCompany: Record<string, number>;
   setPickedUpQuantity: (stopId: string, companyId: string, quantity: number) => void;
   markDelivered: (stopId: string) => void;
-  isStopLocked: (stopId: string) => boolean;
-  isStopCompleted: (stopId: string) => boolean;
   completedCount: () => number;
 };
 
 export const useOrdersStore = create<OrdersState>((set, get) => ({
-  stops: MOCK_STOPS,
   profile: MOCK_PROFILE,
+  pickedUpByCompany: {},
 
   setPickedUpQuantity: (stopId, companyId, quantity) => {
+    const key = `${stopId}:${companyId}`;
     set(state => ({
-      stops: state.stops.map(stop => {
-        if (stop.id !== stopId) return stop;
-        return {
-          ...stop,
-          companies: stop.companies.map(company => {
-            if (company.id !== companyId) return company;
-            return { ...company, pickedUpQuantity: Math.max(0, quantity) };
-          }),
-        };
-      }),
+      pickedUpByCompany: {
+        ...state.pickedUpByCompany,
+        [key]: Math.max(0, quantity),
+      },
     }));
   },
 
   markDelivered: (stopId) => {
     set(state => {
-      const wasDelivered = state.stops.find(s => s.id === stopId)?.isDelivered ?? false;
-      if (wasDelivered) return state;
+      const deliveredKey = `delivered:${stopId}`;
+      if (state.pickedUpByCompany[deliveredKey]) {
+        return state;
+      }
 
       return {
-        stops: state.stops.map(stop =>
-          stop.id === stopId ? { ...stop, isDelivered: true } : stop,
-        ),
+        pickedUpByCompany: {
+          ...state.pickedUpByCompany,
+          [deliveredKey]: 1,
+        },
         profile: {
           ...state.profile,
           completedOrdersToday: state.profile.completedOrdersToday + 1,
@@ -50,18 +46,12 @@ export const useOrdersStore = create<OrdersState>((set, get) => ({
     });
   },
 
-  isStopLocked: (stopId) => {
-    const { stops } = get();
-    const idx = stops.findIndex(s => s.id === stopId);
-    if (idx <= 0) return false;
-    return !stops[idx - 1].isDelivered;
-  },
-
-  isStopCompleted: (stopId) => {
-    return get().stops.find(s => s.id === stopId)?.isDelivered ?? false;
-  },
-
   completedCount: () => {
-    return get().stops.filter(s => s.isDelivered).length;
+    const { profile, pickedUpByCompany } = get();
+    const deliveredFromLocal = Object.keys(pickedUpByCompany).filter(
+      key => key.startsWith('delivered:'),
+    ).length;
+
+    return Math.max(profile.completedOrdersToday, deliveredFromLocal);
   },
 }));

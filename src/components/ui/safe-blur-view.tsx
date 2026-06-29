@@ -1,20 +1,13 @@
+import { BlurView } from 'expo-blur';
+import { requireOptionalNativeModule } from 'expo-modules-core';
 import * as React from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Platform, View } from 'react-native';
 
-let BlurView: React.ComponentType<{
-  intensity?: number;
-  tint?: string;
-  style?: object;
-  children?: React.ReactNode;
-}> | null = null;
+const expoBlurNativeModule = requireOptionalNativeModule('ExpoBlur');
 
-try {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const mod = require('expo-blur');
-  BlurView = mod.BlurView ?? null;
-} catch {
-  BlurView = null;
-}
+/** True when the native ExpoBlur view manager is linked in the current binary. */
+const isBlurNativeAvailable =
+  Platform.OS === 'ios' && expoBlurNativeModule != null;
 
 type Props = {
   intensity?: number;
@@ -24,25 +17,51 @@ type Props = {
   fallbackColor?: string;
 };
 
-export function SafeBlurView({ intensity = 50, tint = 'light', style, children, fallbackColor }: Props) {
-  const isDark = tint === 'dark';
-
+function BlurFallback({
+  style,
+  children,
+  fallbackColor,
+  isDark,
+}: {
+  style?: object;
+  children?: React.ReactNode;
+  fallbackColor?: string;
+  isDark: boolean;
+}) {
   const defaultFallback = isDark
     ? 'rgba(10,10,10,0.82)'
     : 'rgba(250,250,250,0.82)';
 
-  if (Platform.OS === 'android' || !BlurView) {
+  return (
+    <View style={[style, { backgroundColor: fallbackColor ?? defaultFallback }]}>
+      {children}
+    </View>
+  );
+}
+
+export function SafeBlurView({
+  intensity = 50,
+  tint = 'light',
+  style,
+  children,
+  fallbackColor,
+}: Props) {
+  const isDark = tint === 'dark';
+
+  if (Platform.OS === 'android' || !isBlurNativeAvailable) {
     return (
-      <View style={[style, { backgroundColor: fallbackColor ?? defaultFallback }]}>
-        {children}
-      </View>
+      <BlurFallback
+        style={style}
+        children={children}
+        fallbackColor={fallbackColor}
+        isDark={isDark}
+      />
     );
   }
 
-  const B = BlurView;
   return (
-    <B intensity={intensity} tint={tint} style={style}>
+    <BlurView intensity={intensity} tint={tint} style={style}>
       {children}
-    </B>
+    </BlurView>
   );
 }

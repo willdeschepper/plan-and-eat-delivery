@@ -51,13 +51,13 @@ async function refreshAccessToken(): Promise<void> {
     throw new Error('No refresh token available');
   }
 
-  console.log('[auth:refresh] 🔄 Sending refresh request', {
-    hasRefreshToken: Boolean(currentToken.refresh),
-    refreshTokenLength: currentToken.refresh?.length ?? 0,
-    refreshTokenPrefix: currentToken.refresh,
-    hasAccessToken: Boolean(currentToken.access),
-    accessTokenPrefix: currentToken.access,
-  });
+  if (__DEV__) {
+    console.log('[auth:refresh] Sending refresh request', {
+      hasRefreshToken: Boolean(currentToken.refresh),
+      refreshTokenLength: currentToken.refresh?.length ?? 0,
+      hasAccessToken: Boolean(currentToken.access),
+    });
+  }
 
   isRefreshing = true;
   refreshPromise = authClient
@@ -65,12 +65,13 @@ async function refreshAccessToken(): Promise<void> {
     .then(async (response) => {
       const data = response.data as { access: string; refresh?: string };
 
-      console.log('[auth:refresh] ✅ Got new tokens from server', {
-        hasNewAccess: Boolean(data.access),
-        newAccessPrefix: `${data.access?.slice(0, 20)}...`,
-        hasNewRefresh: Boolean(data.refresh),
-        willReuseOldRefresh: !data.refresh,
-      });
+      if (__DEV__) {
+        console.log('[auth:refresh] Got new tokens from server', {
+          hasNewAccess: Boolean(data.access),
+          hasNewRefresh: Boolean(data.refresh),
+          willReuseOldRefresh: !data.refresh,
+        });
+      }
 
       const nextToken: TokenType = {
         access: data.access,

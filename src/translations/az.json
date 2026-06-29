@@ -35,6 +35,9 @@
       "or": "və ya",
       "password_label": "Şifrə",
       "password_placeholder": "Şifrə",
+      "push_native_module_missing": "Bu build-də push bildirişləri mövcud deyil. Tətbiqi yenidən qurun: pnpm prebuild && pnpm ios",
+      "push_permission_denied": "Daxil olmaq üçün push bildirişləri tələb olunur. Sistem ayarlarında bildirişləri aktiv edin və yenidən cəhd edin.",
+      "push_token_unavailable": "Push token alınmadı. Girişi fiziki iPhone-da yoxlayın, simulyatorda yox.",
       "sign_up": "Qeydiyyat",
       "submit": "Daxil ol",
       "subtitle": "Hesabınıza daxil olun",
@@ -95,7 +98,77 @@
       "phone_required": "Telefon tələb olunur"
     }
   },
+  "common": {
+    "back_arrow": "← Geri",
+    "go_to_login": "Girişə keç",
+    "not_found_title": "Bu ekran mövcud deyil.",
+    "ok": "OK"
+  },
   "courier": {
+    "card": {
+      "companies_progress": "{{picked}}/{{total}} şirkət",
+      "locked": "Əvvəlki marşrutu tamamlayın",
+      "progress_done": "Tamamlandı"
+    },
+    "company": {
+      "deliver_section": "ÇATDIR",
+      "picked_section": "GÖTÜRÜLƏN",
+      "required_qty": "Lazım: {{count}} əd."
+    },
+    "drawer": {
+      "delivered": "Çatdırıldı",
+      "delivered_session": "Bu sessiyada çatdırıldı",
+      "earned": "Qazanıldı",
+      "home": "Bugünkü sifarişlər",
+      "logout": "Çıxış",
+      "profile_loading": "Profil yüklənir...",
+      "role": "Kuryer",
+      "settings": "Parametrlər"
+    },
+    "orders": {
+      "all_done_subtitle": "Bu gün əla iş!",
+      "all_done_title": "Bütün çatdırılmalar tamamlandı!",
+      "completed": "TAMAMLANDI",
+      "empty": "Bu gün üçün çatdırılma yoxdur.",
+      "load_failed": "Dayanacaqlar yüklənmədi.",
+      "loading": "Dayanacaqlar yüklənir...",
+      "pending": "GÖZLƏYİR",
+      "retry": "Yenidən cəhd et",
+      "stops": "dayanacaq",
+      "stops_today": "Bu gün {{count}} dayanacaq",
+      "title": "Bugünkü çatdırılmalar"
+    },
+    "profile": {
+      "email": "Email",
+      "load_failed": "Profil yüklənmədi.",
+      "loading": "Profil yüklənir...",
+      "mobile": "Mobil",
+      "title": "Profil"
+    },
+    "stop": {
+      "all_picked": "Bütün sifarişlər götürüldü!",
+      "check_below": "Aşağıda hər müştərini işarələyin",
+      "companies_progress": "{{total}} şirkətdən {{picked}}",
+      "companies_section": "ŞİRKƏTLƏR ({{count}})",
+      "complete_label": "Bu dayanacaq tamamlandı kimi işarələnib",
+      "confirm_delivery": "Çatdırılmanı təsdiqlə",
+      "deliver_done_sub": "Bu marşrut tamamlandı",
+      "deliver_done_title": "Çatdırılma tamamlandı!",
+      "deliver_title": "Bu dayanacağı çatdır",
+      "delivered_chip": "Çatdırıldı",
+      "mark_delivered": "Çatdırıldı kimi işarələ",
+      "nav_maps": "Xəritələr",
+      "nav_waze": "Waze",
+      "no_companies": "Şirkət məlumatı hələ mövcud deyil.",
+      "orders_title": "MÜŞTƏRİ SİFARİŞLƏRİ",
+      "pick_for_each": "Hər şirkət üçün miqdarı göstərin",
+      "pick_quantity_message": "Zəhmət olmasa, hər şirkət üçün götürülən miqdarı göstərin.",
+      "pick_quantity_title": "Miqdarı göstərin",
+      "picked_up": "götürüldü",
+      "ready_to_deliver": "Çatdırılmaya hazırdır",
+      "specify_quantity_cta": "Məhsul miqdarını göstərin",
+      "stop_not_found": "Dayanacaq tapılmadı."
+    },
     "subtitle": "Çatdırılma iş sahəsi",
     "title": "Kuryer"
   },
@@ -106,21 +179,21 @@
     "offline_banner": "İnternet bağlantısı yoxdur"
   },
   "onboarding": {
-    "done": "Hazır",
+    "done": "Başla",
     "message": "Plan&Eat Courier tətbiqinə xoş gəldiniz",
     "next": "Növbəti",
     "progress": "{{current}}/{{total}}",
     "screen1": {
-      "description": "70-dən çox yeməyə göz atın və sevimlilərinizi seçin. Rutininizə uyğun həftəlik və ya aylıq seçiminizi yeniləyin.",
-      "title": "Yeməklərinizi seçin"
+      "description": "Bu günkü bütün çatdırılma dayanacaqlarını görün. Ünvanlar, marşrutlar və götürmələr — hamısı bir yerdə.",
+      "title": "Bugünkü çatdırılma siyahısı"
     },
     "screen2": {
-      "description": "Etibarlı mətbəxlər şəbəkəsi tərəfindən peşəkarcasına hazırlanır. Hər yeməkdə diqqət və keyfiyyətlə təzə hazırlanır.",
-      "title": "Biz bişirib çatdırırıq"
+      "description": "Hər şirkətdən sifarişləri götürün və miqdarları izləyin. Topladıqca irəliləyişi qeyd edin.",
+      "title": "Götürmələri izləyin"
     },
     "screen3": {
-      "description": "Hər gün ləziz naharların dadını çıxarın. Fasilənizi gözləntiylə dolduran təzə, doyurucu yeməklər.",
-      "title": "Ləziz naharların dadını çıxarın"
+      "description": "Hər dayanacağı tamamlayın və növbətiyə keçin. Real vaxt irəliləyişi ilə cədvəldə qalın.",
+      "title": "Vaxtında çatdırın"
     },
     "skip": "Keç"
   },
@@ -129,18 +202,37 @@
     "app_name": "Tətbiqin adı",
     "arabic": "Ərəb",
     "azerbaijani": "Azərbaycanca",
+    "coming_soon": "Tezliklə.",
     "english": "İngilis",
+    "general": "Ümumi",
     "generale": "Ümumi",
     "github": "Github",
     "language": "Dil",
+    "legal": "Hüquqi",
     "links": "Keçidlər",
     "logout": "Çıxış",
+    "logout_confirm": {
+      "cancel": "Ləğv et",
+      "confirm": "Çıxış",
+      "description": "Çıxmaq istədiyinizə əminsiniz?",
+      "title": "Çıxış"
+    },
     "more": "Daha çox",
     "privacy": "Məxfilik siyasəti",
-    "rate": "Qiymətləndir",
+    "rate": "Tətbiqi qiymətləndir",
+    "rate_app_page": {
+      "description_line_1": "Rəyiniz bizim üçün vacibdir",
+      "description_line_2": "Zəhmət olmasa tətbiqi qiymətləndirin"
+    },
     "russian": "Rusca",
     "share": "Paylaş",
     "support": "Dəstək",
+    "support_contacts": {
+      "email_label": "Email",
+      "instagram_label": "Instagram",
+      "phone_label": "Telefon"
+    },
+    "support_section": "Dəstək",
     "support_us": "Bizi dəstəkləyin",
     "terms": "Xidmət şərtləri",
     "theme": {

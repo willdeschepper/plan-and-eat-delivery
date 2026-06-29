@@ -35,6 +35,9 @@
       "or": "or",
       "password_label": "Password",
       "password_placeholder": "Password",
+      "push_native_module_missing": "Push notifications are not available in this build. Rebuild the app: pnpm prebuild && pnpm ios",
+      "push_permission_denied": "Push notifications are required to sign in. Please enable notifications in system settings and try again.",
+      "push_token_unavailable": "Could not obtain a device push token. Test sign-in on a physical iPhone, not the simulator.",
       "sign_up": "Sign up",
       "submit": "Log in",
       "subtitle": "Log in to your account",
@@ -95,31 +98,79 @@
       "phone_required": "Phone is required"
     }
   },
+  "common": {
+    "back_arrow": "← Back",
+    "go_to_login": "Go to login",
+    "not_found_title": "This screen doesn't exist.",
+    "ok": "OK"
+  },
   "courier": {
-    "subtitle": "Delivery workspace",
-    "title": "Courier",
-    "orders": {
-      "title": "Today's Deliveries",
-      "pending": "PENDING",
-      "completed": "COMPLETED",
-      "all_done_title": "All deliveries done!",
-      "stops": "stops"
+    "card": {
+      "companies_progress": "{{picked}}/{{total}} companies",
+      "locked": "Complete the previous route first",
+      "progress_done": "Done"
     },
-    "stop": {
-      "orders_title": "CUSTOMER ORDERS",
-      "picked_up": "picked up",
-      "all_picked": "All orders picked up!",
-      "check_below": "Check off each customer below",
-      "complete_label": "This stop is marked as complete"
+    "company": {
+      "deliver_section": "DELIVER",
+      "picked_section": "PICKED UP",
+      "required_qty": "Required: {{count}} pcs."
     },
     "drawer": {
       "delivered": "Delivered",
+      "delivered_session": "Delivered this session",
       "earned": "Earned",
       "home": "Today's Orders",
-      "settings": "Settings",
-      "logout": "Logout",
-      "role": "Courier"
-    }
+      "logout": "Log out",
+      "profile_loading": "Loading profile...",
+      "role": "Courier",
+      "settings": "Settings"
+    },
+    "orders": {
+      "all_done_subtitle": "Great work today!",
+      "all_done_title": "All deliveries done!",
+      "completed": "COMPLETED",
+      "empty": "No deliveries assigned for today.",
+      "load_failed": "Failed to load stops.",
+      "loading": "Loading stops...",
+      "pending": "PENDING",
+      "retry": "Try again",
+      "stops": "stops",
+      "stops_today": "{{count}} stops today",
+      "title": "Today's Deliveries"
+    },
+    "profile": {
+      "email": "Email",
+      "load_failed": "Failed to load profile.",
+      "loading": "Loading profile...",
+      "mobile": "Mobile",
+      "title": "Profile"
+    },
+    "stop": {
+      "all_picked": "All orders picked up!",
+      "check_below": "Check off each customer below",
+      "companies_progress": "{{picked}} of {{total}} companies",
+      "companies_section": "COMPANIES ({{count}})",
+      "complete_label": "This stop is marked as complete",
+      "confirm_delivery": "Confirm delivery",
+      "deliver_done_sub": "This route is complete",
+      "deliver_done_title": "Delivery complete!",
+      "deliver_title": "Deliver this stop",
+      "delivered_chip": "Delivered",
+      "mark_delivered": "Mark as delivered",
+      "nav_maps": "Maps",
+      "nav_waze": "Waze",
+      "no_companies": "No company data available yet.",
+      "orders_title": "CUSTOMER ORDERS",
+      "pick_for_each": "Specify quantity for each company",
+      "pick_quantity_message": "Please specify picked up quantities for each company.",
+      "pick_quantity_title": "Specify quantity",
+      "picked_up": "picked up",
+      "ready_to_deliver": "Ready to deliver",
+      "specify_quantity_cta": "Specify item quantities",
+      "stop_not_found": "Stop not found."
+    },
+    "subtitle": "Delivery workspace",
+    "title": "Courier"
   },
   "network": {
     "action_offline": "No connection. Check your network settings",
@@ -128,21 +179,21 @@
     "offline_banner": "No internet connection"
   },
   "onboarding": {
-    "done": "Done",
+    "done": "Get Started",
     "message": "Welcome to Plan&Eat Courier",
     "next": "Next",
     "progress": "{{current}}/{{total}}",
     "screen1": {
-      "description": "Browse 70+ meals and choose your favorites. Update your selection weekly or monthly to match your routine.",
-      "title": "Choose your meals"
+      "description": "See all your delivery stops for the day. Addresses, routes, and pickups — clear and ready to go.",
+      "title": "Today's delivery list"
     },
     "screen2": {
-      "description": "Expertly cooked by our network of trusted kitchens. Freshly prepared with care and quality in every meal.",
-      "title": "We cook & deliver"
+      "description": "Pick up orders from each company and track quantities. Mark items as you collect them.",
+      "title": "Track your pickups"
     },
     "screen3": {
-      "description": "Enjoy delicious lunches every day. Fresh, satisfying meals that make your break something to look forward to.",
-      "title": "Enjoy delicious lunches"
+      "description": "Complete each stop and move on to the next. Stay on schedule with real-time progress.",
+      "title": "Deliver on time"
     },
     "skip": "Skip"
   },
@@ -151,18 +202,37 @@
     "app_name": "App Name",
     "arabic": "Arabic",
     "azerbaijani": "Azerbaijani",
+    "coming_soon": "Coming soon.",
     "english": "English",
+    "general": "General",
     "generale": "General",
     "github": "Github",
     "language": "Language",
+    "legal": "Legal",
     "links": "Links",
-    "logout": "Logout",
+    "logout": "Log out",
+    "logout_confirm": {
+      "cancel": "Cancel",
+      "confirm": "Log out",
+      "description": "Are you sure you want to log out?",
+      "title": "Log out"
+    },
     "more": "More",
     "privacy": "Privacy Policy",
-    "rate": "Rate",
+    "rate": "Rate app",
+    "rate_app_page": {
+      "description_line_1": "Your feedback is important to us",
+      "description_line_2": "Please rate the app"
+    },
     "russian": "Russian",
     "share": "Share",
     "support": "Support",
+    "support_contacts": {
+      "email_label": "Email",
+      "instagram_label": "Instagram",
+      "phone_label": "Phone"
+    },
+    "support_section": "Support",
     "support_us": "Support Us",
     "terms": "Terms of Service",
     "theme": {

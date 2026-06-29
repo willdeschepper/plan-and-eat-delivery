@@ -1,7 +1,6 @@
-import { SafeBlurView } from '@/components/ui/safe-blur-view';
-import { useAppTheme } from '@/lib/hooks/use-app-theme';
-import { Image } from 'expo-image';
+import type { DeliveryStop } from '../types';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Linking,
   Pressable,
@@ -15,8 +14,9 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
+import { SafeBlurView } from '@/components/ui/safe-blur-view';
 
-import type { DeliveryStop } from '../types';
+import { useAppTheme } from '@/lib/hooks/use-app-theme';
 
 type Props = {
   stop: DeliveryStop;
@@ -25,6 +25,8 @@ type Props = {
   index: number;
   onPress: () => void;
 };
+
+type ThemeColors = ReturnType<typeof useAppTheme>['c'];
 
 function openWaze(address: string) {
   const query = encodeURIComponent(address);
@@ -38,19 +40,149 @@ function openGoogleMaps(address: string) {
   Linking.openURL(`https://maps.google.com/?q=${query}`);
 }
 
+function StopCardHeader({
+  totalCompanies,
+  isCompleted,
+  accentColor,
+  isDark,
+  deliveredLabel,
+}: {
+  totalCompanies: number;
+  isCompleted: boolean;
+  accentColor: string;
+  isDark: boolean;
+  deliveredLabel: string;
+}) {
+  return (
+    <View style={styles.headerRow}>
+      <View style={[styles.countPill, { backgroundColor: accentColor }]}>
+        <Text style={styles.countPillText}>
+          🏪
+          {' '}
+          {totalCompanies}
+        </Text>
+      </View>
+      {isCompleted && (
+        <View style={styles.statusChip}>
+          <Text style={styles.statusChipText}>
+            ✓
+            {deliveredLabel}
+          </Text>
+        </View>
+      )}
+      <View style={[
+        styles.checkbox,
+        isCompleted
+          ? styles.checkboxDone
+          : {
+              borderColor: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.15)',
+              backgroundColor: 'transparent',
+            },
+      ]}
+      >
+        {isCompleted && <Text style={styles.checkmark}>✓</Text>}
+      </View>
+    </View>
+  );
+}
+
+function StopCardProgress({
+  isCompleted,
+  progressPercent,
+  accentColor,
+  textSecondary,
+  isDark,
+  progressDoneLabel,
+  companiesProgressLabel,
+}: {
+  isCompleted: boolean;
+  progressPercent: number;
+  accentColor: string;
+  textSecondary: string;
+  isDark: boolean;
+  progressDoneLabel: string;
+  companiesProgressLabel: string;
+}) {
+  return (
+    <View style={styles.progressRow}>
+      <View style={[
+        styles.progressBg,
+        { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.07)' },
+      ]}
+      >
+        <Animated.View
+          style={[
+            styles.progressFill,
+            { backgroundColor: accentColor, width: `${progressPercent}%` },
+          ]}
+        />
+      </View>
+      <Text style={[styles.progressLabel, { color: textSecondary }]}>
+        {isCompleted ? progressDoneLabel : companiesProgressLabel}
+      </Text>
+    </View>
+  );
+}
+
+function StopCardNavActions({
+  address,
+  c,
+  isDark,
+  wazeLabel,
+  mapsLabel,
+}: {
+  address: string;
+  c: ThemeColors;
+  isDark: boolean;
+  wazeLabel: string;
+  mapsLabel: string;
+}) {
+  return (
+    <View style={styles.actionsRow}>
+      <Pressable
+        onPress={() => openWaze(address)}
+        style={({ pressed }) => [styles.navBtn, styles.navBtnWaze, pressed && { opacity: 0.75 }]}
+      >
+        <Text style={styles.navBtnText}>
+          🗺
+          {wazeLabel}
+        </Text>
+      </Pressable>
+      <Pressable
+        onPress={() => openGoogleMaps(address)}
+        style={({ pressed }) => [
+          styles.navBtn,
+          styles.navBtnMaps,
+          { borderColor: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.1)' },
+          pressed && { opacity: 0.75 },
+        ]}
+      >
+        <Text style={[styles.navBtnText, { color: c.textPrimary }]}>
+          📍
+          {mapsLabel}
+        </Text>
+      </Pressable>
+    </View>
+  );
+}
+
 export function DeliveryStopCard({ stop, isLocked, isCompleted, index, onPress }: Props) {
   const { isDark, c } = useAppTheme();
+  const { t } = useTranslation();
   const scale = useSharedValue(1);
 
   const pickedCount = stop.companies.filter(co => co.pickedUpQuantity > 0).length;
   const totalCompanies = stop.companies.length;
+  const progressPercent = totalCompanies > 0 ? (pickedCount / totalCompanies) * 100 : 0;
+  const accentColor = isCompleted ? '#22C55E' : '#FF6C00';
 
   const cardStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
   }));
 
   const handlePressIn = () => {
-    if (!isLocked) scale.value = withSpring(0.975);
+    if (!isLocked)
+      scale.value = withSpring(0.975);
   };
   const handlePressOut = () => {
     scale.value = withSpring(1);
@@ -67,14 +199,7 @@ export function DeliveryStopCard({ stop, isLocked, isCompleted, index, onPress }
         onPress={isLocked ? undefined : onPress}
         style={styles.pressable}
       >
-        <View style={[
-          styles.card,
-          {
-            borderColor: isCompleted
-              ? 'rgba(34,197,94,0.3)'
-              : c.border,
-          },
-        ]}>
+        <View style={[styles.card, { borderColor: isCompleted ? 'rgba(34,197,94,0.3)' : c.border }]}>
           <SafeBlurView
             intensity={isDark ? 40 : 50}
             tint={c.blurTint}
@@ -82,103 +207,63 @@ export function DeliveryStopCard({ stop, isLocked, isCompleted, index, onPress }
           />
           <View style={[
             styles.cardInner,
-            { backgroundColor: isDark ? 'rgba(23,23,23,0.6)' : 'rgba(255,255,255,0.65)' },
-          ]}>
-            {/* Photo */}
-            <View style={styles.photoContainer}>
-              <Image
-                source={{ uri: stop.photoUrl }}
-                style={styles.photo}
-                contentFit="cover"
-                transition={300}
+            {
+              backgroundColor: isDark ? 'rgba(23,23,23,0.6)' : 'rgba(255,255,255,0.65)',
+              opacity: isLocked ? 0.55 : 1,
+            },
+          ]}
+          >
+            <View style={styles.content}>
+              <StopCardHeader
+                totalCompanies={totalCompanies}
+                isCompleted={isCompleted}
+                accentColor={accentColor}
+                isDark={isDark}
+                deliveredLabel={t('courier.stop.delivered_chip')}
               />
-              {isCompleted && (
-                <View style={styles.completedBadge}>
-                  <Text style={styles.completedBadgeText}>✓ Доставлено</Text>
-                </View>
-              )}
-              {isLocked && (
-                <View style={styles.lockOverlay}>
-                  <View style={styles.lockIconWrapper}>
-                    <Text style={styles.lockIcon}>🔒</Text>
-                    <Text style={styles.lockText}>Завершите предыдущий маршрут</Text>
-                  </View>
-                </View>
-              )}
-              {/* Companies count pill */}
-              <View style={[
-                styles.countPill,
-                { backgroundColor: isCompleted ? '#22C55E' : '#FF6C00' },
-              ]}>
-                <Text style={styles.countPillText}>🏪 {totalCompanies}</Text>
-              </View>
-            </View>
 
-            {/* Info */}
-            <View style={styles.info}>
+              {isLocked && (
+                <View style={[
+                  styles.lockBanner,
+                  { backgroundColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)' },
+                ]}
+                >
+                  <Text style={[styles.lockText, { color: c.textSecondary }]}>
+                    🔒
+                    {t('courier.card.locked')}
+                  </Text>
+                </View>
+              )}
+
               <Text style={[styles.name, { color: c.textPrimary }]} numberOfLines={1}>
                 {stop.name}
               </Text>
-              <Text style={[styles.address, { color: c.textSecondary }]} numberOfLines={1}>
+              <Text style={[styles.address, { color: c.textSecondary }]} numberOfLines={2}>
                 {stop.address}
               </Text>
 
-              {/* Progress bar — companies picked up */}
               {!isLocked && (
-                <View style={styles.progressRow}>
-                  <View style={[styles.progressBg, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.07)' }]}>
-                    <Animated.View
-                      style={[
-                        styles.progressFill,
-                        {
-                          backgroundColor: isCompleted ? '#22C55E' : '#FF6C00',
-                          width: `${(pickedCount / totalCompanies) * 100}%`,
-                        },
-                      ]}
-                    />
-                  </View>
-                  <Text style={[styles.progressLabel, { color: c.textSecondary }]}>
-                    {isCompleted ? 'Выполнено' : `${pickedCount}/${totalCompanies} компаний`}
-                  </Text>
-                </View>
+                <StopCardProgress
+                  isCompleted={isCompleted}
+                  progressPercent={progressPercent}
+                  accentColor={accentColor}
+                  textSecondary={c.textSecondary}
+                  isDark={isDark}
+                  progressDoneLabel={t('courier.card.progress_done')}
+                  companiesProgressLabel={t('courier.card.companies_progress', {
+                    picked: pickedCount,
+                    total: totalCompanies,
+                  })}
+                />
               )}
 
-              {/* Actions row */}
-              <View style={styles.actionsRow}>
-                <Pressable
-                  onPress={() => openWaze(stop.address)}
-                  style={({ pressed }) => [
-                    styles.navBtn,
-                    styles.navBtnWaze,
-                    pressed && { opacity: 0.75 },
-                  ]}
-                >
-                  <Text style={styles.navBtnText}>🗺 Waze</Text>
-                </Pressable>
-
-                <Pressable
-                  onPress={() => openGoogleMaps(stop.address)}
-                  style={({ pressed }) => [
-                    styles.navBtn,
-                    styles.navBtnMaps,
-                    { borderColor: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.1)' },
-                    pressed && { opacity: 0.75 },
-                  ]}
-                >
-                  <Text style={[styles.navBtnText, { color: c.textPrimary }]}>
-                    📍 Maps
-                  </Text>
-                </Pressable>
-
-                <View style={[
-                  styles.checkbox,
-                  isCompleted
-                    ? styles.checkboxDone
-                    : { borderColor: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.15)', backgroundColor: 'transparent' },
-                ]}>
-                  {isCompleted && <Text style={styles.checkmark}>✓</Text>}
-                </View>
-              </View>
+              <StopCardNavActions
+                address={stop.address}
+                c={c}
+                isDark={isDark}
+                wazeLabel={t('courier.stop.nav_waze')}
+                mapsLabel={t('courier.stop.nav_maps')}
+              />
             </View>
           </View>
         </View>
@@ -208,54 +293,19 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     overflow: 'hidden',
   },
-  photoContainer: {
-    position: 'relative',
-    height: 160,
-  },
-  photo: {
-    width: '100%',
-    height: '100%',
-  },
-  completedBadge: {
-    position: 'absolute',
-    top: 12,
-    left: 12,
-    backgroundColor: '#22C55E',
-    paddingHorizontal: 12,
-    paddingVertical: 5,
-    borderRadius: 20,
-  },
-  completedBadgeText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: '700',
-    letterSpacing: 0.2,
-  },
-  lockOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.55)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  lockIconWrapper: {
-    alignItems: 'center',
+  content: {
+    padding: 16,
     gap: 8,
   },
-  lockIcon: {
-    fontSize: 32,
-  },
-  lockText: {
-    color: 'rgba(255,255,255,0.85)',
-    fontSize: 13,
-    fontWeight: '600',
-    textAlign: 'center',
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 2,
   },
   countPill: {
-    position: 'absolute',
-    bottom: 12,
-    right: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
     borderRadius: 20,
   },
   countPillText: {
@@ -263,9 +313,26 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '700',
   },
-  info: {
-    padding: 16,
-    gap: 4,
+  statusChip: {
+    backgroundColor: '#22C55E',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 20,
+  },
+  statusChipText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 0.2,
+  },
+  lockBanner: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 12,
+  },
+  lockText: {
+    fontSize: 13,
+    fontWeight: '600',
   },
   name: {
     fontSize: 18,
@@ -275,13 +342,13 @@ const styles = StyleSheet.create({
   address: {
     fontSize: 13,
     fontWeight: '400',
-    marginBottom: 8,
+    lineHeight: 18,
   },
   progressRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    marginBottom: 10,
+    marginTop: 2,
   },
   progressBg: {
     flex: 1,
@@ -303,7 +370,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    marginTop: 2,
+    marginTop: 4,
   },
   navBtn: {
     paddingHorizontal: 14,

@@ -1,1 +1,5 @@
-export { PasswordChangedSuccessScreen as default } from '@/features/auth/password-changed-success-screen';
+import { Redirect } from 'expo-router';
+
+export default function RemovedAuthRouteRedirect() {
+  return <Redirect href="/login" />;
+}

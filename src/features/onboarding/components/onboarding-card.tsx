@@ -23,16 +23,16 @@ export function OnboardingCard({
 }: OnboardingCardProps) {
   return (
     <View
-      className="mt-10 w-full rounded-[32px] border border-neutral-100 bg-[#FCFCFC] px-5 py-8"
+      className="mt-10 w-full rounded-[32px] border border-neutral-100 bg-[#FCFCFC] px-5 py-8 dark:border-neutral-700 dark:bg-neutral-800"
     >
       <Text
         tx={titleTx}
-        className="mb-3 text-center font-montserrat-alternates text-[22px] font-semibold text-charcoal-900"
+        className="mb-3 text-center font-montserrat-alternates text-[22px] font-semibold text-charcoal-900 dark:text-white"
       />
 
       <Text
         tx={descriptionTx}
-        className="mb-6 text-center font-montserrat-alternates text-[14px] text-charcoal-600"
+        className="mb-6 text-center font-montserrat-alternates text-[14px] text-charcoal-600 dark:text-neutral-400"
       />
 
       <Button

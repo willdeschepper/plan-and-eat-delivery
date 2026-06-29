@@ -1,8 +1,7 @@
-import { SafeBlurView } from '@/components/ui/safe-blur-view';
-import { useAppTheme } from '@/lib/hooks/use-app-theme';
-import { Image } from 'expo-image';
+/* eslint-disable max-lines-per-function */
 import { useRouter } from 'expo-router';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Dimensions,
   Pressable,
@@ -18,29 +17,50 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
-import { signOut } from '@/lib/hooks';
+import { SafeBlurView } from '@/components/ui/safe-blur-view';
+import { USE_COURIER_API_ORDERS } from '@/features/courier/config';
+import { useCourierProfile } from '@/features/courier/api';
+import { MOCK_COURIER_PROFILE_DTO } from '@/features/orders/mock-data';
+import { useLogoutConfirmModal } from '@/features/settings/hooks/use-logout-confirm-modal';
+import { useAppTheme } from '@/lib/hooks/use-app-theme';
 import { useOrdersStore } from '../orders/store/use-orders-store';
 import { useDrawer } from './drawer-context';
 
 const DRAWER_WIDTH = Dimensions.get('window').width * 0.78;
 const SPRING_CONFIG = { damping: 22, stiffness: 200, mass: 0.8 };
 
-type NavItem = { label: string; icon: string; route: string };
+type NavItem = { labelKey: 'courier.drawer.home' | 'courier.drawer.settings'; icon: string; route: string };
 
 const NAV_ITEMS: NavItem[] = [
-  { label: "Today's Orders", icon: '📦', route: '/orders' },
-  { label: 'Settings', icon: '⚙️', route: '/settings' },
+  { labelKey: 'courier.drawer.home', icon: '📦', route: '/orders' },
+  { labelKey: 'courier.drawer.settings', icon: '⚙️', route: '/settings' },
 ];
+
+function getInitials(name: string, surname: string): string {
+  const first = name.trim().charAt(0);
+  const last = surname.trim().charAt(0);
+  return `${first}${last}`.toUpperCase() || '?';
+}
 
 export function AppDrawer() {
   const { isOpen, closeDrawer } = useDrawer();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { isDark, c } = useAppTheme();
+  const { t } = useTranslation();
+  const { openLogoutConfirm } = useLogoutConfirmModal();
+  const apiProfile = useCourierProfile();
+  const courierProfile = USE_COURIER_API_ORDERS ? apiProfile.data : MOCK_COURIER_PROFILE_DTO;
+  const isProfileLoading = USE_COURIER_API_ORDERS ? apiProfile.isLoading : false;
 
-  const profile = useOrdersStore(s => s.profile);
   const completedCount = useOrdersStore(s => s.completedCount());
+
+  const displayName = courierProfile
+    ? `${courierProfile.name} ${courierProfile.surname}`.trim()
+    : t('courier.drawer.profile_loading');
+  const initials = courierProfile
+    ? getInitials(courierProfile.name, courierProfile.surname)
+    : '?';
 
   const translateX = useSharedValue(-DRAWER_WIDTH);
   const opacity = useSharedValue(0);
@@ -49,7 +69,8 @@ export function AppDrawer() {
     if (isOpen) {
       translateX.value = withSpring(0, SPRING_CONFIG);
       opacity.value = withTiming(1, { duration: 250 });
-    } else {
+    }
+    else {
       translateX.value = withSpring(-DRAWER_WIDTH, SPRING_CONFIG);
       opacity.value = withTiming(0, { duration: 200 });
     }
@@ -71,17 +92,15 @@ export function AppDrawer() {
 
   const handleLogout = () => {
     closeDrawer();
-    setTimeout(() => signOut(), 200);
+    setTimeout(() => openLogoutConfirm(), 200);
   };
 
   return (
     <>
-      {/* Backdrop overlay */}
       <Animated.View style={[styles.overlay, overlayStyle]} pointerEvents={isOpen ? 'auto' : 'none'}>
         <Pressable style={StyleSheet.absoluteFillObject} onPress={closeDrawer} />
       </Animated.View>
 
-      {/* Drawer panel */}
       <Animated.View style={[styles.drawer, { width: DRAWER_WIDTH }, drawerStyle]}>
         <SafeBlurView
           intensity={isDark ? 60 : 70}
@@ -91,46 +110,46 @@ export function AppDrawer() {
         <View style={[
           styles.drawerInner,
           { backgroundColor: isDark ? 'rgba(18,18,18,0.55)' : 'rgba(255,255,255,0.55)' },
-        ]}>
+        ]}
+        >
 
-          {/* User info header */}
           <View style={[styles.header, { paddingTop: insets.top + 24 }]}>
             <View style={styles.avatarContainer}>
-              <Image
-                source={{ uri: profile.avatarUrl }}
-                style={styles.avatar}
-                contentFit="cover"
-              />
+              <View style={styles.avatarPlaceholder}>
+                <Text style={styles.avatarInitials}>{initials}</Text>
+              </View>
               <View style={styles.onlineDot} />
             </View>
             <Text style={[styles.userName, { color: c.textPrimary }]}>
-              {profile.name}
+              {isProfileLoading && !courierProfile ? t('courier.drawer.profile_loading') : displayName}
             </Text>
+            {courierProfile?.email
+              ? (
+                  <Text style={[styles.userEmail, { color: c.textSecondary }]}>
+                    {courierProfile.email}
+                  </Text>
+                )
+              : null}
             <Text style={[styles.userRole, { color: c.textSecondary }]}>
-              Courier
+              {t('courier.drawer.role')}
             </Text>
           </View>
 
-          {/* Stats row */}
           <View style={[styles.statsRow, {
             backgroundColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
             borderColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)',
-          }]}>
+          }]}
+          >
             <View style={styles.statItem}>
               <Text style={styles.statValue}>{completedCount}</Text>
-              <Text style={[styles.statLabel, { color: c.textSecondary }]}>Delivered</Text>
-            </View>
-            <View style={[styles.statDivider, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)' }]} />
-            <View style={styles.statItem}>
-              <Text style={styles.statValue}>${profile.totalEarnings.toFixed(0)}</Text>
-              <Text style={[styles.statLabel, { color: c.textSecondary }]}>Earned</Text>
+              <Text style={[styles.statLabel, { color: c.textSecondary }]}>
+                {t('courier.drawer.delivered_session')}
+              </Text>
             </View>
           </View>
 
-          {/* Divider */}
           <View style={[styles.divider, { backgroundColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)' }]} />
 
-          {/* Navigation */}
           <View style={styles.nav}>
             {NAV_ITEMS.map(item => (
               <Pressable
@@ -143,13 +162,12 @@ export function AppDrawer() {
               >
                 <Text style={styles.navIcon}>{item.icon}</Text>
                 <Text style={[styles.navLabel, { color: c.textPrimary }]}>
-                  {item.label}
+                  {t(item.labelKey)}
                 </Text>
               </Pressable>
             ))}
           </View>
 
-          {/* Bottom: logout */}
           <View style={[styles.footer, { paddingBottom: insets.bottom + 24 }]}>
             <View style={[styles.divider, { backgroundColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)', marginBottom: 12 }]} />
             <Pressable
@@ -160,7 +178,9 @@ export function AppDrawer() {
               onPress={handleLogout}
             >
               <Text style={styles.navIcon}>🚪</Text>
-              <Text style={[styles.navLabel, { color: '#E8313B' }]}>Logout</Text>
+              <Text style={[styles.navLabel, { color: '#E8313B' }]}>
+                {t('courier.drawer.logout')}
+              </Text>
             </Pressable>
           </View>
         </View>
@@ -204,12 +224,20 @@ const styles = StyleSheet.create({
     position: 'relative',
     marginBottom: 14,
   },
-  avatar: {
+  avatarPlaceholder: {
     width: 68,
     height: 68,
     borderRadius: 34,
     borderWidth: 2.5,
     borderColor: '#FF6C00',
+    backgroundColor: 'rgba(255,108,0,0.12)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  avatarInitials: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: '#FF6C00',
   },
   onlineDot: {
     position: 'absolute',
@@ -226,6 +254,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     letterSpacing: -0.3,
+    marginBottom: 2,
+  },
+  userEmail: {
+    fontSize: 13,
+    fontWeight: '500',
     marginBottom: 2,
   },
   userRole: {
@@ -257,10 +290,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
-  },
-  statDivider: {
-    width: 1,
-    marginVertical: 4,
+    textAlign: 'center',
   },
   divider: {
     height: 1,

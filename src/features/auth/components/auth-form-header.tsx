@@ -14,7 +14,7 @@ export function AuthFormHeader({ title, subtitle, testID }: AuthFormHeaderProps)
     <View className="mb-8">
       <Text
         testID={testID}
-        className="pb-2 text-left font-montserrat-alternates text-4xl font-bold text-[#141414]"
+        className="pb-2 text-left font-montserrat-alternates text-4xl font-bold text-charcoal-900 dark:text-white"
       >
         {title}
       </Text>

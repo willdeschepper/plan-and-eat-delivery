@@ -1,0 +1,31 @@
+{
+  "id": "stop-1",
+  //Burda kuryerin qetdiyi mekanin 
+  "name": "Bayil Bay 1",
+  "address": "123 Main St, Anytown, USA",
+  "location":{
+    "latitude": 40.7128,
+    "longitude": -74.0060
+  },
+  "isDelivered": false,
+  //Burda kuryerin hansi shirketlere yemeyi vermeili oldugu 
+  "companies": [
+    {
+      "id": "company-1-1",
+      "instructions":"Go to the building and pick up the items",
+      "name": "Sabah Hub",
+      "quantity": 32
+    }
+  ],
+  //Burda kuryerin hansi kimlerese pickup yemeyi vermeili oldugu 
+  "pickups": [
+    {
+      "id": "pickup-1",
+      "name": "Another Company Name",
+      "quantity": 1,
+      "userName": "John Doe",
+      "userPhone": "+998901234567",
+      "instructions":"Go to the building and pick up the items"
+    }
+  ]
+}

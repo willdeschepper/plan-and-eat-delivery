@@ -1,8 +1,11 @@
+/* eslint-disable max-lines-per-function */
 import { useRouter } from 'expo-router';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
+  Pressable,
+  RefreshControl,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   View,
@@ -13,20 +16,24 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { FocusAwareStatusBar } from '@/components/ui';
+import { USE_COURIER_API_ORDERS } from '@/features/courier/config';
+import { useCourierStops } from '@/features/courier/hooks/use-courier-stops';
 import { useAppTheme } from '@/lib/hooks/use-app-theme';
 
 import { useDrawer } from '../drawer/drawer-context';
 import { BurgerButton } from './components/burger-button';
 import { DeliveryStopCard } from './components/delivery-stop-card';
-import { useOrdersStore } from './store/use-orders-store';
+import { useStopsWithLocalState } from './hooks/use-stops-with-local-state';
 
-function formatDate(date: Date): { dayName: string; fullDate: string } {
-  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  const months = ['January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'];
+function formatDate(date: Date, locale: string): { dayName: string; fullDate: string } {
   return {
-    dayName: days[date.getDay()],
-    fullDate: `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`,
+    dayName: date.toLocaleDateString(locale, { weekday: 'long' }),
+    fullDate: date.toLocaleDateString(locale, {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    }),
   };
 }
 
@@ -35,41 +42,43 @@ export function OrdersScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { openDrawer } = useDrawer();
+  const { t, i18n } = useTranslation();
 
-  const stops = useOrdersStore(s => s.stops);
-  const isStopLocked = useOrdersStore(s => s.isStopLocked);
-  const isStopCompleted = useOrdersStore(s => s.isStopCompleted);
+  const { stops: mappedStops, isLoading, isError, refetch, isRefetching } = useCourierStops();
+  const stops = useStopsWithLocalState(mappedStops);
 
-  const { dayName, fullDate } = formatDate(new Date());
+  const { dayName, fullDate } = formatDate(new Date(), i18n.language);
 
-  const pendingStops = stops.filter(s => !isStopCompleted(s.id));
-  const completedStops = stops.filter(s => isStopCompleted(s.id));
+  const pendingStops = stops.filter(s => !s.isDelivered);
+  const completedStops = stops.filter(s => s.isDelivered);
   const allDone = pendingStops.length === 0 && stops.length > 0;
 
   return (
     <View style={[styles.container, { backgroundColor: c.bg }]}>
-      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
+      <FocusAwareStatusBar />
 
-      {/* Header */}
       <View style={[styles.header, { paddingTop: insets.top, backgroundColor: c.bg, borderBottomColor: c.border }]}>
-        {/* Row 1: burger + pill */}
         <View style={styles.headerRow}>
           <BurgerButton onPress={openDrawer} isDark={isDark} />
           <View style={[styles.stopsPill, {
             backgroundColor: isDark ? 'rgba(255,108,0,0.12)' : '#FFF3EB',
             borderColor: isDark ? 'rgba(255,108,0,0.2)' : '#FFD4B0',
-          }]}>
-            <Text style={styles.stopsPillText}>{stops.length} stops today</Text>
+          }]}
+          >
+            <Text style={styles.stopsPillText}>
+              {t('courier.orders.stops_today', { count: stops.length })}
+            </Text>
           </View>
         </View>
 
-        {/* Row 2: title + date */}
         <View style={styles.headerTitleBlock}>
           <Text style={[styles.headerTitle, { color: c.textPrimary }]}>
-            Today's Deliveries
+            {t('courier.orders.title')}
           </Text>
           <Text style={[styles.headerDate, { color: c.textSecondary }]}>
-            {dayName} · {fullDate}
+            {dayName}
+            {' · '}
+            {fullDate}
           </Text>
         </View>
       </View>
@@ -80,8 +89,41 @@ export function OrdersScreen() {
           { paddingBottom: insets.bottom + 32 },
         ]}
         showsVerticalScrollIndicator={false}
+        refreshControl={(
+          <RefreshControl
+            refreshing={isRefetching}
+            onRefresh={() => void refetch()}
+            tintColor="#FF6C00"
+          />
+        )}
       >
-        {/* All done banner */}
+        {USE_COURIER_API_ORDERS && isLoading && (
+          <View style={styles.stateBlock}>
+            <Text style={[styles.sectionLabel, { color: c.textSecondary }]}>
+              {t('courier.orders.loading')}
+            </Text>
+          </View>
+        )}
+
+        {USE_COURIER_API_ORDERS && isError && !isLoading && stops.length === 0 && (
+          <View style={styles.stateBlock}>
+            <Text style={[styles.sectionLabel, { color: c.textSecondary }]}>
+              {t('courier.orders.load_failed')}
+            </Text>
+            <Pressable onPress={() => void refetch()} style={styles.retryBtn}>
+              <Text style={styles.retryText}>{t('courier.orders.retry')}</Text>
+            </Pressable>
+          </View>
+        )}
+
+        {!isLoading && !isError && stops.length === 0 && (
+          <View style={styles.stateBlock}>
+            <Text style={[styles.sectionLabel, { color: c.textSecondary }]}>
+              {t('courier.orders.empty')}
+            </Text>
+          </View>
+        )}
+
         {allDone && (
           <Animated.View
             entering={FadeInDown.springify().damping(18)}
@@ -92,18 +134,23 @@ export function OrdersScreen() {
           >
             <Text style={styles.allDoneEmoji}>🎉</Text>
             <View style={{ flex: 1 }}>
-              <Text style={[styles.allDoneTitle, { color: c.textPrimary }]}>All deliveries done!</Text>
-              <Text style={[styles.allDoneSubtitle, { color: c.textSecondary }]}>Great work today!</Text>
+              <Text style={[styles.allDoneTitle, { color: c.textPrimary }]}>
+                {t('courier.orders.all_done_title')}
+              </Text>
+              <Text style={[styles.allDoneSubtitle, { color: c.textSecondary }]}>
+                {t('courier.orders.all_done_subtitle')}
+              </Text>
             </View>
           </Animated.View>
         )}
 
-        {/* Pending section */}
         {pendingStops.length > 0 && (
           <Animated.View layout={LinearTransition.springify()}>
             <View style={styles.sectionHeader}>
               <View style={[styles.sectionDot, { backgroundColor: '#FF6C00' }]} />
-              <Text style={[styles.sectionLabel, { color: c.textSecondary }]}>PENDING</Text>
+              <Text style={[styles.sectionLabel, { color: c.textSecondary }]}>
+                {t('courier.orders.pending')}
+              </Text>
               <View style={[styles.sectionCount, { backgroundColor: '#FF6C00' }]}>
                 <Text style={styles.sectionCountText}>{pendingStops.length}</Text>
               </View>
@@ -112,7 +159,7 @@ export function OrdersScreen() {
               <DeliveryStopCard
                 key={stop.id}
                 stop={stop}
-                isLocked={isStopLocked(stop.id)}
+                isLocked={false}
                 isCompleted={false}
                 index={idx}
                 onPress={() => router.push(`/stop/${stop.id}` as never)}
@@ -121,7 +168,6 @@ export function OrdersScreen() {
           </Animated.View>
         )}
 
-        {/* Completed section */}
         {completedStops.length > 0 && (
           <Animated.View
             entering={FadeInDown.delay(80).springify().damping(18)}
@@ -129,7 +175,9 @@ export function OrdersScreen() {
           >
             <View style={[styles.sectionHeader, { marginTop: pendingStops.length > 0 ? 8 : 0 }]}>
               <View style={[styles.sectionDot, { backgroundColor: '#22C55E' }]} />
-              <Text style={[styles.sectionLabel, { color: c.textSecondary }]}>COMPLETED</Text>
+              <Text style={[styles.sectionLabel, { color: c.textSecondary }]}>
+                {t('courier.orders.completed')}
+              </Text>
               <View style={[styles.sectionCount, { backgroundColor: '#22C55E' }]}>
                 <Text style={styles.sectionCountText}>{completedStops.length}</Text>
               </View>
@@ -153,8 +201,6 @@ export function OrdersScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-
-  /* ── Header ── */
   header: {
     borderBottomWidth: StyleSheet.hairlineWidth,
     paddingHorizontal: 20,
@@ -179,9 +225,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     letterSpacing: 0.1,
   },
-  headerTitleBlock: {
-    gap: 3,
-  },
+  headerTitleBlock: { gap: 3 },
   headerTitle: {
     fontSize: 30,
     fontWeight: '800',
@@ -193,14 +237,26 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     letterSpacing: 0.1,
   },
-
-  /* ── Scroll content ── */
   scrollContent: {
     paddingHorizontal: 16,
     paddingTop: 18,
   },
-
-  /* ── All done banner ── */
+  stateBlock: {
+    paddingVertical: 24,
+    alignItems: 'center',
+    gap: 12,
+  },
+  retryBtn: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255,108,0,0.12)',
+  },
+  retryText: {
+    color: '#FF6C00',
+    fontSize: 14,
+    fontWeight: '600',
+  },
   allDoneBanner: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -213,8 +269,6 @@ const styles = StyleSheet.create({
   allDoneEmoji: { fontSize: 32 },
   allDoneTitle: { fontSize: 16, fontWeight: '700', letterSpacing: -0.2 },
   allDoneSubtitle: { fontSize: 13, marginTop: 2 },
-
-  /* ── Section headers ── */
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',

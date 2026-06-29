@@ -1,12 +1,10 @@
 import type { InputFieldForm } from '@/components/ui/input-field';
 
 import { useForm } from '@tanstack/react-form';
-import { useRouter } from 'expo-router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, Text as RNText } from 'react-native';
 
-import { Button, InputField, View } from '@/components/ui';
+import { Button, InputField } from '@/components/ui';
 import { useLoginFormValidators } from '@/lib/hooks';
 import { AuthFormHeader } from './auth-form-header';
 import { AuthFormLayout } from './auth-form-layout';
@@ -21,7 +19,6 @@ export type LoginFormProps = {
 };
 
 export function LoginForm({ onSubmit = () => {} }: LoginFormProps) {
-  const router = useRouter();
   const { t } = useTranslation();
   const [passwordVisible, setPasswordVisible] = React.useState(false);
   const { validateNumber, validatePassword } = useLoginFormValidators();
@@ -63,16 +60,6 @@ export function LoginForm({ onSubmit = () => {} }: LoginFormProps) {
         passwordVisible={passwordVisible}
         setPasswordVisible={setPasswordVisible}
       />
-
-      <Pressable
-        onPress={() => router.push('/forgot-password')}
-        className="mb-4 self-end"
-        testID="forgot-password-link"
-      >
-        <RNText className="text-base text-charcoal-900 underline dark:text-neutral-100">
-          {t('auth.login.forgot_password')}
-        </RNText>
-      </Pressable>
 
       <form.Subscribe
         selector={state => [state.isSubmitting, state.values.number, state.values.password]}

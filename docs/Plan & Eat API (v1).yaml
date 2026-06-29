@@ -1,0 +1,3997 @@
+openapi: 3.0.3
+info:
+  title: Plan & Eat API
+  version: 0.1.0 (v1)
+  description: API for Plan & Eat system
+paths:
+  /api/banners/:
+    get:
+      operationId: banners_list
+      tags:
+      - banners
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Banner'
+          description: ''
+  /api/caterings/login/:
+    post:
+      operationId: caterings_login_create
+      tags:
+      - caterings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CateringLogin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CateringLogin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CateringLogin'
+        required: true
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CateringLogin'
+          description: ''
+  /api/caterings/orders/:
+    get:
+      operationId: caterings_orders_list
+      tags:
+      - caterings
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MealSummary'
+          description: ''
+  /api/caterings/orders/{meal_id}/prepare/:
+    patch:
+      operationId: caterings_orders_prepare_partial_update
+      parameters:
+      - in: path
+        name: meal_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - caterings
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/caterings/orders/{meal_id}/replace/:
+    post:
+      operationId: caterings_orders_replace_create
+      parameters:
+      - in: path
+        name: meal_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - caterings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CateringReplace'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CateringReplace'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CateringReplace'
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CateringReplace'
+          description: ''
+    patch:
+      operationId: caterings_orders_replace_partial_update
+      parameters:
+      - in: path
+        name: meal_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - caterings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCateringReplace'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCateringReplace'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCateringReplace'
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CateringReplace'
+          description: ''
+  /api/caterings/orders/{order_id}/pack/:
+    patch:
+      operationId: caterings_orders_pack_partial_update
+      parameters:
+      - in: path
+        name: order_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - caterings
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/caterings/profile/:
+    get:
+      operationId: caterings_profile_retrieve
+      tags:
+      - caterings
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CateringProfile'
+          description: ''
+  /api/caterings/statistics/:
+    get:
+      operationId: caterings_statistics_retrieve
+      tags:
+      - caterings
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/companies/addresses/:
+    get:
+      operationId: company_addresses
+      description: "\n    OpenAPI schema decorator for the CompanyAddressListView.\n\
+        \n    This decorator documents the GET /companies/addresses/ endpoint which\
+        \ returns\n    a flat list of user's company addresses\n\n    Tags\n    ----\n\
+        \    COMPANIES\n\n    Responses\n    ---------\n    200 : CompanyAddressReadSerializer\
+        \ (list)\n        A JSON array of category objects.  Each object contains:\n\
+        \        - id                  (int)\n        - address             (str)\
+        \      — Full address of pick-up address\n        - longitude           (decimal)\
+        \  — Longitude of pick-up address\n        - latitude            (decimal)\
+        \  — Latitude of pick-up address\n        - min_active_sub      (int)    \
+        \  — Min. active sub limit\n        - active_sub          (int)      — Current\
+        \ count of active sub for each address\n    401 : ErrorResponseSerializer\n\
+        \        Returned when the request lacks a valid authentication token.\n \
+        \   "
+      summary: Company Address List
+      tags:
+      - companies
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CompanyAddressRead'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                AuthenticationFailed:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: authentication_failed
+                      detail: Некорректные учетные данные.
+                      attr: null
+                NotAuthenticated:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: not_authenticated
+                      detail: Учетные данные не были предоставлены.
+                      attr: null
+          description: ''
+  /api/companies/check/:
+    get:
+      operationId: companies_check_retrieve
+      tags:
+      - companies
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/companies/hr-contact/:
+    post:
+      operationId: companies_hr_contact_create
+      tags:
+      - companies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HrContact'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/HrContact'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/HrContact'
+        required: true
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HrContact'
+          description: ''
+  /api/couriers/{id}/complete/:
+    put:
+      operationId: couriers_complete_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - couriers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourierCompleteOrder'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CourierCompleteOrder'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CourierCompleteOrder'
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourierCompleteOrder'
+          description: ''
+  /api/couriers/login/:
+    post:
+      operationId: couriers_login_create
+      tags:
+      - couriers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourierLogin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CourierLogin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CourierLogin'
+        required: true
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourierLogin'
+          description: ''
+  /api/couriers/orders/:
+    get:
+      operationId: couriers_orders_list
+      tags:
+      - couriers
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CourierAssignment'
+          description: ''
+  /api/couriers/profile/:
+    get:
+      operationId: couriers_profile_retrieve
+      tags:
+      - couriers
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourierProfile'
+          description: ''
+  /api/customers/change-password/:
+    post:
+      operationId: customers_change_password_create
+      tags:
+      - customers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePassword'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangePassword'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ChangePassword'
+        required: true
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangePassword'
+          description: ''
+  /api/customers/forgot-password/:
+    post:
+      operationId: forgot_password
+      description: "\n    Initiate the forgot password flow for a customer account.\n\
+        \n    This endpoint allows customers to request a password reset by providing\
+        \ their registered email address.\n    If the email exists, a one-time password\
+        \ (OTP) is generated and sent to the user's email to verify their identity\n\
+        \    and proceed with password reset.\n\n    ### Request body:\n    - **email**:\
+        \ The customer's registered email address. Must exist in the system.\n\n \
+        \   ### Backend process:\n    1. Validate that the email exists in the system.\n\
+        \    2. Retrieve the corresponding `Customer` and associated `User`.\n   \
+        \ 3. Generate or retrieve the OTP associated with the user (used for password\
+        \ reset verification).\n    4. Render the \"forgot password\" email template\
+        \ with the OTP.\n    5. Send the OTP to the user's email using the email service.\n\
+        \    6. Do **not** change the user password yet — the OTP must be verified\
+        \ first.\n\n    ### Successful response:\n    - Returns basic customer information\
+        \ (`email`) confirming that the forgot password request was processed.\n \
+        \   - Does **not** include sensitive data like passwords or tokens.\n\n  \
+        \  ### Error responses:\n    - **400 Validation Error**: If the email does\
+        \ not exist or is invalid.\n    - **404 Not Found**: If the customer account\
+        \ cannot be found (edge case).\n\n    ### Security notes:\n    - Rate limiting\
+        \ should be applied to prevent abuse.\n    - No indication is given whether\
+        \ the email exists to prevent user enumeration (if desired for production).\n\
+        \    "
+      summary: Customer Forgot Password
+      tags:
+      - customers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPassword'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ForgotPassword'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ForgotPassword'
+        required: true
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForgotPassword'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                NotFound:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: not_found
+                      detail: Страница не найдена.
+                      attr: null
+          description: ''
+  /api/customers/google-login/:
+    post:
+      operationId: google_oauth2_login
+      description: "\n    Authenticate using Google OAuth2 authorization-code flow.\n\
+        \n    The frontend obtains an authorization code from Google, then sends it\
+        \ here together\n    with the exact `redirect_uri` used during that OAuth\
+        \ flow. The backend exchanges the\n    code for a Google access token server-side,\
+        \ verifies the user via the PSA pipeline,\n    and returns JWT tokens.\n\n\
+        \    ⚠️ **Security rules:**\n    - Only pre-registered, active accounts may\
+        \ sign in (no auto-registration)\n    - `redirect_uri` must match exactly\
+        \ the one registered in Google Cloud Console\n\n    ### Request body:\n  \
+        \  - **code**: Authorization code received from Google's OAuth redirect\n\
+        \    - **redirect_uri**: The redirect URI the frontend used when initiating\
+        \ the OAuth flow\n      (e.g. `http://localhost:3000/auth/callback` or `postmessage`\
+        \ for popup flows)\n\n    ### Successful response:\n    - **token.access**:\
+        \ Short-lived access token for API calls\n    - **token.refresh**: Long-lived\
+        \ refresh token\n\n    ### Backend flow:\n    1. POST `code` + `redirect_uri`\
+        \ + client credentials to `oauth2.googleapis.com/token`\n    2. Receive Google\
+        \ access token\n    3. Fetch user info from Google's userinfo endpoint\n \
+        \   4. Check email exists in the database and `is_active = True`\n    5. Issue\
+        \ JWT tokens\n\n    ### Error responses (400):\n    - Invalid or expired code\n\
+        \    - `redirect_uri` mismatch\n    - Email not registered in the system\n\
+        \    - Account is inactive\n\n    ### Frontend example (React, authorization-code\
+        \ flow):\n    ```javascript\n    import { useGoogleLogin } from '@react-oauth/google';\n\
+        \n    const login = useGoogleLogin({\n        flow: 'auth-code',\n       \
+        \ onSuccess: async ({ code }) => {\n            const res = await fetch('/api/customers/google-login/',\
+        \ {\n                method: 'POST',\n                headers: { 'Content-Type':\
+        \ 'application/json' },\n                body: JSON.stringify({\n        \
+        \            code,\n                    redirect_uri: 'postmessage',  // popup\
+        \ flow uses 'postmessage'\n                }),\n            });\n        \
+        \    const { token } = await res.json();\n            localStorage.setItem('access_token',\
+        \ token.access);\n            localStorage.setItem('refresh_token', token.refresh);\n\
+        \        },\n    });\n    ```\n\n    ### Required environment variables:\n\
+        \    - `GOOGLE_OAUTH2_CLIENT_ID`: OAuth 2.0 Client ID from Google Cloud Console\n\
+        \    - `GOOGLE_OAUTH2_CLIENT_SECRET`: Client Secret from Google Cloud Console\n\
+        \    "
+      summary: Google OAuth2 Login
+      tags:
+      - customers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoogleOAuth2'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GoogleOAuth2'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/GoogleOAuth2'
+        required: true
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoogleOAuth2'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                PermissionDenied:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: permission_denied
+                      detail: У вас недостаточно прав для выполнения данного действия.
+                      attr: null
+          description: ''
+  /api/customers/login/:
+    post:
+      operationId: customer_login
+      description: "\n    Authenticate a customer using email and password.\n\n  \
+        \  This endpoint verifies the provided credentials and, if valid, logs in\
+        \ the customer by returning an authentication token.\n\n    ### Request body:\n\
+        \    - **email**: Customer's registered email address\n    - **password**:\
+        \ Customer's account password\n\n    ### Successful response:\n    - Customer\
+        \ data\n    - Authentication token for authorized requests\n\n    ### Errors:\n\
+        \    - Invalid email (account not found)\n    - Incorrect password\n    "
+      summary: Customer Login
+      tags:
+      - customers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerLogin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomerLogin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomerLogin'
+        required: true
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerLogin'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                NotFound:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: not_found
+                      detail: Страница не найдена.
+                      attr: null
+          description: ''
+  /api/customers/logout/:
+    post:
+      operationId: logout
+      description: "\n    Logout the customer by blacklisting the refresh token.\n\
+        \n    This endpoint invalidates the user's session by adding their refresh\
+        \ token to a blacklist,\n    preventing it from being used to generate new\
+        \ access tokens. This is the secure way to log out\n    when using JWT authentication.\n\
+        \n    ### Request body:\n    - **refresh**: The refresh token to be blacklisted.\n\
+        \n    ### Authentication:\n    - Requires a valid access token in the Authorization\
+        \ header.\n    - Format: `Authorization: Bearer <access_token>`\n\n    ###\
+        \ Successful response:\n    - **200 OK**: The refresh token has been successfully\
+        \ blacklisted.\n\n    ### Post-logout behavior:\n    - The blacklisted refresh\
+        \ token can no longer be used to obtain new access tokens.\n    - The user\
+        \ must log in again to obtain new tokens.\n    - The current access token\
+        \ will remain valid until it naturally expires (cannot be revoked with JWT).\n\
+        \n    ### Security best practices:\n    - Always call this endpoint when the\
+        \ user logs out.\n    - Clear tokens from client-side storage (localStorage,\
+        \ sessionStorage, cookies) after logout.\n    - Ensure `rest_framework_simplejwt.token_blacklist`\
+        \ is in INSTALLED_APPS for this feature to work.\n\n    ### Error responses:\n\
+        \    - **400 Validation Error**: Invalid or expired refresh token, or blacklist\
+        \ not configured.\n    - **401 Unauthorized**: Access token is missing or\
+        \ invalid.\n    "
+      summary: Logout Customer
+      tags:
+      - customers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Logout'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Logout'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Logout'
+        required: true
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Logout'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                AuthenticationFailed:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: authentication_failed
+                      detail: Некорректные учетные данные.
+                      attr: null
+                NotAuthenticated:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: not_authenticated
+                      detail: Учетные данные не были предоставлены.
+                      attr: null
+          description: ''
+  /api/customers/profile/:
+    get:
+      operationId: customer_profile
+      description: "\n        Retrieve customer profile.\n\n        This endpoint\
+        \ allows authenticated customers to view their profile information.\n\n  \
+        \      ### Successful response:\n        - Customer data\n\n        ### Errors:\n\
+        \        - Authentication token is missing or invalid\n        "
+      summary: Customer Profile
+      tags:
+      - customers
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerReadProfile'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                AuthenticationFailed:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: authentication_failed
+                      detail: Некорректные учетные данные.
+                      attr: null
+                NotAuthenticated:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: not_authenticated
+                      detail: Учетные данные не были предоставлены.
+                      attr: null
+          description: ''
+    put:
+      operationId: customer_profile_update
+      description: "\n        Update customer profile.\n\n        This endpoint allows\
+        \ authenticated customers to modify their profile information.\n\n       \
+        \ ### Request body:\n        - **name**: Customer first name\n        - **surname**:\
+        \ Customer last name\n        - **mobile**: Customer mobile number\n\n   \
+        \     ### Successful response:\n        - Customer data\n\n        ### Errors:\n\
+        \        - Authentication token is missing or invalid\n        - Validation\
+        \ error\n        "
+      summary: Update Customer Profile
+      tags:
+      - customers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerUpdateProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomerUpdateProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomerUpdateProfile'
+        required: true
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerReadProfile'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                AuthenticationFailed:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: authentication_failed
+                      detail: Некорректные учетные данные.
+                      attr: null
+                NotAuthenticated:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: not_authenticated
+                      detail: Учетные данные не были предоставлены.
+                      attr: null
+          description: ''
+    patch:
+      operationId: customer_profile_partial_update
+      description: "\n        Partially update customer profile.\n\n        This endpoint\
+        \ allows authenticated customers to modify their profile information.\n\n\
+        \        ### Request body:\n        - **name**: Customer first name\n    \
+        \    - **surname**: Customer last name\n        - **mobile**: Customer mobile\
+        \ number\n\n        ### Successful response:\n        - Customer data\n\n\
+        \        ### Errors:\n        - Authentication token is missing or invalid\n\
+        \        - Validation error\n        "
+      summary: Partially Update Customer Profile
+      tags:
+      - customers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCustomerUpdateProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCustomerUpdateProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCustomerUpdateProfile'
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerReadProfile'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                AuthenticationFailed:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: authentication_failed
+                      detail: Некорректные учетные данные.
+                      attr: null
+                NotAuthenticated:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: not_authenticated
+                      detail: Учетные данные не были предоставлены.
+                      attr: null
+          description: ''
+  /api/customers/refresh/:
+    post:
+      operationId: refresh_token
+      description: "\n    Refresh the access token using a valid refresh token.\n\n\
+        \    This endpoint allows clients to obtain a new access token without requiring\
+        \ the user to log in again.\n    The refresh token obtained during login should\
+        \ be used to get a new access token when the current one expires.\n\n    ###\
+        \ Request body:\n    - **refresh**: The refresh token obtained during login\
+        \ or previous refresh.\n\n    ### Successful response:\n    - **access**:\
+        \ A new access token that can be used for authenticated requests.\n    - **refresh**:\
+        \ The same refresh token that was provided (echoed back).\n\n    ### Security\
+        \ notes:\n    - Refresh tokens have a longer lifespan than access tokens.\n\
+        \    - If the refresh token is expired or invalid, the user must log in again.\n\
+        \    - Use HTTPS in production to protect tokens during transmission.\n\n\
+        \    ### Error responses:\n    - **400 Validation Error**: Invalid or expired\
+        \ refresh token.\n    "
+      summary: Refresh Access Token
+      tags:
+      - customers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshToken'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RefreshToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RefreshToken'
+        required: true
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefreshToken'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+  /api/customers/register/:
+    post:
+      operationId: customer_register
+      description: "\n    Register a new customer account.\n\n    This endpoint creates\
+        \ a new inactive user account using the provided personal details and credentials.\n\
+        \    After successful registration, a one-time password (OTP) is generated\
+        \ and sent to the customer's email address\n    to verify and activate the\
+        \ account.\n\n    ### Request body:\n    - **name**: Customer first name\n\
+        \    - **surname**: Customer last name\n    - **email**: Unique email address\n\
+        \    - **mobile**: Unique mobile number\n    - **password**: Account password\
+        \ (minimum 8 characters)\n    - **password2**: Password confirmation (must\
+        \ match password)\n\n    ### Successful response:\n    - Newly created user\
+        \ information\n\n    ### Post-registration flow:\n    - Account is created\
+        \ as inactive\n    - OTP is sent via email for verification\n    - User must\
+        \ activate the account before login\n\n    ### Errors:\n    - Email already\
+        \ exists\n    - Mobile already exists\n    - Password too short\n    - Passwords\
+        \ do not match\n    "
+      summary: Customer Register
+      tags:
+      - customers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerRegister'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomerRegister'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomerRegister'
+        required: true
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerRegister'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                NotFound:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: not_found
+                      detail: Страница не найдена.
+                      attr: null
+          description: ''
+  /api/customers/relations/:
+    get:
+      operationId: customers_relations_list
+      tags:
+      - customers
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RelationsRead'
+          description: ''
+  /api/customers/relations/{id}/delete/:
+    delete:
+      operationId: customers_relations_delete_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - customers
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/customers/relations/generate/:
+    post:
+      operationId: relation_link_generate
+      description: "\n    Generate a unique invitation token for linking two customer\
+        \ accounts as relatives.\n\n    An authenticated customer (who does not belong\
+        \ to a company) can call this endpoint\n    to get a shareable one-time token.\
+        \ The token can then be used by another customer\n    to accept the relation\
+        \ invitation via the `/relation/invite/<token>/` endpoint.\n\n    ### Restrictions:\n\
+        \    - The requesting customer must **not** have an active company.\n    -\
+        \ Each call regenerates the token, invalidating any previously issued one.\n\
+        \n    ### Successful response:\n    - **token**: The newly generated invitation\
+        \ token (UUID without dashes).\n\n    ### Error responses:\n    - **400 Validation\
+        \ Error**: Customer already belongs to a company.\n    - **401 Unauthorized**:\
+        \ Authentication token is missing or invalid.\n    "
+      summary: Generate Relation Invite Link
+      tags:
+      - customers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RelationGenerate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RelationGenerate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RelationGenerate'
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RelationGenerate'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                AuthenticationFailed:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: authentication_failed
+                      detail: Некорректные учетные данные.
+                      attr: null
+                NotAuthenticated:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: not_authenticated
+                      detail: Учетные данные не были предоставлены.
+                      attr: null
+          description: ''
+  /api/customers/resend-otp/:
+    post:
+      operationId: resend_otp
+      description: "\n    Resend a new OTP code to verify an unactivated customer\
+        \ account.\n\n    This endpoint is used when a customer did not receive the\
+        \ original OTP or it has expired.\n    It generates a new OTP and sends it\
+        \ to the registered email address.\n\n    ### Use cases:\n    - User did not\
+        \ receive the original OTP email\n    - OTP code has expired (3 minutes validity)\n\
+        \    - User accidentally deleted the email\n\n    ### Request body:\n    -\
+        \ **email**: The registered email address that needs verification.\n\n   \
+        \ ### Successful response:\n    - Returns basic customer information confirming\
+        \ the OTP was resent.\n    - A new OTP is generated and sent to the email.\n\
+        \n    ### Backend process:\n    1. Validates that the email exists in the\
+        \ system.\n    2. Checks that the account is not already active (verified).\n\
+        \    3. Generates a new OTP code using OTPHandler.\n    4. Sends the new OTP\
+        \ via email.\n\n    ### Error responses:\n    - **400 Validation Error**:\n\
+        \        - Email does not exist in the system\n        - Account is already\
+        \ verified and active\n\n    ### Security notes:\n    - Each new OTP invalidates\
+        \ the previous one.\n    - OTP codes expire after 3 minutes.\n    - Consider\
+        \ rate limiting to prevent abuse.\n    - Only works for inactive (unverified)\
+        \ accounts.\n    "
+      summary: Resend OTP for Account Verification
+      tags:
+      - customers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResendOTP'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResendOTP'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ResendOTP'
+        required: true
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResendOTP'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+  /api/customers/set-password/:
+    post:
+      operationId: set_password
+      description: "\n    Set a new password for the authenticated user.\n\n    This\
+        \ endpoint is used to change the password. It usually follows a successful\
+        \ OTP verification\n    or can be used by a logged-in user to change their\
+        \ credentials.\n\n    ### Request body:\n    - **password**: The new password\
+        \ (min 8 characters).\n    - **password2**: Confirmation of the new password.\n\
+        \n    ### Successful response:\n    - Returns the customer object.\n\n   \
+        \ ### Error responses:\n    - **400 Validation Error**: Passwords do not match\
+        \ or are too short.\n    - **401 Unauthorized**: Authentication token is missing\
+        \ or invalid.\n    "
+      summary: Set New Password
+      tags:
+      - customers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetPassword'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetPassword'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SetPassword'
+        required: true
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetPassword'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                AuthenticationFailed:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: authentication_failed
+                      detail: Некорректные учетные данные.
+                      attr: null
+                NotAuthenticated:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: not_authenticated
+                      detail: Учетные данные не были предоставлены.
+                      attr: null
+          description: ''
+  /api/customers/verify/:
+    post:
+      operationId: verify_account
+      description: "\n    Verify and activate a customer account using the OTP sent\
+        \ via email.\n\n    After registration, the account is inactive. This endpoint\
+        \ validates the One-Time Password (OTP)\n    sent to the customer's email.\
+        \ If the OTP is correct, the account is activated and a login token is returned.\n\
+        \n    ### Request body:\n    - **email**: The registered email address.\n\
+        \    - **code**: The 6-digit OTP code received in the email.\n\n    ### Successful\
+        \ response:\n    - Customer data\n    - **token**: Access and refresh tokens\
+        \ for immediate login.\n\n    ### Error responses:\n    - **400 Validation\
+        \ Error**: Invalid email, account does not exist, or incorrect OTP code.\n\
+        \    "
+      summary: Verify Customer Account
+      tags:
+      - customers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyAccount'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VerifyAccount'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VerifyAccount'
+        required: true
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifyAccount'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+  /api/customers/verify-forgot-password/:
+    post:
+      operationId: verify_forgot_password
+      description: "\n    Verify the OTP for the forgot password flow.\n\n    This\
+        \ step confirms the user's identity before allowing them to reset their password.\n\
+        \    It checks the OTP sent after the `forgot_password` request.\n\n    ###\
+        \ Request body:\n    - **email**: The registered email address.\n    - **code**:\
+        \ The 6-digit OTP code received in the email.\n\n    ### Successful response:\n\
+        \    - Customer data\n    - **token**: Access and refresh tokens (automatically\
+        \ logs user in or authorizes next step).\n\n    ### Error responses:\n   \
+        \ - **400 Validation Error**: Invalid email, account does not exist, or incorrect\
+        \ OTP code.\n    "
+      summary: Verify Forgot Password OTP
+      tags:
+      - customers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyForgotPassword'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VerifyForgotPassword'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VerifyForgotPassword'
+        required: true
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifyForgotPassword'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: ''
+  /api/favorites/drinks/:
+    post:
+      operationId: favorites_drinks_create
+      tags:
+      - favorites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FavoriteMeal'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FavoriteMeal'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FavoriteMeal'
+        required: true
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FavoriteMeal'
+          description: ''
+  /api/favorites/meals/:
+    post:
+      operationId: favorites_meals_create
+      tags:
+      - favorites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FavoriteMeal'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FavoriteMeal'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FavoriteMeal'
+        required: true
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FavoriteMeal'
+          description: ''
+  /api/locations/:
+    get:
+      operationId: locations
+      description: "\n    OpenAPI schema decorator for the LocationListView.\n\n \
+        \   This decorator documents the GET /locations/ endpoint which returns\n\
+        \    a flat list of locations (pick-up addresses)\n\n    Tags\n    ----\n\
+        \    LOCATIONS\n\n    Responses\n    ---------\n    200 : LocationReadSerializer\
+        \ (list)\n        A JSON array of category objects.  Each object contains:\n\
+        \        - id         (int)\n        - name       (str)      — Address name.\n\
+        \        - address    (str)      — Full address of pick-up address\n     \
+        \   - longitude  (decimal)  — Longitude of pick-up address\n        - latitude\
+        \   (decimal)  — Latitude of pick-up address\n        - phone      (str) \
+        \     — Phone number of pick-up address\n        - start_hour (time)     —\
+        \ Start time of pick-up address\n        - end_hour   (time)     — End time\
+        \ of pick-up address\n    401 : ErrorResponseSerializer\n        Returned\
+        \ when the request lacks a valid authentication token.\n    "
+      summary: Location List
+      parameters:
+      - in: query
+        name: search
+        schema:
+          type: string
+      tags:
+      - locations
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LocationRead'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                AuthenticationFailed:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: authentication_failed
+                      detail: Некорректные учетные данные.
+                      attr: null
+                NotAuthenticated:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: not_authenticated
+                      detail: Учетные данные не были предоставлены.
+                      attr: null
+          description: ''
+  /api/meals/:
+    get:
+      operationId: meals
+      description: "\n    OpenAPI schema decorator for the MealListView.\n\n    This\
+        \ decorator documents the GET /meals/ endpoint which returns a\n    **paginated\
+        \ and filterable** list of meal records, ordered by creation date\n    (ascending).\n\
+        \n    Filtering\n    ---------\n    The view uses ``MealFilter`` (django-filter)\
+        \ which allows the caller to\n    narrow the result set by query parameters\
+        \ such as ``category``,\n    ``supplier``, ``ingredients``, and calorie-range\
+        \ fields — see\n    ``apps/meals/filters.py`` for the exact filter fields.\n\
+        \n    Pagination\n    ----------\n    ``CustomPageNumberPagination`` is applied;\
+        \ use the ``page`` and\n    ``page_size`` query parameters to navigate through\
+        \ results.\n\n    Tags\n    ----\n    MEALS\n\n    Responses\n    ---------\n\
+        \    200 : MealReadSerializer (list, paginated)\n        A paginated JSON\
+        \ object whose ``results`` array contains meal objects.\n        Each meal\
+        \ object contains:\n        - id            (int)\n        - name        \
+        \  (str)\n        - supplier      (object) — Nested SupplierReadSerializer\
+        \ (id, name).\n        - category      (object) — Nested CategoryChildrenSerializer\
+        \ (id, name, icon).\n        - ingredients   (list)   — List of IngredientReadSerializer\
+        \ objects.\n        - meal_options (list) — List of MealOptionReadSerializer\
+        \ objects.\n        - price         (decimal)\n        - image         (url)\
+        \    — Presigned S3 URL for the meal image.\n        - calories      (decimal)\n\
+        \        - proteins      (decimal)\n        - carbohydrates (decimal)\n  \
+        \      - fats          (decimal)\n        - rating        (decimal)\n    \
+        \    - created_at    (datetime)\n        - updated_at    (datetime)\n    401\
+        \ : ErrorResponseSerializer\n        Returned when the request lacks a valid\
+        \ authentication token.\n    "
+      summary: Meal List
+      parameters:
+      - in: query
+        name: carb_options
+        schema:
+          type: string
+      - in: query
+        name: category
+        schema:
+          type: integer
+      - in: query
+        name: date
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: options
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: plan
+        schema:
+          type: string
+      - in: query
+        name: protein_options
+        schema:
+          type: string
+      - in: query
+        name: search
+        schema:
+          type: string
+      tags:
+      - meals
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedMealReadList'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                AuthenticationFailed:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: authentication_failed
+                      detail: Некорректные учетные данные.
+                      attr: null
+                NotAuthenticated:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: not_authenticated
+                      detail: Учетные данные не были предоставлены.
+                      attr: null
+          description: ''
+  /api/meals/calories/:
+    get:
+      operationId: calories
+      description: "\n    OpenAPI schema decorator for the CaloryListView.\n\n   \
+        \ This decorator documents the GET /meals/calories/ endpoint which returns\n\
+        \    the complete, ordered list of calorie-range records.  Each ``Calory``\n\
+        \    record represents a named calorie band (e.g. \"Low\", \"Medium\", \"\
+        High\")\n    defined by a ``start`` and ``end`` decimal value.  These ranges\
+        \ are\n    typically displayed in the UI as filter chips on the meal search\
+        \ screen.\n\n    Tags\n    ----\n    MEALS\n\n    Responses\n    ---------\n\
+        \    200 : CaloryReadSerializer (list)\n        A JSON array of calory-range\
+        \ objects.  Each object contains all model\n        fields **except** ``created_at``\
+        \ and ``updated_at`` (excluded via\n        the serializer's ``Meta.exclude``),\
+        \ specifically:\n        - id    (int)\n        - name  (str)     — Human-readable\
+        \ range label (e.g. \"Low calorie\").\n        - start (decimal) — Lower bound\
+        \ of the calorie range (kcal).\n        - end   (decimal) — Upper bound of\
+        \ the calorie range (kcal).\n        - disabled (bool) — Disabled or not disabled\
+        \ if there is any subscription plan\n    401 : ErrorResponseSerializer\n \
+        \       Returned when the request lacks a valid authentication token.\n  \
+        \  "
+      summary: Calory Range List
+      parameters:
+      - in: query
+        name: plan
+        schema:
+          type: integer
+        description: The ID of the subscription plan to filter categories or check
+          disabled status.
+      tags:
+      - meals
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CaloryRead'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                AuthenticationFailed:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: authentication_failed
+                      detail: Некорректные учетные данные.
+                      attr: null
+                NotAuthenticated:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: not_authenticated
+                      detail: Учетные данные не были предоставлены.
+                      attr: null
+          description: ''
+  /api/meals/carb/options/:
+    get:
+      operationId: meals_carb_options_list
+      tags:
+      - meals
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarbOptionRead'
+          description: ''
+  /api/meals/categories/:
+    get:
+      operationId: categories
+      description: "\n    OpenAPI schema decorator for the CategoryListView.\n\n \
+        \   This decorator documents the GET /meals/categories/ endpoint which returns\n\
+        \    a flat list of **root-level** categories (i.e. categories whose ``parent``\n\
+        \    field is ``NULL``).  Each category object also embeds its immediate\n\
+        \    children via the ``CategoryChildrenSerializer`` nested under the\n  \
+        \  ``children`` key.\n\n    Tags\n    ----\n    MEALS\n\n    Responses\n \
+        \   ---------\n    200 : CategoryReadSerializer (list)\n        A JSON array\
+        \ of category objects.  Each object contains:\n        - id       (int)\n\
+        \        - name     (str)   — Human-readable category label.\n        - icon\
+        \     (url)   — Presigned S3 URL for the category icon image.\n        - children\
+        \ (list)  — Nested list of child category objects.\n        - disabled (bool)\
+        \  — Disabled or not disabled if there is any subscription plan\n    401 :\
+        \ ErrorResponseSerializer\n        Returned when the request lacks a valid\
+        \ authentication token.\n    "
+      summary: Category List
+      parameters:
+      - in: query
+        name: plan_id
+        schema:
+          type: integer
+        description: The ID of the subscription plan to filter categories or check
+          disabled status.
+      tags:
+      - meals
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryRead'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                AuthenticationFailed:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: authentication_failed
+                      detail: Некорректные учетные данные.
+                      attr: null
+                NotAuthenticated:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: not_authenticated
+                      detail: Учетные данные не были предоставлены.
+                      attr: null
+          description: ''
+  /api/meals/comment/:
+    post:
+      operationId: meals_comment_create
+      tags:
+      - meals
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MealCommentCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MealCommentCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MealCommentCreate'
+        required: true
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MealCommentCreate'
+          description: ''
+  /api/meals/drink-options/:
+    get:
+      operationId: meals_drink_options_list
+      parameters:
+      - in: query
+        name: date
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: meals
+        schema:
+          type: string
+      - in: query
+        name: search
+        schema:
+          type: string
+      tags:
+      - meals
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DrinkOptionRead'
+          description: ''
+  /api/meals/drinks/:
+    get:
+      operationId: meals_drinks_list
+      parameters:
+      - in: query
+        name: date
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: meals
+        schema:
+          type: string
+      - in: query
+        name: search
+        schema:
+          type: string
+      tags:
+      - meals
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DrinkRead'
+          description: ''
+  /api/meals/ingredients/:
+    get:
+      operationId: ingredients
+      description: "\n    OpenAPI schema decorator for the IngredientListView.\n\n\
+        \    This decorator documents the GET /meals/ingredients/ endpoint which returns\n\
+        \    the complete, un-paginated list of ingredients available in the system.\n\
+        \    Ingredients are used to compose meals and are referenced by their ``id``\n\
+        \    when a meal record is created or updated.\n\n    Tags\n    ----\n   \
+        \ MEALS\n\n    Responses\n    ---------\n    200 : IngredientReadSerializer\
+        \ (list)\n        A JSON array of ingredient objects.  Each object contains:\n\
+        \        - id   (int)\n        - name (str) — Human-readable ingredient label.\n\
+        \        - icon (url) — Presigned S3 URL for the ingredient icon image.\n\
+        \    401 : ErrorResponseSerializer\n        Returned when the request lacks\
+        \ a valid authentication token.\n    "
+      summary: Ingredient List
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: search
+        schema:
+          type: string
+      tags:
+      - meals
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedIngredientReadList'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                AuthenticationFailed:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: authentication_failed
+                      detail: Некорректные учетные данные.
+                      attr: null
+                NotAuthenticated:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: not_authenticated
+                      detail: Учетные данные не были предоставлены.
+                      attr: null
+          description: ''
+  /api/meals/options/:
+    get:
+      operationId: options
+      description: "\n    "
+      summary: Meal Option List
+      tags:
+      - meals
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MealOptionRead'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                AuthenticationFailed:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: authentication_failed
+                      detail: Некорректные учетные данные.
+                      attr: null
+                NotAuthenticated:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: not_authenticated
+                      detail: Учетные данные не были предоставлены.
+                      attr: null
+          description: ''
+  /api/meals/protein/options/:
+    get:
+      operationId: meals_protein_options_list
+      tags:
+      - meals
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProteinOptionRead'
+          description: ''
+  /api/meals/suppliers/:
+    get:
+      operationId: suppliers
+      description: "\n    OpenAPI schema decorator for the SupplierListView.\n\n \
+        \   This decorator documents the GET /meals/suppliers/ endpoint which returns\n\
+        \    the complete, un-paginated list of food suppliers registered in the system.\n\
+        \    Suppliers are associated with individual meal records.\n\n    Tags\n\
+        \    ----\n    MEALS\n\n    Responses\n    ---------\n    200 : SupplierReadSerializer\
+        \ (list)\n        A JSON array of supplier objects.  Each object contains:\n\
+        \        - id   (int)\n        - name (str) — Human-readable supplier/restaurant\
+        \ name.\n        - logo (url)   — Presigned S3 URL for the supplier logo.\n\
+        \    401 : ErrorResponseSerializer\n        Returned when the request lacks\
+        \ a valid authentication token.\n    "
+      summary: Supplier List
+      tags:
+      - meals
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupplierRead'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                AuthenticationFailed:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: authentication_failed
+                      detail: Некорректные учетные данные.
+                      attr: null
+                NotAuthenticated:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: not_authenticated
+                      detail: Учетные данные не были предоставлены.
+                      attr: null
+          description: ''
+  /api/notifications/:
+    get:
+      operationId: notifications_list
+      tags:
+      - notifications
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NotificationRead'
+          description: ''
+  /api/orders/change-meal/:
+    patch:
+      operationId: orders_change_meal_partial_update
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMealOrderChangeMeal'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMealOrderChangeMeal'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMealOrderChangeMeal'
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MealOrderChangeMeal'
+          description: ''
+  /api/orders/meals/:
+    get:
+      operationId: orders_meals_list
+      tags:
+      - orders
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MealOrderRead'
+          description: ''
+  /api/orders/rate/:
+    post:
+      operationId: orders_rate_create
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MealOrderRate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MealOrderRate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MealOrderRate'
+        required: true
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MealOrderRate'
+          description: ''
+  /api/payments/{id}/auto-charge-sub/:
+    patch:
+      operationId: payments_auto_charge_sub_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - payments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSubscriptionAutoCharge'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSubscriptionAutoCharge'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSubscriptionAutoCharge'
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionAutoCharge'
+          description: ''
+  /api/payments/{id}/change-location/:
+    patch:
+      operationId: payments_change_location_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - payments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSubscriptionLocationChange'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSubscriptionLocationChange'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSubscriptionLocationChange'
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionLocationChange'
+          description: ''
+  /api/payments/{id}/freeze-date-sub/:
+    patch:
+      operationId: payments_freeze_date_sub_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - payments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSubscriptionDateFreeze'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSubscriptionDateFreeze'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSubscriptionDateFreeze'
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionDateFreeze'
+          description: ''
+  /api/payments/buy-sub/:
+    post:
+      operationId: payments_buy_sub_create
+      tags:
+      - payments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubscriptionCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubscriptionCreate'
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionCreate'
+          description: ''
+  /api/payments/callback/:
+    get:
+      operationId: payments_callback_retrieve
+      tags:
+      - payments
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/payments/calory-calculation/:
+    post:
+      operationId: payments_calory_calculation_create
+      tags:
+      - payments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CaloryCalculationCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CaloryCalculationCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CaloryCalculationCreate'
+        required: true
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CaloryCalculationCreate'
+          description: ''
+  /api/payments/cycles/:
+    get:
+      operationId: payment_cycles
+      description: "\n    "
+      summary: Payment Cycle List
+      tags:
+      - payments
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentCycleRead'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                AuthenticationFailed:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: authentication_failed
+                      detail: Некорректные учетные данные.
+                      attr: null
+                NotAuthenticated:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: not_authenticated
+                      detail: Учетные данные не были предоставлены.
+                      attr: null
+          description: ''
+  /api/payments/day-offs/:
+    get:
+      operationId: payments_day_offs_list
+      parameters:
+      - in: query
+        name: date_contains
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: year
+        schema:
+          type: integer
+      tags:
+      - payments
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DayOff'
+          description: ''
+  /api/payments/get-price/:
+    post:
+      operationId: payments_get_price_create
+      tags:
+      - payments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PriceCalculationCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PriceCalculationCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PriceCalculationCreate'
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceCalculationCreate'
+          description: ''
+  /api/payments/methods/:
+    get:
+      operationId: payments_methods_list
+      tags:
+      - payments
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReadPaymentMethod'
+          description: ''
+  /api/payments/methods/{id}/delete/:
+    delete:
+      operationId: payments_methods_delete_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - payments
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/payments/methods/{id}/set/:
+    patch:
+      operationId: payments_methods_set_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - payments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSetPaymentMethod'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSetPaymentMethod'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSetPaymentMethod'
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetPaymentMethod'
+          description: ''
+  /api/payments/methods/create/:
+    post:
+      operationId: payments_methods_create_create
+      tags:
+      - payments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentMethod'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentMethod'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentMethod'
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePaymentMethod'
+          description: ''
+  /api/payments/my-calory-result/:
+    get:
+      operationId: payments_my_calory_result_retrieve
+      tags:
+      - payments
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CaloryCalculationRead'
+          description: ''
+  /api/payments/my-sub/:
+    get:
+      operationId: payments_my_sub_retrieve
+      tags:
+      - payments
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionRead'
+          description: ''
+  /api/subscriptions/:
+    get:
+      operationId: subscriptions
+      description: "\n    OpenAPI schema decorator for SubscriptionListView.\n\n \
+        \   Endpoint\n    --------\n    GET /subscriptions/\n\n    Purpose\n    -------\n\
+        \    Returns the complete, **un-paginated** list of subscription plans offered\n\
+        \    on the platform.  Each plan represents a curated meal-delivery package\n\
+        \    that a customer can subscribe to.  The consumer typically renders these\n\
+        \    as product cards on the subscription discovery / pricing screen.\n\n\
+        \    Authentication\n    --------------\n    Requires a valid JWT bearer token\
+        \ in the ``Authorization`` header\n    (``Bearer <token>``).  Unauthenticated\
+        \ requests receive a 401 response.\n\n    Response shape — 200 OK\n    -----------------------\n\
+        \    A JSON array where each element is a fully resolved subscription object:\n\
+        \n    Field            Type        Description\n    ---------------  ----------\
+        \  ---------------------------------------------\n    id               int\
+        \         Auto-incremented primary key.\n    name             str        \
+        \ Unique, human-readable plan name\n                                 (e.g.\
+        \ \"Classic\", \"Premium\").\n    image            url         Presigned S3\
+        \ URL for the plan's cover image.\n                                 Stored\
+        \ under the ``subscriptions/`` S3 prefix.\n    price_per_meal   decimal  \
+        \   Cost per individual meal within this plan\n                          \
+        \       (max 10 digits, 2 decimal places).\n    price_per_month  decimal \
+        \    Total monthly cost of the plan\n                                 (max\
+        \ 10 digits, 2 decimal places).\n    quantity         int         Number of\
+        \ meals included per month\n                                 (positive integer).\n\
+        \    description      str (HTML)  Rich-text HTML description of the plan,\n\
+        \                                 authored via CKEditor in Django Admin.\n\
+        \    kitchens         list        Nested list of supplier/kitchen objects.\n\
+        \                                 Each item: { id (int), name (str) }.\n \
+        \                                References ``meals.Supplier`` via M2M.\n\
+        \    categories       list        Nested list of meal-category objects.\n\
+        \                                 Each item: { id (int), name (str),\n   \
+        \                              icon (url) }.\n                           \
+        \      References ``meals.Category`` via M2M.\n    calories         list \
+        \       Nested list of calorie-range objects.\n                          \
+        \       Each item: { id (int), name (str),\n                             \
+        \    start (decimal), end (decimal) }.\n                                 References\
+        \ ``meals.Calory`` via M2M.\n    created_at       datetime    ISO 8601 timestamp\
+        \ — record creation time.\n    updated_at       datetime    ISO 8601 timestamp\
+        \ — last modification time.\n\n    Design decisions\n    ----------------\n\
+        \    * No pagination is applied because the number of subscription plans in\
+        \ a\n      typical food-delivery product is small (< 20) and the full list\
+        \ is\n      always needed to render the pricing page in a single request.\n\
+        \    * The three M2M relations (kitchens, categories, calories) are expanded\n\
+        \      inline so that the client never needs a second round-trip to resolve\n\
+        \      reference IDs.\n    * The ``description`` field returns raw HTML produced\
+        \ by CKEditor; the\n      client is responsible for safe rendering (e.g. ``dangerouslySetInnerHTML``\n\
+        \      in React with a sanitiser like DOMPurify).\n\n    Responses\n    ---------\n\
+        \    200 : SubscriptionReadSerializer (list)\n        Array of subscription\
+        \ plan objects as described above.\n    401 : ErrorResponseSerializer\n  \
+        \      Returned when the request lacks or contains an invalid auth token.\n\
+        \    "
+      summary: Subscription Plan List
+      tags:
+      - subscriptions
+      security:
+      - tokenAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubscriptionPlanRead'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                AuthenticationFailed:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: authentication_failed
+                      detail: Некорректные учетные данные.
+                      attr: null
+                NotAuthenticated:
+                  value:
+                    type: client_error
+                    errors:
+                    - code: not_authenticated
+                      detail: Учетные данные не были предоставлены.
+                      attr: null
+          description: ''
+components:
+  schemas:
+    ActivationEnum:
+      enum:
+      - sedentary
+      - lightly_active
+      - very_active
+      - highly_active
+      type: string
+      description: |-
+        * `sedentary` - Sedentary
+        * `lightly_active` - Lightly Active
+        * `very_active` - Very Active
+        * `highly_active` - Highly Active
+    Banner:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 400
+        image:
+          type: string
+          format: uri
+      required:
+      - id
+      - image
+      - title
+    BlankEnum:
+      enum:
+      - ''
+    CaloryCalculationCreate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        goal:
+          $ref: '#/components/schemas/GoalEnum'
+        activation:
+          $ref: '#/components/schemas/ActivationEnum'
+        gender:
+          $ref: '#/components/schemas/GenderEnum'
+        birthday:
+          type: string
+          format: date
+        height:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        weight:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        result:
+          readOnly: true
+      required:
+      - activation
+      - birthday
+      - gender
+      - goal
+      - height
+      - id
+      - result
+      - weight
+    CaloryCalculationRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        goal:
+          $ref: '#/components/schemas/GoalEnum'
+        activation:
+          $ref: '#/components/schemas/ActivationEnum'
+        gender:
+          $ref: '#/components/schemas/GenderEnum'
+        birthday:
+          type: string
+          format: date
+        height:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        weight:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        result: {}
+      required:
+      - activation
+      - birthday
+      - created_at
+      - gender
+      - goal
+      - height
+      - id
+      - updated_at
+      - weight
+    CaloryRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 50
+        description:
+          type: string
+          nullable: true
+        start:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,5}(?:\.\d{0,1})?$
+        end:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,5}(?:\.\d{0,1})?$
+      required:
+      - id
+      - name
+    CarbOptionRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 50
+      required:
+      - id
+      - name
+    CategoryChildren:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 50
+        icon:
+          type: string
+          format: uri
+          nullable: true
+      required:
+      - id
+      - name
+    CategoryRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 50
+        icon:
+          type: string
+          format: uri
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryChildren'
+      required:
+      - children
+      - id
+      - name
+    CateringLogin:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        device_token:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - password
+    CateringProfile:
+      type: object
+      properties:
+        supplier:
+          allOf:
+          - $ref: '#/components/schemas/SupplierRead'
+          readOnly: true
+      required:
+      - supplier
+    CateringReplace:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        reason:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ReasonEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        own_reason:
+          type: string
+          nullable: true
+      required:
+      - id
+    ChangePassword:
+      type: object
+      properties:
+        old_password:
+          type: string
+          writeOnly: true
+        new_password:
+          type: string
+          writeOnly: true
+        new_password_confirmation:
+          type: string
+          writeOnly: true
+      required:
+      - new_password
+      - new_password_confirmation
+      - old_password
+    CompanyAddressRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        address:
+          type: string
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+        min_active_sub:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+      required:
+      - address
+      - id
+      - latitude
+      - longitude
+      - min_active_sub
+    CourierAssignment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        company_location:
+          type: integer
+          nullable: true
+        pickup_location:
+          type: integer
+          nullable: true
+      required:
+      - id
+    CourierCompleteOrder:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+      required:
+      - id
+    CourierLogin:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        device_token:
+          type: string
+          writeOnly: true
+      required:
+      - device_token
+      - email
+      - password
+    CourierProfile:
+      type: object
+      properties:
+        name:
+          type: string
+        surname:
+          type: string
+        email:
+          type: string
+          format: email
+        mobile:
+          type: string
+      required:
+      - email
+      - mobile
+      - name
+      - surname
+    CreatePaymentMethod:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+      required:
+      - id
+    CustomerLogin:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        device_token:
+          type: string
+          writeOnly: true
+        token:
+          allOf:
+          - $ref: '#/components/schemas/Token'
+          readOnly: true
+      required:
+      - email
+      - password
+      - token
+    CustomerReadProfile:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        name:
+          type: string
+          maxLength: 120
+        surname:
+          type: string
+          maxLength: 120
+        mobile:
+          type: string
+          maxLength: 128
+      required:
+      - email
+      - mobile
+      - name
+      - surname
+    CustomerRegister:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 120
+        surname:
+          type: string
+          maxLength: 120
+        email:
+          type: string
+          format: email
+        mobile:
+          type: string
+        is_corporate_user:
+          type: boolean
+        password:
+          type: string
+          writeOnly: true
+        password2:
+          type: string
+          writeOnly: true
+        device_token:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - mobile
+      - name
+      - password
+      - password2
+      - surname
+    CustomerUpdateProfile:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+          maxLength: 120
+        surname:
+          type: string
+          maxLength: 120
+        mobile:
+          type: string
+      required:
+      - email
+      - mobile
+      - name
+      - surname
+    DayOff:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        year:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        dates:
+          type: array
+          items:
+            type: string
+            format: date
+      required:
+      - id
+      - year
+    DaysEnum:
+      enum:
+      - MON
+      - TUE
+      - WED
+      - THU
+      - FRI
+      - SAT
+      - SUN
+      type: string
+      description: |-
+        * `MON` - Monday
+        * `TUE` - Tuesday
+        * `WED` - Wednesday
+        * `THU` - Thursday
+        * `FRI` - Friday
+        * `SAT` - Saturday
+        * `SUN` - Sunday
+    DrinkOptionRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 120
+        image:
+          type: string
+          format: uri
+          nullable: true
+      required:
+      - created_at
+      - id
+      - name
+      - updated_at
+    DrinkRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        drink_option:
+          $ref: '#/components/schemas/DrinkOptionRead'
+        supplier:
+          $ref: '#/components/schemas/SupplierRead'
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - drink_option
+      - id
+      - supplier
+      - updated_at
+    ErrorResponse:
+      type: object
+      properties:
+        type:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/StandardizedErrorItem'
+      required:
+      - errors
+      - type
+    FavoriteMeal:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        meal:
+          type: integer
+      required:
+      - id
+      - meal
+    ForgotPassword:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          writeOnly: true
+      required:
+      - email
+    GenderEnum:
+      enum:
+      - male
+      - female
+      type: string
+      description: |-
+        * `male` - Male
+        * `female` - Female
+    GoalEnum:
+      enum:
+      - lose_weight
+      - gain_weight
+      - build_muscle
+      - maintain_weight
+      type: string
+      description: |-
+        * `lose_weight` - Lose Weight
+        * `gain_weight` - Gain Weight
+        * `build_muscle` - Build Muscle
+        * `maintain_weight` - Maintain Weight
+    GoogleOAuth2:
+      type: object
+      description: |-
+        Serializer for Google OAuth2 authorization-code flow.
+
+        Frontend exchanges a Google authorization code for JWT tokens.
+        The redirect_uri must exactly match the one registered in Google Cloud Console
+        and the one used by the frontend when requesting the code.
+      properties:
+        code:
+          type: string
+          writeOnly: true
+          description: Google OAuth2 authorization code obtained by the frontend
+        redirect_uri:
+          type: string
+          writeOnly: true
+          description: Redirect URI used when the frontend requested the authorization
+            code
+        token:
+          allOf:
+          - $ref: '#/components/schemas/Token'
+          readOnly: true
+      required:
+      - code
+      - redirect_uri
+      - token
+    HrContact:
+      type: object
+      properties:
+        full_name:
+          type: string
+          maxLength: 500
+        phone:
+          type: string
+          maxLength: 128
+      required:
+      - full_name
+      - phone
+    IngredientRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 120
+        icon:
+          type: string
+          format: uri
+          nullable: true
+      required:
+      - id
+      - name
+    KeyEnum:
+      enum:
+      - week
+      - month
+      - quarter_year
+      type: string
+      description: |-
+        * `week` - Week
+        * `month` - Month
+        * `quarter_year` - Quarter Year
+    LocationRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        address:
+          type: string
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+        phone:
+          type: string
+          maxLength: 128
+        start_hour:
+          type: string
+          format: time
+        end_hour:
+          type: string
+          format: time
+      required:
+      - address
+      - created_at
+      - end_hour
+      - id
+      - latitude
+      - longitude
+      - name
+      - phone
+      - start_hour
+      - updated_at
+    Logout:
+      type: object
+      description: Serializer for logging out by blacklisting the refresh token.
+      properties:
+        refresh:
+          type: string
+          description: Refresh token to blacklist
+      required:
+      - refresh
+    MealCommentCreate:
+      type: object
+      properties:
+        meal:
+          type: integer
+        comment:
+          type: string
+      required:
+      - comment
+      - meal
+    MealOptionRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 120
+      required:
+      - id
+      - name
+    MealOrderChangeMeal:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        meal:
+          type: integer
+          nullable: true
+        drink:
+          type: integer
+          nullable: true
+      required:
+      - id
+    MealOrderRate:
+      type: object
+      properties:
+        order:
+          type: integer
+          nullable: true
+        meal:
+          type: integer
+          nullable: true
+        rate:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        comment:
+          type: string
+          nullable: true
+      required:
+      - rate
+    MealOrderRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        meal:
+          $ref: '#/components/schemas/MealRead'
+        drink:
+          $ref: '#/components/schemas/DrinkRead'
+        company_location:
+          $ref: '#/components/schemas/CompanyAddressRead'
+        pickup_location:
+          $ref: '#/components/schemas/LocationRead'
+        date:
+          type: string
+          format: date
+        is_prepared:
+          type: boolean
+        is_delivered:
+          type: boolean
+      required:
+      - company_location
+      - date
+      - drink
+      - id
+      - meal
+      - pickup_location
+    MealRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        meal_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/MealOptionRead'
+        protein_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProteinOptionRead'
+        carb_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarbOptionRead'
+        supplier:
+          $ref: '#/components/schemas/SupplierRead'
+        category:
+          $ref: '#/components/schemas/CategoryChildren'
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/IngredientRead'
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 300
+        image:
+          type: string
+          format: uri
+          nullable: true
+        health_point:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        calories:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,5}(?:\.\d{0,1})?$
+        proteins:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        carbohydrates:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        fats:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+      required:
+      - carb_options
+      - category
+      - created_at
+      - id
+      - ingredients
+      - meal_options
+      - name
+      - protein_options
+      - supplier
+      - updated_at
+    MealSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 300
+        image:
+          type: string
+          format: uri
+          nullable: true
+        total_ordered:
+          type: integer
+          readOnly: true
+        customers:
+          type: string
+          readOnly: true
+      required:
+      - customers
+      - id
+      - name
+      - total_ordered
+    NotificationRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 300
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - description
+      - id
+      - title
+    NullEnum:
+      enum:
+      - null
+    PaginatedIngredientReadList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/IngredientRead'
+    PaginatedMealReadList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/MealRead'
+    PatchedCateringReplace:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        reason:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ReasonEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        own_reason:
+          type: string
+          nullable: true
+    PatchedCustomerUpdateProfile:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+          maxLength: 120
+        surname:
+          type: string
+          maxLength: 120
+        mobile:
+          type: string
+    PatchedMealOrderChangeMeal:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        meal:
+          type: integer
+          nullable: true
+        drink:
+          type: integer
+          nullable: true
+    PatchedSetPaymentMethod:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        is_default:
+          type: boolean
+          readOnly: true
+          nullable: true
+    PatchedSubscriptionAutoCharge:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        auto_charge:
+          type: boolean
+    PatchedSubscriptionDateFreeze:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        dates:
+          type: array
+          items:
+            type: string
+            format: date
+          description: Specific calendar dates for this subscription
+    PatchedSubscriptionLocationChange:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        company_location:
+          type: integer
+          nullable: true
+        pickup_location:
+          type: integer
+          nullable: true
+    PaymentCycleRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        exclude_days_limit:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        key:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/KeyEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        discount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          nullable: true
+      required:
+      - created_at
+      - id
+      - name
+      - updated_at
+    PriceCalculationCreate:
+      type: object
+      properties:
+        plan:
+          type: integer
+          nullable: true
+        sub_type:
+          $ref: '#/components/schemas/SubTypeEnum'
+        calory:
+          type: integer
+          nullable: true
+        payment_cycle:
+          type: integer
+          nullable: true
+        code:
+          type: string
+          writeOnly: true
+        days:
+          type: array
+          items:
+            $ref: '#/components/schemas/DaysEnum'
+        categories:
+          type: array
+          items:
+            type: integer
+        meal_options:
+          type: array
+          items:
+            type: integer
+        dates:
+          type: array
+          items:
+            type: string
+            format: date
+          description: Specific calendar dates for this subscription
+        meals:
+          type: array
+          items:
+            type: integer
+    ProteinOptionRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 50
+      required:
+      - id
+      - name
+    ReadPaymentMethod:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        brand:
+          type: string
+          maxLength: 32
+        masked_pan:
+          type: string
+          maxLength: 32
+        is_default:
+          type: boolean
+          nullable: true
+      required:
+      - brand
+      - id
+      - masked_pan
+    ReasonEnum:
+      enum:
+      - ingredients
+      - technical
+      - time
+      - chief
+      type: string
+      description: |-
+        * `ingredients` - Not enough ingredients
+        * `technical` - Technical problem
+        * `time` - Not enough time
+        * `chief` - Chief is absent
+    RefreshToken:
+      type: object
+      description: Serializer for refreshing access tokens.
+      properties:
+        refresh:
+          type: string
+          description: Refresh token
+        access:
+          type: string
+          readOnly: true
+          description: New access token
+      required:
+      - access
+      - refresh
+    RelationEnum:
+      enum:
+      - spouse
+      - child
+      - parent
+      - sibling
+      type: string
+      description: |-
+        * `spouse` - Spouse
+        * `child` - Child
+        * `parent` - Parent
+        * `sibling` - Sibling
+    RelationGenerate:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          nullable: true
+          maxLength: 254
+        relation:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/RelationEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+    RelationsRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          nullable: true
+          maxLength: 254
+        relation:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/RelationEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+      required:
+      - id
+    ResendOTP:
+      type: object
+      description: Serializer to resend OTP for account verification.
+      properties:
+        email:
+          type: string
+          format: email
+          writeOnly: true
+      required:
+      - email
+    SetPassword:
+      type: object
+      properties:
+        password:
+          type: string
+          writeOnly: true
+        password2:
+          type: string
+          writeOnly: true
+      required:
+      - password
+      - password2
+    SetPaymentMethod:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        is_default:
+          type: boolean
+          readOnly: true
+          nullable: true
+      required:
+      - id
+      - is_default
+    StandardizedErrorItem:
+      type: object
+      properties:
+        code:
+          type: string
+        detail:
+          type: string
+        attr:
+          type: string
+          nullable: true
+      required:
+      - code
+      - detail
+    SubTypeEnum:
+      enum:
+      - calory
+      - category
+      type: string
+      description: |-
+        * `calory` - Calory
+        * `category` - Category
+    SubscriptionAutoCharge:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        auto_charge:
+          type: boolean
+      required:
+      - id
+    SubscriptionCreate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        code:
+          type: string
+          writeOnly: true
+        sub_type:
+          $ref: '#/components/schemas/SubTypeEnum'
+        days:
+          type: array
+          items:
+            $ref: '#/components/schemas/DaysEnum'
+        dates:
+          type: array
+          items:
+            type: string
+            format: date
+          description: Specific calendar dates for this subscription
+        have_bread:
+          type: boolean
+        have_fork_and_spoon:
+          type: boolean
+        plan:
+          type: integer
+          nullable: true
+        calory:
+          type: integer
+          nullable: true
+        payment_cycle:
+          type: integer
+          nullable: true
+        company_location:
+          type: integer
+          nullable: true
+        pickup_location:
+          type: integer
+          nullable: true
+        payment_method:
+          type: integer
+          nullable: true
+        categories:
+          type: array
+          items:
+            type: integer
+        meal_options:
+          type: array
+          items:
+            type: integer
+        meals:
+          type: array
+          items:
+            type: integer
+        drink_options:
+          type: array
+          items:
+            type: integer
+        ingredients:
+          type: array
+          items:
+            type: integer
+      required:
+      - id
+    SubscriptionDateFreeze:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        dates:
+          type: array
+          items:
+            type: string
+            format: date
+          description: Specific calendar dates for this subscription
+      required:
+      - id
+    SubscriptionLocationChange:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        company_location:
+          type: integer
+          nullable: true
+        pickup_location:
+          type: integer
+          nullable: true
+      required:
+      - id
+    SubscriptionPlanRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        kitchens:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupplierRead'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryChildren'
+        calories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaloryRead'
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        image:
+          type: string
+          format: uri
+        price_per_meal:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        price_per_month:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        description:
+          type: string
+        percent:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        is_active:
+          type: boolean
+        meals:
+          type: array
+          items:
+            type: integer
+      required:
+      - calories
+      - categories
+      - created_at
+      - description
+      - id
+      - image
+      - kitchens
+      - name
+      - price_per_meal
+      - price_per_month
+      - quantity
+      - updated_at
+    SubscriptionRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        plan:
+          $ref: '#/components/schemas/SubscriptionPlanRead'
+        dates:
+          type: array
+          items:
+            type: string
+            format: date
+          description: Specific calendar dates for this subscription
+        days:
+          type: array
+          items:
+            $ref: '#/components/schemas/DaysEnum'
+        final_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          nullable: true
+        sub_type:
+          $ref: '#/components/schemas/SubTypeEnum'
+        calory:
+          $ref: '#/components/schemas/CaloryRead'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryRead'
+        payment_cycle:
+          $ref: '#/components/schemas/PaymentCycleRead'
+        meal_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/MealOptionRead'
+        meals:
+          type: array
+          items:
+            $ref: '#/components/schemas/MealRead'
+        drinks:
+          type: array
+          items:
+            $ref: '#/components/schemas/DrinkRead'
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/IngredientRead'
+        start_date:
+          type: string
+          format: date
+          nullable: true
+        end_date:
+          type: string
+          format: date
+          nullable: true
+        company_location:
+          $ref: '#/components/schemas/CompanyAddressRead'
+        pickup_location:
+          $ref: '#/components/schemas/LocationRead'
+        have_bread:
+          type: boolean
+        have_fork_and_spoon:
+          type: boolean
+        payment_method:
+          $ref: '#/components/schemas/ReadPaymentMethod'
+        auto_charge:
+          type: boolean
+      required:
+      - calory
+      - categories
+      - company_location
+      - drinks
+      - id
+      - ingredients
+      - meal_options
+      - meals
+      - payment_cycle
+      - payment_method
+      - pickup_location
+      - plan
+    SupplierRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 120
+        logo:
+          type: string
+          format: uri
+      required:
+      - id
+      - logo
+      - name
+    Token:
+      type: object
+      properties:
+        access:
+          type: string
+        refresh:
+          type: string
+      required:
+      - access
+      - refresh
+    VerifyAccount:
+      type: object
+      description: Serializer to verify account registration via OTP.
+      properties:
+        email:
+          type: string
+          format: email
+          writeOnly: true
+        code:
+          type: string
+          writeOnly: true
+        token:
+          allOf:
+          - $ref: '#/components/schemas/Token'
+          readOnly: true
+      required:
+      - code
+      - email
+      - token
+    VerifyForgotPassword:
+      type: object
+      description: |-
+        Serializer to verify forgot password request via OTP.
+        Ensure we only allow verification for active users if needed,
+        but the base validation checks for email existence which is the primary constraint.
+      properties:
+        email:
+          type: string
+          format: email
+          writeOnly: true
+        code:
+          type: string
+          writeOnly: true
+        token:
+          allOf:
+          - $ref: '#/components/schemas/Token'
+          readOnly: true
+      required:
+      - code
+      - email
+      - token
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"

@@ -71,14 +71,14 @@ export function OtpInput({
             className={[
               'size-12 rounded-full border text-2xl font-semibold shadow-sm',
               hasError
-                ? 'border-danger-600 bg-danger-50 text-danger-600'
+                ? 'border-danger-600 bg-danger-50 text-danger-600 dark:bg-danger-950'
                 : digit.trim()
                   ? focusedIndex === index
-                    ? 'border-[#2C583A] bg-success-50 text-[#141414]'
-                    : 'border-[#2C583A] bg-success-50 text-[#141414]'
+                    ? 'border-[#2C583A] bg-success-50 text-charcoal-900 dark:bg-success-950 dark:text-white'
+                    : 'border-[#2C583A] bg-success-50 text-charcoal-900 dark:bg-success-950 dark:text-white'
                   : focusedIndex === index
-                    ? 'border-[#2C583A] bg-success-50 text-[#141414] '
-                    : 'border-neutral-400 bg-white text-neutral-900',
+                    ? 'border-[#2C583A] bg-success-50 text-charcoal-900 dark:bg-success-950 dark:text-white'
+                    : 'border-neutral-400 bg-white text-neutral-900 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white',
             ].join(' ')}
           />
         );

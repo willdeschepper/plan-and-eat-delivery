@@ -14,18 +14,7 @@ const EAS_PROJECT_ID = 'courier-project-id-replace-me';
 
 const appIconBadgeConfig: AppIconBadgeConfig = {
   enabled: Env.EXPO_PUBLIC_APP_ENV !== 'production',
-  badges: [
-    {
-      text: Env.EXPO_PUBLIC_APP_ENV,
-      type: 'banner',
-      color: 'white',
-    },
-    {
-      text: Env.EXPO_PUBLIC_VERSION.toString(),
-      type: 'ribbon',
-      color: 'white',
-    },
-  ],
+  badges: [],
 };
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
@@ -70,6 +59,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     permissions: [
       'ACCESS_COARSE_LOCATION',
       'ACCESS_FINE_LOCATION',
+      'POST_NOTIFICATIONS',
     ],
     config: {
       googleMaps: {
@@ -167,6 +157,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     'expo-router',
     ['app-icon-badge', appIconBadgeConfig],
     ['react-native-edge-to-edge'],
+    [
+      'expo-notifications',
+      {
+        icon: './assets/splash-icon.png',
+        color: '#FF6C00',
+      },
+    ],
   ],
   extra: {
     eas: {
