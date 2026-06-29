@@ -1,0 +1,118 @@
+{
+  "project_info": {
+    "project_number": "289981191929",
+    "project_id": "planandeat-4b7c4",
+    "storage_bucket": "planandeat-4b7c4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289981191929:android:f53df9f9b75b9106757428",
+        "android_client_info": {
+          "package_name": "com.planandeat.catering"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "289981191929-sprsm3t9rklkkcnmr11pmfu8kn4ltpv5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBicQn2MHW-ORRnI2kD6YBPH5f9x1Ocr7Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "289981191929-sprsm3t9rklkkcnmr11pmfu8kn4ltpv5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "289981191929-547p8kp5urp63m3mfqpfjrv1f4f0mqrj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.planandeat.customer"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289981191929:android:ee995e10a77fb1cb757428",
+        "android_client_info": {
+          "package_name": "com.planandeat.courier"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "289981191929-sprsm3t9rklkkcnmr11pmfu8kn4ltpv5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBicQn2MHW-ORRnI2kD6YBPH5f9x1Ocr7Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "289981191929-sprsm3t9rklkkcnmr11pmfu8kn4ltpv5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "289981191929-547p8kp5urp63m3mfqpfjrv1f4f0mqrj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.planandeat.customer"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289981191929:android:aa582fc31d8535bf757428",
+        "android_client_info": {
+          "package_name": "com.planandeat.customer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "289981191929-sprsm3t9rklkkcnmr11pmfu8kn4ltpv5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBicQn2MHW-ORRnI2kD6YBPH5f9x1Ocr7Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "289981191929-sprsm3t9rklkkcnmr11pmfu8kn4ltpv5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "289981191929-547p8kp5urp63m3mfqpfjrv1f4f0mqrj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.planandeat.customer"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -10,7 +10,7 @@ export function useStopsWithLocalState(stops: DeliveryStop[]): DeliveryStop[] {
     () =>
       stops.map(stop => ({
         ...stop,
-        isDelivered: Boolean(pickedUpByCompany[`delivered:${stop.id}`]),
+        isDelivered: stop.isDelivered || Boolean(pickedUpByCompany[`delivered:${stop.id}`]),
         companies: stop.companies.map(company => ({
           ...company,
           pickedUpQuantity:

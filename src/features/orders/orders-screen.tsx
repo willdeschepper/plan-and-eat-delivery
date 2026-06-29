@@ -17,7 +17,6 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { FocusAwareStatusBar } from '@/components/ui';
-import { USE_COURIER_API_ORDERS } from '@/features/courier/config';
 import { useCourierStops } from '@/features/courier/hooks/use-courier-stops';
 import { useAppTheme } from '@/lib/hooks/use-app-theme';
 
@@ -97,7 +96,7 @@ export function OrdersScreen() {
           />
         )}
       >
-        {USE_COURIER_API_ORDERS && isLoading && (
+        {isLoading && (
           <View style={styles.stateBlock}>
             <Text style={[styles.sectionLabel, { color: c.textSecondary }]}>
               {t('courier.orders.loading')}
@@ -105,7 +104,7 @@ export function OrdersScreen() {
           </View>
         )}
 
-        {USE_COURIER_API_ORDERS && isError && !isLoading && stops.length === 0 && (
+        {isError && !isLoading && stops.length === 0 && (
           <View style={styles.stateBlock}>
             <Text style={[styles.sectionLabel, { color: c.textSecondary }]}>
               {t('courier.orders.load_failed')}

@@ -36,8 +36,11 @@ export {
 } from '@/features/courier/types';
 
 export function useCourierOrders() {
+  const status = useAuthStore.use.status();
+
   return useQuery({
     queryKey: courierOrdersQueryKey,
+    enabled: status === 'signIn',
     queryFn: fetchCourierOrders,
   });
 }

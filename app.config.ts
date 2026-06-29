@@ -55,6 +55,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       foregroundImage: './assets/adaptive-icon.png',
       backgroundColor: '#ffffff',
     },
+    googleServicesFile: './google-services.json',
     package: Env.EXPO_PUBLIC_PACKAGE,
     permissions: [
       'ACCESS_COARSE_LOCATION',

@@ -18,9 +18,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SafeBlurView } from '@/components/ui/safe-blur-view';
-import { USE_COURIER_API_ORDERS } from '@/features/courier/config';
 import { useCourierProfile } from '@/features/courier/api';
-import { MOCK_COURIER_PROFILE_DTO } from '@/features/orders/mock-data';
 import { useLogoutConfirmModal } from '@/features/settings/hooks/use-logout-confirm-modal';
 import { useAppTheme } from '@/lib/hooks/use-app-theme';
 import { useOrdersStore } from '../orders/store/use-orders-store';
@@ -49,9 +47,7 @@ export function AppDrawer() {
   const { isDark, c } = useAppTheme();
   const { t } = useTranslation();
   const { openLogoutConfirm } = useLogoutConfirmModal();
-  const apiProfile = useCourierProfile();
-  const courierProfile = USE_COURIER_API_ORDERS ? apiProfile.data : MOCK_COURIER_PROFILE_DTO;
-  const isProfileLoading = USE_COURIER_API_ORDERS ? apiProfile.isLoading : false;
+  const { data: courierProfile, isLoading: isProfileLoading } = useCourierProfile();
 
   const completedCount = useOrdersStore(s => s.completedCount());
 

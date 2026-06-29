@@ -4,19 +4,14 @@ import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { FocusAwareStatusBar } from '@/components/ui';
-import { USE_COURIER_API_ORDERS } from '@/features/courier/config';
 import { useCourierProfile } from '@/features/courier/api';
-import { MOCK_COURIER_PROFILE_DTO } from '@/features/orders/mock-data';
 import { useAppTheme } from '@/lib/hooks/use-app-theme';
 
 export function ProfileScreen() {
   const { t } = useTranslation();
   const { c } = useAppTheme();
   const insets = useSafeAreaInsets();
-  const apiProfile = useCourierProfile();
-  const profile = USE_COURIER_API_ORDERS ? apiProfile.data : MOCK_COURIER_PROFILE_DTO;
-  const isLoading = USE_COURIER_API_ORDERS ? apiProfile.isLoading : false;
-  const isError = USE_COURIER_API_ORDERS ? apiProfile.isError : false;
+  const { data: profile, isLoading, isError } = useCourierProfile();
 
   return (
     <View style={[styles.container, { backgroundColor: c.bg, paddingTop: insets.top + 24 }]}>

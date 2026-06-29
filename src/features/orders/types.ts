@@ -21,11 +21,3 @@ export interface DeliveryStop {
   companies: CompanyPickup[];
   isDelivered: boolean;
 }
-
-export interface CourierProfile {
-  id: string;
-  name: string;
-  avatarUrl: string;
-  completedOrdersToday: number;
-  totalEarnings: number;
-}
