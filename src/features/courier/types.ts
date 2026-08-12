@@ -1,7 +1,7 @@
 export type CourierLoginRequest = {
   email: string;
   password: string;
-  device_token: string;
+  device_token?: string;
 };
 
 export type CourierTokenDto = {
@@ -13,10 +13,28 @@ export type CourierLoginResponse = {
   token: CourierTokenDto;
 };
 
+export type MealOrderCompanyLocationDto = {
+  id: number;
+  address: string;
+  longitude: string;
+  latitude: string;
+};
+
+export type MealOrderDto = {
+  id: number;
+  meal: { id: number; name: string; image: string };
+  company_location: MealOrderCompanyLocationDto | null;
+  pickup_location: number | null;
+  date: string;
+  is_prepared: boolean;
+  is_delivered: boolean;
+};
+
 export type CourierAssignmentDto = {
   id: number;
   company_location: number | null;
   pickup_location: number | null;
+  orders: MealOrderDto[];
 };
 
 export type CourierCompleteOrderDto = {

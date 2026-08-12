@@ -1,18 +1,33 @@
-import type { CourierAssignmentDto, LocationDto } from '@/features/courier/types';
+import type {
+  CourierAssignmentDto,
+  LocationDto,
+  MealOrderDto,
+} from '@/features/courier/types';
 import type { CompanyPickup, DeliveryStop } from '@/features/orders/types';
 
 function buildLocationIndex(locations: LocationDto[]): Map<number, LocationDto> {
   return new Map(locations.map(location => [location.id, location]));
 }
 
-function buildSyntheticCompany(location: LocationDto): CompanyPickup {
+function buildCompanyFromOrders(
+  companyLocationId: number,
+  orders: MealOrderDto[],
+  locationById: Map<number, LocationDto>,
+): CompanyPickup {
+  const location = locationById.get(companyLocationId);
+  const address = orders[0]?.company_location?.address ?? location?.address ?? '';
+
   return {
-    id: String(location.id),
-    name: location.name,
-    address: location.address,
+    id: String(companyLocationId),
+    name: address,
+    address,
     photoUrl: '',
-    items: [{ id: 'default', name: 'Order', quantity: 1 }],
-    pickedUpQuantity: 0,
+    items: orders.map(order => ({
+      id: String(order.id),
+      name: order.meal.name,
+      quantity: 1,
+    })),
+    pickedUpQuantity: orders.filter(o => o.is_delivered).length,
   };
 }
 
@@ -26,17 +41,27 @@ export function mapAssignmentsToStops(
     const pickupLocation = assignment.pickup_location != null
       ? locationById.get(assignment.pickup_location)
       : undefined;
-    const companyLocation = assignment.company_location != null
-      ? locationById.get(assignment.company_location)
-      : undefined;
+
+    const ordersByCompany = new Map<number, MealOrderDto[]>();
+    for (const order of assignment.orders) {
+      if (order.company_location == null)
+        continue;
+      const list = ordersByCompany.get(order.company_location.id) ?? [];
+      list.push(order);
+      ordersByCompany.set(order.company_location.id, list);
+    }
+
+    const companies = [...ordersByCompany.entries()].map(([id, orders]) =>
+      buildCompanyFromOrders(id, orders, locationById));
 
     return {
       id: String(assignment.id),
       name: pickupLocation?.name ?? `Маршрут #${assignment.id}`,
       address: pickupLocation?.address ?? '',
       photoUrl: '',
-      isDelivered: false,
-      companies: companyLocation ? [buildSyntheticCompany(companyLocation)] : [],
+      isDelivered: assignment.orders.length > 0
+        && assignment.orders.every(o => o.is_delivered),
+      companies,
     };
   });
 }

@@ -6,6 +6,8 @@ import { logApiFailure } from '@/lib/api/log-api-debug';
 import { translate } from '@/lib/i18n/utils';
 import { getIsOnline } from '@/lib/network/network-status';
 
+export const GENERAL_ERROR_FALLBACK = 'Unexpected error, please try again.';
+
 type StandardizedErrorItem = {
   code: string;
   detail: string;
@@ -45,7 +47,7 @@ export function parseApiError(error: unknown): ParsedApiError {
     });
     return {
       fieldErrors: {},
-      generalError: 'Unexpected error, please try again.',
+      generalError: GENERAL_ERROR_FALLBACK,
     };
   }
 
@@ -80,7 +82,7 @@ export function formatApiErrorForUser(parsed: ParsedApiError): string {
   if (fieldMessages.length > 0)
     return fieldMessages.join('\n');
 
-  return 'Unexpected error, please try again.';
+  return GENERAL_ERROR_FALLBACK;
 }
 
 /** No HTTP response — transport failure, timeout, or offline (M1-D). */
@@ -89,6 +91,16 @@ export function isAxiosNetworkError(error: unknown): boolean {
     return false;
   }
   return error.response === undefined;
+}
+
+/** For local/non-API errors (e.g. push token failures): show error.message, or a safe fallback. */
+export function showLocalError(
+  error: unknown,
+  fallback: string = GENERAL_ERROR_FALLBACK,
+): void {
+  const message
+    = error instanceof Error && error.message ? error.message : fallback;
+  showErrorMessage(message);
 }
 
 export function showParsedApiError(error: unknown): void {

@@ -35,9 +35,6 @@
       "or": "və ya",
       "password_label": "Şifrə",
       "password_placeholder": "Şifrə",
-      "push_native_module_missing": "Bu build-də push bildirişləri mövcud deyil. Tətbiqi yenidən qurun: pnpm prebuild && pnpm ios",
-      "push_permission_denied": "Daxil olmaq üçün push bildirişləri tələb olunur. Sistem ayarlarında bildirişləri aktiv edin və yenidən cəhd edin.",
-      "push_token_unavailable": "Push token alınmadı. Girişi fiziki iPhone-da yoxlayın, simulyatorda yox.",
       "sign_up": "Qeydiyyat",
       "submit": "Daxil ol",
       "subtitle": "Hesabınıza daxil olun",
@@ -203,6 +200,13 @@
     "arabic": "Ərəb",
     "azerbaijani": "Azərbaycanca",
     "coming_soon": "Tezliklə.",
+    "delete_account": "Hesabı sil",
+    "delete_account_confirm": {
+      "cancel": "Ləğv et",
+      "confirm": "Sil",
+      "description": "Bu əməliyyat geri alına bilməz. Bütün məlumatlarınız həmişəlik silinəcək.",
+      "title": "Hesabı silmək istəyirsiniz?"
+    },
     "english": "İngilis",
     "general": "Ümumi",
     "generale": "Ümumi",

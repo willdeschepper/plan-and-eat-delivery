@@ -1,4 +1,13 @@
 pluginManagement {
+  repositories {
+    // Use Aliyun Google mirror — dl.google.com is unreachable on this network
+    maven { url 'https://maven.aliyun.com/repository/google' }
+    maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+    maven { url 'https://maven.aliyun.com/repository/public' }
+    mavenCentral()
+    gradlePluginPortal()
+  }
+
   def reactNativeGradlePlugin = new File(
     providers.exec {
       workingDir(rootDir)

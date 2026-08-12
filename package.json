@@ -26,6 +26,8 @@
     "prebuild:production": "cross-env EXPO_PUBLIC_APP_ENV=production STRICT_ENV_VALIDATION=1 pnpm run prebuild",
     "android:production": "cross-env EXPO_PUBLIC_APP_ENV=production pnpm run android",
     "ios:production": "cross-env EXPO_PUBLIC_APP_ENV=production pnpm run ios",
+    "bundle:android:release": "cd android && ./gradlew bundleRelease",
+    "assemble:android:release": "cd android && ./gradlew assembleRelease",
     "build:development:ios": "eas build --profile development --platform ios",
     "build:development:android": "eas build --profile development --platform android",
     "build:preview:ios": "eas build --profile preview --platform ios",

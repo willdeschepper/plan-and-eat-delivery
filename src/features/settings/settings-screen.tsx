@@ -11,6 +11,7 @@ import { useAppTheme } from '@/lib/hooks/use-app-theme';
 import { SettingsMenuRow } from './components/settings-menu-row';
 import { SettingsScreenHeader } from './components/settings-screen-header';
 import { SettingsSection } from './components/settings-section';
+import { useDeleteAccountModal } from './hooks/use-delete-account-modal';
 import { useLogoutConfirmModal } from './hooks/use-logout-confirm-modal';
 import { useSettingsDisplayLabels } from './hooks/use-settings-display-labels';
 import { useSettingsMenuItems } from './hooks/use-settings-menu-items';
@@ -23,6 +24,7 @@ export function SettingsScreen() {
   const { generalItems, supportItems, legalItems } = useSettingsMenuItems();
   const { languageLabel, themeLabel } = useSettingsDisplayLabels();
   const { openLogoutConfirm } = useLogoutConfirmModal();
+  const { openDeleteAccount } = useDeleteAccountModal();
 
   const presentModal = React.useCallback(() => {
     openLogoutConfirm();
@@ -105,6 +107,21 @@ export function SettingsScreen() {
           onPress={presentModal}
         >
           <Text style={styles.logoutText}>{t('settings.logout')}</Text>
+        </Pressable>
+
+        <Pressable
+          testID="settings-delete-account"
+          style={({ pressed }) => [
+            styles.logoutBtn,
+            {
+              opacity: pressed ? 0.75 : 1,
+              borderColor: isDark ? 'rgba(232,49,59,0.3)' : '#FECACA',
+              backgroundColor: isDark ? 'rgba(232,49,59,0.08)' : '#FEF2F2',
+            },
+          ]}
+          onPress={openDeleteAccount}
+        >
+          <Text style={styles.logoutText}>{t('settings.delete_account')}</Text>
         </Pressable>
       </ScrollView>
     </View>

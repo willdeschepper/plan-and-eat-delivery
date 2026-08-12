@@ -35,9 +35,6 @@
       "or": "or",
       "password_label": "Password",
       "password_placeholder": "Password",
-      "push_native_module_missing": "Push notifications are not available in this build. Rebuild the app: pnpm prebuild && pnpm ios",
-      "push_permission_denied": "Push notifications are required to sign in. Please enable notifications in system settings and try again.",
-      "push_token_unavailable": "Could not obtain a device push token. Test sign-in on a physical iPhone, not the simulator.",
       "sign_up": "Sign up",
       "submit": "Log in",
       "subtitle": "Log in to your account",
@@ -203,6 +200,13 @@
     "arabic": "Arabic",
     "azerbaijani": "Azerbaijani",
     "coming_soon": "Coming soon.",
+    "delete_account": "Delete account",
+    "delete_account_confirm": {
+      "cancel": "Cancel",
+      "confirm": "Delete",
+      "description": "This action is irreversible. All your data will be permanently deleted.",
+      "title": "Delete account?"
+    },
     "english": "English",
     "general": "General",
     "generale": "General",

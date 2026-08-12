@@ -2,7 +2,9 @@
 
 buildscript {
   repositories {
-    google()
+    // Use Aliyun Google mirror — dl.google.com is unreachable on this network
+    maven { url 'https://maven.aliyun.com/repository/google' }
+    maven { url 'https://maven.aliyun.com/repository/public' }
     mavenCentral()
   }
   dependencies {
@@ -15,7 +17,9 @@ buildscript {
 
 allprojects {
   repositories {
-    google()
+    // Use Aliyun Google mirror — dl.google.com is unreachable on this network
+    maven { url 'https://maven.aliyun.com/repository/google' }
+    maven { url 'https://maven.aliyun.com/repository/public' }
     mavenCentral()
     maven { url 'https://www.jitpack.io' }
   }

@@ -35,9 +35,6 @@
       "or": "или",
       "password_label": "Пароль",
       "password_placeholder": "Пароль",
-      "push_native_module_missing": "Push-уведомления недоступны в этой сборке. Пересоберите приложение: pnpm prebuild && pnpm ios",
-      "push_permission_denied": "Для входа нужны push-уведомления. Включите уведомления в настройках системы и попробуйте снова.",
-      "push_token_unavailable": "Не удалось получить push-токен. Тестируйте вход на физическом iPhone, не на симуляторе.",
       "sign_up": "Зарегистрироваться",
       "submit": "Войти",
       "subtitle": "Войдите в свой аккаунт",
@@ -203,6 +200,13 @@
     "arabic": "Арабский",
     "azerbaijani": "Азербайджанский",
     "coming_soon": "Скоро будет доступно.",
+    "delete_account": "Удалить аккаунт",
+    "delete_account_confirm": {
+      "cancel": "Отмена",
+      "confirm": "Удалить",
+      "description": "Это действие необратимо. Все ваши данные будут безвозвратно удалены.",
+      "title": "Удалить аккаунт?"
+    },
     "english": "Английский",
     "general": "Основные",
     "generale": "Основные",

@@ -1,8 +1,12 @@
+import type { AxiosError } from 'axios';
+
 import {
   formatApiErrorForUser,
+  GENERAL_ERROR_FALLBACK,
   getErrorResponse,
   isAxiosNetworkError,
   parseApiError,
+  showLocalError,
   showParsedApiError,
 } from './errors';
 
@@ -79,7 +83,7 @@ describe('parseApiError', () => {
     const err = axiosErr({ foo: 1 });
     expect(parseApiError(err)).toEqual({
       fieldErrors: {},
-      generalError: 'Unexpected error, please try again.',
+      generalError: GENERAL_ERROR_FALLBACK,
     });
     expect(logApiFailure).toHaveBeenCalledWith(
       'parseApiError_unhandled_shape',
@@ -139,7 +143,7 @@ describe('formatApiErrorForUser', () => {
 
   it('returns fallback when empty', () => {
     expect(formatApiErrorForUser({ fieldErrors: {} })).toBe(
-      'Unexpected error, please try again.',
+      GENERAL_ERROR_FALLBACK,
     );
   });
 });
@@ -155,6 +159,32 @@ describe('isAxiosNetworkError', () => {
 
   it('returns false when response exists', () => {
     expect(isAxiosNetworkError(axiosErr({ errors: [] }))).toBe(false);
+  });
+});
+
+describe('showLocalError', () => {
+  beforeEach(() => {
+    showErrorMessage.mockClear();
+  });
+
+  it('shows error.message when Error has a non-empty message', () => {
+    showLocalError(new Error('Push permission denied'));
+    expect(showErrorMessage).toHaveBeenCalledWith('Push permission denied');
+  });
+
+  it('shows default fallback when error is not an Error', () => {
+    showLocalError('plain string');
+    expect(showErrorMessage).toHaveBeenCalledWith(GENERAL_ERROR_FALLBACK);
+  });
+
+  it('shows default fallback when Error has an empty message', () => {
+    showLocalError(new Error(''));
+    expect(showErrorMessage).toHaveBeenCalledWith(GENERAL_ERROR_FALLBACK);
+  });
+
+  it('shows custom fallback when provided', () => {
+    showLocalError(null, 'Custom fallback');
+    expect(showErrorMessage).toHaveBeenCalledWith('Custom fallback');
   });
 });
 
