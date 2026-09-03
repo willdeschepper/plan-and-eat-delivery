@@ -117,15 +117,3 @@ pnpm check-all
 
 The completion queue includes tests for offline persistence, stable-key replay and uncertain responses. CI or a local run should still be used to verify the current environment before release.
 
-## Origin and attribution
-
-This repository was **studied, adapted and modernized** by [Wiliam De Schepper](https://github.com/willdeschepper). It must not be presented as an application authored from zero.
-
-The starting points were:
-
-- [Obytes React Native template](https://github.com/obytes/react-native-template-obytes), distributed under the MIT License.
-- [MirMohsun/plan-and-eat-courier-mobile](https://github.com/MirMohsun/plan-and-eat-courier-mobile), used as the application base. No explicit license was found in that repository when this attribution was written.
-
-Wiliam's work in this fork includes dependency and configuration updates, authentication hardening, network/lifecycle behavior, API integration, delivery UI evolution, and the persistent completion/reconciliation flow. Git history remains the source of truth for individual changes.
-
-See [`NOTICE`](./NOTICE) and [`LICENSE`](./LICENSE) for the scope of the licensing statements.
