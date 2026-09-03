@@ -1,0 +1,25 @@
+Plan & Eat Courier — attribution notice
+
+This repository is a technical study, adaptation and modernization. It is not
+presented as an application created from scratch by Wiliam De Schepper.
+
+Starting points:
+
+1. Obytes React Native template
+   https://github.com/obytes/react-native-template-obytes
+   Copyright (c) 2021 Obytes
+   Distributed under the MIT License.
+
+2. plan-and-eat-courier-mobile
+   https://github.com/MirMohsun/plan-and-eat-courier-mobile
+   Used as the application base. No explicit license was found in that
+   repository when this notice was written. This repository does not claim
+   ownership of third-party work or relicense it through this notice.
+
+Modernization and additions in this fork are maintained by:
+
+Wiliam De Schepper
+https://github.com/willdeschepper
+
+Consult the Git history to identify individual contributions. Third-party
+dependencies and assets remain governed by their own licenses and terms.
