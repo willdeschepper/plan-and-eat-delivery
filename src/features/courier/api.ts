@@ -1,4 +1,5 @@
 import type { AxiosError } from 'axios';
+import type { CompletionResult } from '@/features/courier/completion-queue';
 import type {
   CourierLoginRequest,
   CourierLoginResponse,
@@ -6,10 +7,7 @@ import type {
 import { useQuery } from '@tanstack/react-query';
 import { createMutation } from 'react-query-kit';
 
-import {
-  completeAssignment,
-  type CompletionResult,
-} from '@/features/courier/completion-queue';
+import { completeAssignment } from '@/features/courier/completion-queue';
 import {
   fetchCourierOrders,
   fetchCourierProfile,
