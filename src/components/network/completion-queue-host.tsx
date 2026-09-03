@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { courierOrdersQueryKey } from '@/features/courier/types';
 import { flushPendingCompletions } from '@/features/courier/completion-queue';
+import { courierOrdersQueryKey } from '@/features/courier/types';
 import { queryClient } from '@/lib/api/provider';
 import { useAuthStore } from '@/lib/hooks';
 import { getIsOnline, subscribe } from '@/lib/network/network-status';
