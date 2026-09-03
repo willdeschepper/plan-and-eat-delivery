@@ -70,7 +70,23 @@ export function StopDetailScreen() {
     }
 
     try {
-      await completeAssignment.mutateAsync({ id: Number(stop.id) });
+      const completion = await completeAssignment.mutateAsync({
+        id: Number(stop.id),
+      });
+      if (completion.status === 'queued') {
+        Alert.alert(
+          t('courier.stop.delivery_queued_title', {
+            defaultValue: 'Delivery queued',
+          }),
+          t('courier.stop.delivery_queued_message', {
+            defaultValue:
+              'The delivery will be reconciled automatically when the connection is available.',
+          }),
+        );
+        router.back();
+        return;
+      }
+
       markDelivered(stop.id);
       router.back();
     }

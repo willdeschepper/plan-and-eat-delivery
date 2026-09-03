@@ -1,11 +1,13 @@
 import type { AxiosError } from 'axios';
+import type { CompletionResult } from '@/features/courier/completion-queue';
 import type {
-  CourierCompleteOrderDto,
   CourierLoginRequest,
   CourierLoginResponse,
 } from '@/features/courier/types';
 import { useQuery } from '@tanstack/react-query';
 import { createMutation } from 'react-query-kit';
+
+import { completeAssignment } from '@/features/courier/completion-queue';
 import {
   fetchCourierOrders,
   fetchCourierProfile,
@@ -77,15 +79,14 @@ export const useCourierLogin = createMutation<
 });
 
 export const useCompleteAssignment = createMutation<
-  CourierCompleteOrderDto,
+  CompletionResult,
   { id: number },
   AxiosError
 >({
-  mutationFn: async variables =>
-    client
-      .put(`/api/couriers/${variables.id}/complete/`)
-      .then(response => response.data),
-  onSuccess: () => {
-    void queryClient.invalidateQueries({ queryKey: courierOrdersQueryKey });
+  mutationFn: variables => completeAssignment(variables.id),
+  onSuccess: (result) => {
+    if (result.status === 'confirmed') {
+      void queryClient.invalidateQueries({ queryKey: courierOrdersQueryKey });
+    }
   },
 });

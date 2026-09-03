@@ -10,7 +10,7 @@ import 'tsx/cjs';
 import Env from './env';
 
 const EXPO_ACCOUNT_OWNER = 'willdeschepper';
-const EAS_PROJECT_ID = 'courier-project-id-replace-me';
+const EAS_PROJECT_ID = Env.EAS_PROJECT_ID;
 
 const appIconBadgeConfig: AppIconBadgeConfig = {
   enabled: Env.EXPO_PUBLIC_APP_ENV !== 'production',
@@ -29,10 +29,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   icon: './assets/splash-icon.png',
   userInterfaceStyle: 'automatic',
   newArchEnabled: true,
-  updates: {
-    url: 'https://u.expo.dev/courier-project-id-replace-me',
-    fallbackToCacheTimeout: 0,
-  },
+  updates: EAS_PROJECT_ID
+    ? {
+        url: `https://u.expo.dev/${EAS_PROJECT_ID}`,
+        fallbackToCacheTimeout: 0,
+      }
+    : { enabled: false },
   runtimeVersion: Env.EXPO_PUBLIC_VERSION.toString(),
   assetBundlePatterns: ['**/*'],
   ios: {
@@ -166,9 +168,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       },
     ],
   ],
-  extra: {
-    eas: {
-      projectId: EAS_PROJECT_ID,
-    },
-  },
+  extra: EAS_PROJECT_ID
+    ? {
+        eas: {
+          projectId: EAS_PROJECT_ID,
+        },
+      }
+    : {},
 });
