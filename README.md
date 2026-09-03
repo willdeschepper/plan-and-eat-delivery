@@ -18,9 +18,9 @@ Mobile App </h1>
 Clone the repo to your machine and install deps :
 
 ```sh
-git clone https://github.com/user/repo-name
+git clone git@github.com:willdeschepper/plan-and-eat-delivery.git
 
-cd ./repo-name
+cd ./plan-and-eat-delivery
 
 pnpm install
 ```

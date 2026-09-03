@@ -5,7 +5,7 @@
   "packageManager": "pnpm@10.12.3",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/user/plan-and-eat-courier-mobile.git"
+    "url": "git+https://github.com/willdeschepper/plan-and-eat-delivery.git"
   },
   "main": "expo-router/entry",
   "scripts": {

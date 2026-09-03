@@ -5,7 +5,7 @@
 This document defines the mandatory architectural contract for both mobile apps:
 
 - `plan-and-eat-customer-mobile`
-- `plan-and-eat-courier-mobile`
+- `plan-and-eat-delivery`
 
 The projects must remain structurally and technically aligned. Business features are allowed to differ.
 

@@ -4,7 +4,7 @@
 
 - Source repository: `plan-and-eat-customer-mobile`
 - Baseline strategy: controlled clone with domain replacement
-- Target repository: `plan-and-eat-courier-mobile`
+- Target repository: `plan-and-eat-delivery`
 
 ## Architecture Invariants
 

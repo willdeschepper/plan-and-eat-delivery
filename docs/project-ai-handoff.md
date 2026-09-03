@@ -1,4 +1,4 @@
-# AI Handoff Document: `plan-and-eat-courier-mobile`
+# AI Handoff Document: `plan-and-eat-delivery`
 
 Ниже — структурированный бриф, который можно напрямую отдавать другому ИИ как контекст проекта.
 
@@ -6,7 +6,7 @@
 
 ## 1) Метаданные проекта
 
-- **Repo:** `plan-and-eat-courier-mobile`
+- **Repo:** `plan-and-eat-delivery`
 - **Тип:** мобильное приложение курьера (React Native + Expo)
 - **OS у текущей среды:** macOS (`darwin 25.3.0`)
 - **Пакетный менеджер:** `pnpm` (`packageManager: pnpm@10.12.3`)
@@ -209,7 +209,7 @@
 ## 13) Готовый prompt-блок для другого ИИ
 
 ```text
-Project: plan-and-eat-courier-mobile
+Project: plan-and-eat-delivery
 
 Stack:
 - Expo SDK 54, React Native 0.81.5, React 19

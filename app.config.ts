@@ -9,7 +9,7 @@ import 'tsx/cjs';
 // eslint-disable-next-line perfectionist/sort-imports
 import Env from './env';
 
-const EXPO_ACCOUNT_OWNER = 'mirmokhsun';
+const EXPO_ACCOUNT_OWNER = 'willdeschepper';
 const EAS_PROJECT_ID = 'courier-project-id-replace-me';
 
 const appIconBadgeConfig: AppIconBadgeConfig = {
