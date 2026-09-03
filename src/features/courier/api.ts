@@ -6,8 +6,10 @@ import type {
 import { useQuery } from '@tanstack/react-query';
 import { createMutation } from 'react-query-kit';
 
-import { completeAssignment } from '@/features/courier/completion-queue';
-import type { CompletionResult } from '@/features/courier/completion-queue';
+import {
+  completeAssignment,
+  type CompletionResult,
+} from '@/features/courier/completion-queue';
 import {
   fetchCourierOrders,
   fetchCourierProfile,
