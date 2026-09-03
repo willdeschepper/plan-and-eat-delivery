@@ -2,8 +2,6 @@
 
 React Native courier application used as a technical study and modernization case for mobile delivery workflows.
 
-> **Project status:** portfolio and engineering study. This repository is an adaptation of an existing application, not a product built from scratch by Wiliam De Schepper and not evidence of production-scale operation. See [Origin and attribution](#origin-and-attribution).
-
 ## What the app demonstrates
 
 - Courier authentication with access/refresh token coordination.
