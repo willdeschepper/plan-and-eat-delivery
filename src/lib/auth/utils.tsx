@@ -19,7 +19,6 @@ export const getToken = (): TokenType | null => getTokenSnapshot();
 export async function setToken(value: TokenType): Promise<boolean> {
   const ok = await setTokenPairInKeychain(value);
   if (ok) {
-    console.log('[auth:setToken] ✅ Token set successfully', value);
     setTokenSnapshot(value);
   }
   return ok;
