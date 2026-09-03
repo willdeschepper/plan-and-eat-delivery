@@ -9,6 +9,7 @@ import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
 
+import { CompletionQueueHost } from '@/components/network/completion-queue-host';
 import { NetworkConnectivityHost } from '@/components/network/network-connectivity-host';
 import { GlobalDialogHost } from '@/components/ui/global-dialog-host';
 import { GlobalModalHost } from '@/components/ui/global-modal-host';
@@ -73,6 +74,7 @@ function Providers({ children }: { children: React.ReactNode }) {
         <ThemeProvider value={theme}>
           <APIProvider>
             <AuthBootstrapEffect />
+            <CompletionQueueHost />
             <BottomSheetModalProvider>
               <View style={styles.fill}>
                 <NetworkConnectivityHost />
